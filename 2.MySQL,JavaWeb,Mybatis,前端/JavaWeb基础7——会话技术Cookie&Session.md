@@ -1,14 +1,58 @@
 >  **导航：**
->
->  [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析](https://blog.csdn.net/qq_40991313/article/details/126646289?csdn_share_tail={"type"%3A"blog"%2C"rType"%3A"article"%2C"rId"%3A"126646289"%2C"source"%3A"qq_40991313"})
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析](https://blog.csdn.net/qq_40991313/article/details/126646289?csdn_share_tail=%7B%22type%22%3A%22blog%22%2C%22rType%22%3A%22article%22%2C%22rId%22%3A%22126646289%22%2C%22source%22%3A%22qq_40991313%22%7D "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析")
 
-[TOC]
+**目录**
 
+[一、会话技术](#%E4%BC%9A%E8%AF%9D%E6%8A%80%E6%9C%AF)
 
+[1.1 会话和跟踪技术介绍](#%E4%BC%9A%E8%AF%9D%E8%B7%9F%E8%B8%AA%E6%8A%80%E6%9C%AF%E7%9A%84%E6%A6%82%E8%BF%B0)
 
-# 一、会话技术
+[1.2 Cookie](#Cookie)
 
-## 1.1 会话和跟踪技术介绍
+[1.2.1 简介](#%E7%AE%80%E4%BB%8B)
+
+[1.2.2 Cookie的发送和获取](#Cookie%E7%9A%84%E5%8F%91%E9%80%81%E5%92%8C%E8%8E%B7%E5%8F%96)
+
+[1.2.3 Cookie的原理](#Cookie%E7%9A%84%E5%8E%9F%E7%90%86)
+
+[1.2.4 Cookie的存活时间](#Cookie%E7%9A%84%E5%AD%98%E6%B4%BB%E6%97%B6%E9%97%B4)
+
+[1.2.5 Cookie存储中文](#Cookie%E5%AD%98%E5%82%A8%E4%B8%AD%E6%96%87)
+
+[1.3 Session](#Session)
+
+[1.3.1 简介](#1.3.1%20%E7%AE%80%E4%BB%8B)
+
+[1.3.2 Session的基本使用](#Session%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8)
+
+[1.3.3 Session的原理分析](#Session%E7%9A%84%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90)
+
+[1.3.4 钝化与活化、销毁](#%E9%92%9D%E5%8C%96%E4%B8%8E%E6%B4%BB%E5%8C%96%E3%80%81%E9%94%80%E6%AF%81)
+
+[1.4 总结，Cookie和Session区别和应用场景](#Cookie%E5%92%8CSession%E5%8C%BA%E5%88%AB)
+
+[1.5 案例，用户登录注册“记住我”和“验证码”](#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C%E2%80%9C%E8%AE%B0%E4%BD%8F%E6%88%91%E2%80%9D%E5%92%8C%E2%80%9C%E9%AA%8C%E8%AF%81%E7%A0%81%E2%80%9D%E6%A1%88%E4%BE%8B)
+
+[1.5.1 需求分析](#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90)
+
+[1.5.2 用户登录功能](#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD)
+
+[1.5.3 记住我-设置Cookie](#%E8%AE%B0%E4%BD%8F%E6%88%91-%E8%AE%BE%E7%BD%AECookie)
+
+[1.5.4 记住我-获取Cookie](#%E8%AE%B0%E4%BD%8F%E6%88%91-%E8%8E%B7%E5%8F%96Cookie)
+
+[1.5.5 用户注册功能](#%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C%E5%8A%9F%E8%83%BD)
+
+[1.5.6 验证码-展示](#%E9%AA%8C%E8%AF%81%E7%A0%81-%E5%B1%95%E7%A4%BA)
+
+[1.5.7 验证码-校验](#%E9%AA%8C%E8%AF%81%E7%A0%81-%E6%A0%A1%E9%AA%8C)
+
+--
+
+## 一、会话技术
+
+### 1.1 会话和跟踪技术介绍
 
 **会话:**会话指的是客户端与服务器交互的一个**时间段**。
 
@@ -16,64 +60,45 @@
 
 用实际场景来理解下会话，比如在我们访问京东的时候，当打开浏览器进入京东首页后，浏览器和京东的服务器之间就建立了一次会话，后面的搜索商品,查看商品的详情,加入购物车等都是在这一次会话中完成。
 
-**思考:**下图中总共建立了几个会话?![img](JavaWeb基础7——会话技术Cookie&Session.assets/b857c630659b457f9360f54f0b4363c5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+**思考:**下图中总共建立了几个会话?![](https://i-blog.csdnimg.cn/blog_migrate/8eb577b07489984321b813b77f3bebb6.png)
 
 每个浏览器都会与服务端建立了一个会话，加起来总共是**3**个会话。
-
-
-
-
 
 **会话跟踪:**一种维护浏览器状态的方法，服务器需要**识别**多次请求是否来自于**同一浏览器**，以便在同一次会话的多次请求间**共享数据**。
 
 **会话跟踪技术的应用**
 
-- 服务器会收到多个请求，这多个请求可能来自多个浏览器，如上图中的6个请求来自3个浏览器
-
-- 服务器需要用来识别请求是否来自同一个浏览器
-
-- 服务器用来识别浏览器的过程，这个过程就是**会话跟踪**
-
-- 服务器识别浏览器后就可以在同一个会话中多次请求之间来共享数据
-
-- **购物车:** `加入购物车`和`去购物车结算`是两次请求，但是后面这次请求要想展示前一次请求所添加的商品，就需要用到数据共享。![img](JavaWeb基础7——会话技术Cookie&Session.assets/9e2775e86d5e4ac0af0bfb0f8523718a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-  
-
-- **页面展示用户登录信息:**很多网站，登录后访问多个功能发送多次请求后，浏览器上都会有当前登录用户的信息[用户名]。![img](JavaWeb基础7——会话技术Cookie&Session.assets/1042a5df03824a84acee95bbc2071ca0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-  
-
-- 网站登录页面的**`记住我`**功能:当用户登录成功后，勾选`记住我`按钮后下次再登录的时候，网站就会自动填充用户名和密码，简化用户的登录操作。多次登录就会有多次请求，他们之间也涉及到共享数据
-
-  ![img](JavaWeb基础7——会话技术Cookie&Session.assets/f35cfe4cc0b94b429c1d9b2d86b099a9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-  
-
-- 登录页面的**验证码功能:**生成验证码和输入验证码点击注册这也是**两次请求**，这两次请求的数据之间要进行**对比**，相同则允许注册，不同则拒绝注册，该功能的实现也需要在同一次会话中共享数据。
-
-  ![img](JavaWeb基础7——会话技术Cookie&Session.assets/5d86ee5e45394cf18ec907542312faf2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-  
+-   服务器会收到多个请求，这多个请求可能来自多个浏览器，如上图中的6个请求来自3个浏览器
+    
+-   服务器需要用来识别请求是否来自同一个浏览器
+    
+-   服务器用来识别浏览器的过程，这个过程就是**会话跟踪**
+    
+-   服务器识别浏览器后就可以在同一个会话中多次请求之间来共享数据
+    
+-   **购物车:** `加入购物车`和`去购物车结算`是两次请求，但是后面这次请求要想展示前一次请求所添加的商品，就需要用到数据共享。![](https://i-blog.csdnimg.cn/blog_migrate/44cabfa41915d0ad7c06ca3b11698990.png)
+    
+-   **页面展示用户登录信息:**很多网站，登录后访问多个功能发送多次请求后，浏览器上都会有当前登录用户的信息\[用户名\]。![](https://i-blog.csdnimg.cn/blog_migrate/65feaaafb126c84edf4f885955d58f36.png)
+    
+-   网站登录页面的**`记住我`**功能:当用户登录成功后，勾选`记住我`按钮后下次再登录的时候，网站就会自动填充用户名和密码，简化用户的登录操作。多次登录就会有多次请求，他们之间也涉及到共享数据
+    
+     ![](https://i-blog.csdnimg.cn/blog_migrate/0eefdc266c4777c8cf745131f6885ea6.png)
+    
+-   登录页面的**验证码功能:**生成验证码和输入验证码点击注册这也是**两次请求**，这两次请求的数据之间要进行**对比**，相同则允许注册，不同则拒绝注册，该功能的实现也需要在同一次会话中共享数据。
+    
+    ![](https://i-blog.csdnimg.cn/blog_migrate/f86ed4f6c2f31c48b2afa17f354131cf.png)
+    
 
 > **思考:为什么现在浏览器和服务器不支持数据共享呢?**
->
-> - 浏览器和服务器之间使用的是HTTP请求来进行数据传输
-> - HTTP协议是**无状态**的，每次浏览器向服务器请求时，服务器都会将该请求视为**新的**请求
-> - HTTP协议设计成无状态的目的是让**每次请求之间相互独立，互不影响**
-> - 请求与请求之间独立后，就无法实现多次请求之间的数据共享
+> 
+> -   浏览器和服务器之间使用的是HTTP请求来进行数据传输
+>     
+> -   HTTP协议是**无状态**的，每次浏览器向服务器请求时，服务器都会将该请求视为**新的**请求
+>     
+> -   HTTP协议设计成无状态的目的是让**每次请求之间相互独立，互不影响**
+>     
+> -   请求与请求之间独立后，就无法实现多次请求之间的数据共享
+>     
 
 **会话跟踪技术的实现方式:**
 
@@ -86,17 +111,15 @@
 Session译为会议，会话。
 
 > **小结**
->
 > 
->
-> - HTTP协议是无状态的，靠HTTP协议是无法实现会话跟踪
-> - 想要实现会话跟踪，就需要用到Cookie和Session
+> -   HTTP协议是无状态的，靠HTTP协议是无法实现会话跟踪
+>     
+> -   想要实现会话跟踪，就需要用到Cookie和Session
+>     
 
+### 1.2 Cookie
 
-
-## 1.2 Cookie
-
-### 1.2.1 简介
+#### 1.2.1 简介
 
 **Cookie**：
 
@@ -104,54 +127,53 @@ Session译为会议，会话。
 
 **Cookie的工作流程**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/ba0edda902e1448cb51862961ced602e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/9843c3e454b0714ab587701d0a3630f6.png)
 
+-   服务端提供了两个Servlet，分别是ServletA和ServletB
+    
+-   浏览器发送HTTP请求1给服务端，服务端ServletA接收请求并进行业务处理
+    
+-   服务端ServletA在处理的过程中可以**创建一个Cookie对象**并将`name=zs`的数据存入Cookie
+    
+-   服务端ServletA在响应数据的时候，会把Cookie对象**响应**给浏览器
+    
+-   浏览器接收到响应数据，会把Cookie对象中的数据**存储在浏览器内存**中，此时浏览器和服务端就**建立了一次会话**
+    
+-   **在同一次会话**中浏览器**再次发送**HTTP请求2给服务端ServletB，浏览器会**携带Cookie对象**中的所有数据
+    
+-   ServletB接收到请求和数据后，就可以获取到存储在Cookie对象中的数据，这样同一个会话中的多次请求之间就实现了数据共享
+    
 
+#### 1.2.2 Cookie的发送和获取
 
-
-
-- 服务端提供了两个Servlet，分别是ServletA和ServletB
-- 浏览器发送HTTP请求1给服务端，服务端ServletA接收请求并进行业务处理
-- 服务端ServletA在处理的过程中可以**创建一个Cookie对象**并将`name=zs`的数据存入Cookie
-- 服务端ServletA在响应数据的时候，会把Cookie对象**响应**给浏览器
-- 浏览器接收到响应数据，会把Cookie对象中的数据**存储在浏览器内存**中，此时浏览器和服务端就**建立了一次会话**
-- **在同一次会话**中浏览器**再次发送**HTTP请求2给服务端ServletB，浏览器会**携带Cookie对象**中的所有数据
-- ServletB接收到请求和数据后，就可以获取到存储在Cookie对象中的数据，这样同一个会话中的多次请求之间就实现了数据共享
-
-### 1.2.2 Cookie的发送和获取
-
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/72c0e278eedf4258b3651111765a14bb.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/bf2396e12c36eb5d40491d35f466e167.png)
 
 **发送Cookie**
 
-- 创建Cookie对象，并设置数据
+-   创建Cookie对象，并设置数据
+    
 
 ```java
 Cookie cookie = new Cookie("key","value");
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- 发送Cookie到客户端（浏览器）：使用**response**对象
+-   发送Cookie到客户端（浏览器）：使用**response**对象
+    
 
 ```java
 response.addCookie(cookie);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **案例完成Cookie的发送：**
 
 > **需求:**在Servlet中生成Cookie对象并存入数据，然后将数据发送给浏览器
->
+> 
 > 1.创建Maven项目,项目名称为cookie-demo，并在pom.xml添加依赖
->
+> 
 > 2.编写Servlet类，名称为AServlet
->
+> 
 > 3.在AServlet中创建Cookie对象，存入数据，发送给前端
->
+> 
 > 4.启动测试，在浏览器查看Cookie对象中的值
 
 (1)创建Maven项目cookie-demo，并在pom.xml添加依赖Servlet、jsp、jstl
@@ -200,8 +222,6 @@ response.addCookie(cookie);
 </build>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (2)在Servlet中创建Cookie对象，存入数据，发送给前端
 
 ```java
@@ -223,8 +243,6 @@ public class AServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 （3）启动测试，在浏览器查看Cookie对象中的值
 
 访问
@@ -233,54 +251,43 @@ public class AServlet extends HttpServlet {
 http://localhost:8080/cookie-demo/aServlet
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **chrome浏览器查看Cookie的值**，有两种方式:
 
 **方式一:**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/dcc66327b10b4840aa5ee834ba525d5f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/fe35936b2848f4719f896581a35dfe30.png)
 
 **方式二:**选中打开开发者工具或者 使用快捷键F12 或者 Ctrl+Shift+I
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/1546aa92e7b84ae8a0c0f044b5ae191e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/2b4182a3a121cd8b4d769e6787b0eec5.png)
 
 **获取Cookie**
 
-- **获取客户端携带的所有Cookie**，使用**request**对象
+-   **获取客户端携带的所有Cookie**，使用**request**对象
+    
 
 ```java
 Cookie[] cookies = request.getCookies();
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- 遍历数组，获取每一个Cookie对象：for
-- 使用Cookie对象方法**获取数据**
+-   遍历数组，获取每一个Cookie对象：for
+    
+-   使用Cookie对象方法**获取数据**
+    
 
 ```java
 cookie.getName();
 cookie.getValue();
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **案例完成Cookie的获取:**
 
 > 需求:在Servlet中获取前一个案例存入在Cookie对象中的数据
->
+> 
 > 1.编写一个新Servlet类，名称为BServlet
->
+> 
 > 2.在BServlet中使用request对象获取Cookie数组，遍历数组，从数据中获取指定名称对应的值
->
+> 
 > 3.启动测试，在控制台打印出获取的值
 
 （1）在BServlet中使用request对象获取Cookie数组，遍历数组，从数据中获取指定名称对应的值
@@ -313,62 +320,60 @@ public class BServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 （2）启动测试，在控制台打印出获取的值
 
 访问`http://localhost:8080/cookie-demo/bServlet`
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/e255da33d2634dc8be1cf0d74f2bb436.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/81626fe24935713ad933d1140fb6837b.png)
 
-
-
-
-
-在IDEA控制台就能看到输出的结果:![img](JavaWeb基础7——会话技术Cookie&Session.assets/ee1108413b424b9b87137f068cd5aae5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-
+在IDEA控制台就能看到输出的结果:![](https://i-blog.csdnimg.cn/blog_migrate/b00b705247d54ecb95786dfa9c007d89.png)
 
 > **小结**
->
 > 
->
-> - 发送Cookie:
->   - 创建Cookie对象，并设置值:Cookie cookie = new Cookie("key","value");
->   - 发送Cookie到客户端使用的是Reponse对象:response.addCookie(cookie);
-> - 获取Cookie:
->   - 使用Request对象获取Cookie数组:Cookie[] cookies = request.getCookies();
->   - 遍历数组
->   - 获取数组中每个Cookie对象的值:cookie.getName()和cookie.getValue()
+> -   发送Cookie:
+>     
+>     -   创建Cookie对象，并设置值:Cookie cookie = new Cookie("key","value");
+>         
+>     -   发送Cookie到客户端使用的是Reponse对象:response.addCookie(cookie);
+>         
+> -   获取Cookie:
+>     
+>     -   使用Request对象获取Cookie数组:Cookie\[\] cookies = request.getCookies();
+>         
+>     -   遍历数组
+>         
+>     -   获取数组中每个Cookie对象的值:cookie.getName()和cookie.getValue()
+>         
 
 介绍完Cookie的基本使用之后，那么Cookie的底层到底是如何实现一次会话两次请求之间的数据共享呢?
 
-### 1.2.3 Cookie的原理
+#### 1.2.3 Cookie的原理
 
 对于Cookie的实现原理是**基于HTTP协议**的:
 
-- **响应头:set-cookie**
-- **请求头: cookie**
+-   **响应头:set-cookie**
+    
+-   **请求头: cookie**
+    
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/9d8407bcae604284ad943e76ef50096c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/ef799d955e0fe2a685f1fd7ba42c9078.png)
 
 **过程：** 
 
-
-
-
-
-- 前面的案例中已经能够实现，AServlet给前端发送Cookie,BServlet从request中获取Cookie的功能
-- 对于AServlet响应数据的时候，Tomcat服务器都是**基于HTTP协议来响应数据**
-- 当Tomcat发现后端要返回的是一个Cookie对象之后，Tomcat就会在**响应头**中添加一行数据**`Set-Cookie:username=zs`**
-- 浏览器获取到响应结果后，从响应头中就可以获取到`Set-Cookie`对应值`username=zs`,并将数据**存储在浏览器的内存**中
-- 浏览器再次发送请求给BServlet的时候，**浏览器会自动在请求头中添加`\**Cookie\**: username=zs`**发送给服务端BServlet
-- Request对象会把请求头中cookie对应的值封装成一个个Cookie对象，最终形成一个数组
-- BServlet通过Request对象获取到Cookie[]后，就可以从中获取自己需要的数据
+-   前面的案例中已经能够实现，AServlet给前端发送Cookie,BServlet从request中获取Cookie的功能
+    
+-   对于AServlet响应数据的时候，Tomcat服务器都是**基于HTTP协议来响应数据**
+    
+-   当Tomcat发现后端要返回的是一个Cookie对象之后，Tomcat就会在**响应头**中添加一行数据**`Set-Cookie:username=zs`**
+    
+-   浏览器获取到响应结果后，从响应头中就可以获取到`Set-Cookie`对应值`username=zs`,并将数据**存储在浏览器的内存**中
+    
+-   浏览器再次发送请求给BServlet的时候，**浏览器会自动在请求头中添加`**Cookie**: username=zs`**发送给服务端BServlet
+    
+-   Request对象会把请求头中cookie对应的值封装成一个个Cookie对象，最终形成一个数组
+    
+-   BServlet通过Request对象获取到Cookie\[\]后，就可以从中获取自己需要的数据
+    
 
 **案例验证:**
 
@@ -376,31 +381,19 @@ public class BServlet extends HttpServlet {
 
 使用Chrom浏览器打开开发者工具(F12或Crtl+Shift+I)进行查看**响应头**中的数据
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/0952c9f61c1341efbee9b93caa2d622d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/69e2c55f9a8e26ed30cd3901b305cefb.png)
 
-
-
-
-
-（2）访问BServlet对应的地址`http://localhost:8080/cookie-demo/bServlet
+（2）访问BServlet对应的地址\`[http://localhost:8080/cookie-demo/bServlet](http://localhost:8080/cookie-demo/bServlet "http://localhost:8080/cookie-demo/bServlet")
 
 使用Chrom浏览器打开开发者工具(F12或Crtl+Shift+I)进行查看**请求头**中的数据
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/1ec531f39f4d4facb4bacdeeaf05220f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/6c928742d656d5122a1a1e5f45411bca.png)
 
-
-
-
-
-### 1.2.4 Cookie的存活时间
+#### 1.2.4 Cookie的存活时间
 
 cookie响应发送和请求获取过程:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/c472bed49cb14363b2339285475eec4b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/209e6438f437875a6fc0b66b8bd64a42.png)
 
 (1)浏览器发送请求给AServlet,AServlet会响应一个存有`usernanme=zs`的Cookie对象给浏览器
 
@@ -409,24 +402,24 @@ cookie响应发送和请求获取过程:
 (3)当浏览器再次发送请求给BServlet,BServlet就可以使用Request对象获取到Cookie数据
 
 > **思考：**在发送请求到BServlet之前，如果把**浏览器关闭再打开**进行访问，BServlet能否获取到Cookie数据?
->
+> 
 > 注意：浏览器关闭再打开不是指打开一个新的选显卡，而且必须是先关闭再打开，顺序不能变。
->
+> 
 > 答案：不能。BServlet中无法再获取到Cookie数据，浏览器关闭默认销毁cookie
 
-- **默认情况下，Cookie存储在浏览器内存中，当浏览器关闭，内存释放，则Cookie被销毁**
+-   **默认情况下，Cookie存储在浏览器内存中，当浏览器关闭，内存释放，则Cookie被销毁**
+    
 
 此时，网站登录在重启浏览器后“记着我”功能就无法实现了。
 
 **如何将Cookie持久化存储?**
 
-- **设置Cookie存活时间**
+-   **设置Cookie存活时间**
+    
 
 ```java
 setMaxAge(int seconds)
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 参数值为:
 
@@ -460,20 +453,16 @@ public class AServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 修改完代码后，启动测试，访问`http://localhost:8080/cookie-demo/aServlet`
 
-- 访问一个AServlet后，把浏览器关闭重启后，再去访问`http://localhost:8080/cookie-demo/bServet`,能在控制台打印出`username:zs`,说明Cookie没有随着浏览器关闭而被销毁
-- 通过浏览器查看Cookie的内容，会发现Cookie的相关信息![img](JavaWeb基础7——会话技术Cookie&Session.assets/e15fc150194b4d0ca5415c1b6b3c50c9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+-   访问一个AServlet后，把浏览器关闭重启后，再去访问`http://localhost:8080/cookie-demo/bServet`,能在控制台打印出`username:zs`,说明Cookie没有随着浏览器关闭而被销毁
+    
+-   通过浏览器查看Cookie的内容，会发现Cookie的相关信息![](https://i-blog.csdnimg.cn/blog_migrate/4e9ec4b1bd96afe592a21d0f35587f78.png)
+    
 
+#### 1.2.5 Cookie存储中文
 
-
-
-
-### 1.2.5 Cookie存储中文
-
-**Cookie不能直接存储中文，并且会报错，要进行URL编码间接存储中文。** 
+**Cookie不能直接存储中文，并且会报错，要进行URL编码间接存储中文。** 
 
 测试是否直接支持中文：
 
@@ -498,22 +487,19 @@ public class AServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 启动访问测试，访问`http://localhost:8080/cookie-demo/aServlet`会发现浏览器会提示错误信息
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/1e3ecc0c22ae4c1fbea42a3c8d0162b0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/c3e66061992fdd4dc35e9d9df36f470a.png)
 
-
-
-- **结论:Cookie不能直接存储中文，并且会报错**
+-   **结论:Cookie不能直接存储中文，并且会报错**
+    
 
 **cookie间接存储中文方法：进行**URL编码解码
 
 > 1.在AServlet中对中文进行URL编码，采用URLEncoder.encode()，将编码后的值存入Cookie中
->
+> 
 > 2.在BServlet中获取Cookie中的值,获取的值为URL编码后的值
->
+> 
 > 3.将获取的值在进行URL解码,采用URLDecoder.decode()，就可以获取到对应的中文值
 
 (1)在AServlet中对中文进行URL编码
@@ -537,8 +523,6 @@ public class AServlet extends HttpServlet {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (2)在BServlet中获取值，并对值进行解码
 
@@ -572,106 +556,96 @@ public class BServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 至此，我们就可以将中文存入Cookie中进行使用。
 
 > **小结**
->
+> 
 > Cookie的使用细节中，我们讲了Cookie的`存活时间`和`存储中文`:
->
-> - 存活时间，需要掌握setMaxAage()API的使用
-> - 存储中文，需要掌握URL编码和解码的使用
+> 
+> -   存活时间，需要掌握setMaxAage()API的使用
+>     
+> -   存储中文，需要掌握URL编码和解码的使用
+>     
 
-## 1.3 Session
+### 1.3 Session
 
-### **1.3.1 简介**
+#### **1.3.1 简介**
 
 **Session**：服务端会话跟踪技术：将数据保存到服务端。
 
-- Session是存储在服务端而Cookie是存储在客户端
-- 存储在客户端的数据容易被窃取和截获，存在很多不安全的因素
-- 存储在服务端的数据相比于客户端来说就**更安全**
+-   Session是存储在服务端而Cookie是存储在客户端
+    
+-   存储在客户端的数据容易被窃取和截获，存在很多不安全的因素
+    
+-   存储在服务端的数据相比于客户端来说就**更安全**
+    
 
 **特点：**
 
-- Session的setAttribute支持中文，不存在乱码、报错等问题。 
-- Session基于cookie实现的，服务端把session唯一标识id当成cookie响应给浏览器，再次请求时直接通过浏览器cookie里的id找到服务器内存中存储的session对象。
-- 同一会话多次请求获取到的session对象是同一个。
-- 关闭浏览器后Session销毁。
+-   Session的setAttribute支持中文，不存在乱码、报错等问题。 
+-   Session基于cookie实现的，服务端把session唯一标识id当成cookie响应给浏览器，再次请求时直接通过浏览器cookie里的id找到服务器内存中存储的session对象。
+-   同一会话多次请求获取到的session对象是同一个。
+-   关闭浏览器后Session销毁。
 
 **Session的工作流程**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/635c3a847b6545a8b8236e637de3dd32.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e5e726524aedb8771250bbb35fdaaa81.png)
 
+-   在服务端的AServlet获取一个Session对象，把数据存入其中
+    
+-   在服务端的BServlet获取到相同的Session对象，从中取出数据
+    
+-   就可以实现一次会话中多次请求之间的数据共享了
+    
 
-
-
-
-- 在服务端的AServlet获取一个Session对象，把数据存入其中
-- 在服务端的BServlet获取到相同的Session对象，从中取出数据
-- 就可以实现一次会话中多次请求之间的数据共享了
-
-### **1.3.2** Session的基本使用
+#### **1.3.2** Session的基本使用
 
 在JavaEE中提供了**HttpSession接口**，来实现一次会话的多次请求之间数据共享功能。
 
 具体的使用步骤为:
 
-- **获取Session对象**,使用的是request对象
+-   **获取Session对象**,使用的是request对象
+    
 
 ```java
 HttpSession session = request.getSession();
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- Session对象提供的**功能**，类似于request域对象方法:
-
-  - **存储数据到 session 域中**
-
-    ```java
-    void setAttribute(String name, Object o)
-    ```
-
-    ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
+-   Session对象提供的**功能**，类似于request域对象方法:
     
-
-  - **根据 key，获取值**
-
-    ```java
-    Object getAttribute(String name)
-    ```
-
-    ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-    
-
-  - **根据 key，删除该键值对**
-
-    ```java
-    void removeAttribute(String name)
-    ```
-
-    ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-    
+    -   **存储数据到 session 域中**
+        
+        ```java
+        void setAttribute(String name, Object o)
+        ```
+        
+    -   **根据 key，获取值**
+        
+        ```java
+        Object getAttribute(String name)
+        ```
+        
+    -   **根据 key，删除该键值对**
+        
+        ```java
+        void removeAttribute(String name)
+        ```
+        
 
 **案例：**
 
 介绍完Session相关的API后，接下来通过一个案例来完成对Session的使用，具体实现步骤为:
 
 > 需求:在一个Servlet中往Session中存入数据，在另一个Servlet中获取Session中存入的数据
->
+> 
 > 1.创建名为SessionDemo1的Servlet类
->
+> 
 > 2.创建名为SessionDemo2的Servlet类
->
+> 
 > 3.在SessionDemo1的方法中:获取Session对象、存储数据
->
+> 
 > 4.在SessionDemo2的方法中:获取Session对象、获取数据
->
+> 
 > 5.启动测试
 
 (1)SessionDemo1:获取Session对象、存储数据
@@ -695,8 +669,6 @@ public class SessionDemo1 extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (2)SessionDemo2:获取Session对象、获取数据
 
 ```java
@@ -719,61 +691,44 @@ public class SessionDemo2 extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3)启动测试，
 
-- 先访问`http://localhost:8080/cookie-demo/demo1`,将数据存入Session
-
-- 在访问`http://localhost:8080/cookie-demo/demo2`,从Session中获取数据
-
-- 查看控制台![img](JavaWeb基础7——会话技术Cookie&Session.assets/d6dcd697af54425eb45269cfd4927aac.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-
+-   先访问`http://localhost:8080/cookie-demo/demo1`,将数据存入Session
+    
+-   在访问`http://localhost:8080/cookie-demo/demo2`,从Session中获取数据
+    
+-   查看控制台![](https://i-blog.csdnimg.cn/blog_migrate/76511cc7b4d239472952c01f282af6cb.png)
+    
 
 通过案例的效果，能看到Session是能够在一次会话中两次请求之间共享数据。
 
 > **小结**
->
 > 
->
-> - **Session的获取**
->
->   ```java
->   HttpSession session = request.getSession();
->   ```
->
->   ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> 
->
-> - **Session常用方法的使用**
->
->   ```java
->   void setAttribute(String name, Object o)
->   Object getAttribute(String name)
->   ```
->
->   ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
->   **注意:**Session中可以存储的是一个**Object类型**的数据，也就是说Session中可以存储任意数据类型。
+> -   **Session的获取**
+>     
+>     ```java
+>     HttpSession session = request.getSession();
+>     ```
+>     
+> -   **Session常用方法的使用**
+>     
+>     ```java
+>     void setAttribute(String name, Object o)
+>     Object getAttribute(String name)
+>     ```
+>     
+>     **注意:**Session中可以存储的是一个**Object类型**的数据，也就是说Session中可以存储任意数据类型。
+>     
 
+#### **1.3.3** Session的原理分析
 
-
-### **1.3.3** Session的原理分析
-
-- **Session是基于Cookie实现的**
-- **一个会话里多次请求获取的Session对象是同一个。不同浏览器或者重新打开浏览器后获取的Session对象不是同一个。**
+-   **Session是基于Cookie实现的**
+    
+-   **一个会话里多次请求获取的Session对象是同一个。不同浏览器或者重新打开浏览器后获取的Session对象不是同一个。**
 
 **验证：**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/d2d4b95b3f4f4fbbbd654ea9a841fc31.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/5f599ef168d7f1ac6ddc6ecb0f871824.png)
 
 Session要想实现一次会话多次请求之间的数据共享，就必须要保证多次请求获取Session的对象是同一个。
 
@@ -799,8 +754,6 @@ public class SessionDemo1 extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 SessionDemo2
 
 ```java
@@ -824,25 +777,20 @@ public class SessionDemo2 extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 启动测试，分别访问
 
-```
-http://localhost:8080/cookie-demo/demo1
-http://localhost:8080/cookie-demo/demo2
-```
+`http://localhost:8080/cookie-demo/demo1`
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/a1aeae0e1aab4531a052998059a38223.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+`http://localhost:8080/cookie-demo/demo2`
 
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/7284140fa203c91b4d35ca7d24c8ecc6.png)
 
 > **结论:**
->
-> - 两个Servlet类中获取的Session对象是**同一个**
-> - 把demo1和demo2请求刷新多次，控制台最终打印的结果都是同一个
+> 
+> -   两个Servlet类中获取的Session对象是**同一个**
+>     
+> -   把demo1和demo2请求刷新多次，控制台最终打印的结果都是同一个
+>     
 
 注意：**如果是不同浏览器或者重新打开浏览器后，打印的Session就不一样了。**
 
@@ -850,11 +798,7 @@ Session实现的也是一次会话中的多次请求之间的数据共享。
 
 **Session是如何保证在一次会话中获取的Session对象是同一个呢?**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/ac6ec2dc9ee64f51a7a1db20bc89730f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/96d00c875c095c790c6424e65b2eed53.png)
 
 (1)demo1在第一次获取session对象的时候，session对象会有一个**唯一的标识**，假如是`id:10`
 
@@ -874,55 +818,43 @@ Session实现的也是一次会话中的多次请求之间的数据共享。
 
 (1)使用chrome浏览器访问`http://localhost:8080/cookie-demo/demo1`,打开开发者模式(F12或Ctrl+Shift+I),查看**响应头(Response Headers)**数据:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/10ccbf837b3b47bf8657b4170464453d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/ae4033052ed6db9fbf77fd9850aba358.png)
 
 (2)使用chrome浏览器再次访问`http://localhost:8080/cookie-demo/demo2`，查看**请求头(Request Headers)**数据:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/cde75916b6d944cdb39f94f32d2d2bdb.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/b3960ceec9c46121c24fcb9098370a28.png)
 
 > **小结**
->
 > 
->
-> - Session是基于Cookie来实现的
+> -   Session是基于Cookie来实现的
+>     
 
-### **1.3.4** 钝化与活化、销毁
+#### **1.3.4** 钝化与活化、销毁
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/80c53305817f411c8b7693f71a949cc2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/070410a3af213bdf650e2796603a0937.png)
 
 > **注意：**
->
-> - 这里说的关闭服务器是正常关闭，不是强制关闭
-> - 在服务器正常关闭后，session写入服务器的硬盘里，不是客户端的硬盘里。
+> 
+> -   这里说的关闭服务器是正常关闭，不是强制关闭
+> -   在服务器正常关闭后，session写入服务器的硬盘里，不是客户端的硬盘里。
 
-- session数据存储在服务端，服务器重启后，session数据会被保存在服务器硬盘
-- 浏览器被关闭启动后，重新建立的连接就已经是一个全新的会话，获取的session数据也是一个新的对象
-- session的数据要想共享，浏览器不能关闭，所以session数据不能长期保存数据
-- cookie是存储在客户端，是可以长期保存
-
-
+-   session数据存储在服务端，服务器重启后，session数据会被保存在服务器硬盘
+    
+-   浏览器被关闭启动后，重新建立的连接就已经是一个全新的会话，获取的session数据也是一个新的对象
+    
+-   session的数据要想共享，浏览器不能关闭，所以session数据不能长期保存数据
+    
+-   cookie是存储在客户端，是可以长期保存
+    
 
 **Session钝化与活化**
 
-- 思考：服务器重启后，Session中的数据是否还在?
+-   思考：服务器重启后，Session中的数据是否还在?
+    
 
 要想回答这个问题，我们可以先看下下面这幅图，
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/5bfbdcaf69c743fd9e64ffab076868b9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/8e50b16976e544ea7615a5dd4f4d4c28.png)
 
 (1)服务器端AServlet和BServlet共用的session对象应该是存储在服务器的内存中
 
@@ -954,19 +886,11 @@ Session实现的也是一次会话中的多次请求之间的数据共享。
 
 **启动**:进入到项目pom.xml所在目录，执行`tomcat7:run`
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/04863e033c3d4500991fadae04054ce5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/eb0da0c4f7f78cfb41af4374d33e9982.png)
 
 **停止**:在启动的命令行界面，输入`ctrl+c`
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/086bcd2be1994d6a924fbadd7121ebaf.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/709bdd75f58db8658f7bf0c66e47c83d.png)
 
 接下来的测试流程是:
 
@@ -980,11 +904,7 @@ Session实现的也是一次会话中的多次请求之间的数据共享。
 
 (5)访问`http://localhost:8080/cookie-demo/demo2` 查看是否能获取到session中的数据
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/b1cbea75bbb6474e9f761d5b0619f11c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/d787c900fec0ccee2133d81c60de0a91.png)
 
 经过测试，会发现**只要服务器是正常关闭和启动，session中的数据是可以被保存下来的。**
 
@@ -994,150 +914,135 @@ Session实现的也是一次会话中的多次请求之间的数据共享。
 
 **Session的钝化和活化**
 
-- **钝化：**在服务器**正常关闭**后，Tomcat会自动将Session数据写入**硬盘的文件**中
-
-  - 钝化的数据路径为:`项目目录\target\tomcat\work\Tomcat\localhost\项目名称\SESSIONS.ser`![img](JavaWeb基础7——会话技术Cookie&Session.assets/67fb42f1e9be4594815f540ee120eb71.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
+-   **钝化：**在服务器**正常关闭**后，Tomcat会自动将Session数据写入**硬盘的文件**中
     
-
+    -   钝化的数据路径为:`项目目录\target\tomcat\work\Tomcat\localhost\项目名称\SESSIONS.ser`![](https://i-blog.csdnimg.cn/blog_migrate/c4621b545699171b4611cd21b8abf8e3.png)
+        
+-   **活化：**再次启动服务器后，从**文件**中加载数据到Session中
     
-
-- **活化：**再次启动服务器后，从**文件**中加载数据到Session中
-
-  - 数据加载到Session中后，路径中的`SESSIONS.ser`文件会被删除掉
+    -   数据加载到Session中后，路径中的`SESSIONS.ser`文件会被删除掉
+        
 
 对于上述的整个过程，大家只需要**了解下即可**。因为所有的过程都是Tomcat自己完成的，不需要我们参与。
 
 > **小结**
->
 > 
->
-> - session数据存储在服务端，服务器重启后，session数据会被保存
-> - 浏览器被关闭启动后，重新建立的连接就已经是一个全新的会话，获取的session数据也是一个新的对象
-> - session的数据要想共享，浏览器不能关闭，所以session数据不能长期保存数据
-> - cookie是存储在客户端，是可以长期保存
-
-
+> -   session数据存储在服务端，服务器重启后，session数据会被保存
+>     
+> -   浏览器被关闭启动后，重新建立的连接就已经是一个全新的会话，获取的session数据也是一个新的对象
+>     
+> -   session的数据要想共享，浏览器不能关闭，所以session数据不能长期保存数据
+>     
+> -   cookie是存储在客户端，是可以长期保存
+>     
 
 **Session销毁**
 
 session的销毁会有两种方式:
 
-- **默认情况下，无操作，30分钟自动销毁**
-
-  - 对于这个失效时间，是可以通过**配置进行修改**的
-
-    - 在项目的web.xml中配置
-
-      ```XML
-      <?xml version="1.0" encoding="UTF-8"?>
-      <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-               version="3.1">
-      
-          <session-config>
-              <session-timeout>100</session-timeout>
-          </session-config>
-      </web-app>
-      ```
-
-      ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-      
-
-    - 如果没有配置，默认是30分钟，默认值是在Tomcat的web.xml配置文件中写死的![img](JavaWeb基础7——会话技术Cookie&Session.assets/11d824fc3b2e498c91c44f125c59a24b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-      
-
-      
-
-- 调用Session对象的**invalidate()**进行**手动销毁**
-
-  - 在SessionDemo2类中添加session销毁的方法
-
-    ```java
-    @WebServlet("/demo2")
-    public class SessionDemo2 extends HttpServlet {
-        @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            //获取数据，从session中
+-   **默认情况下，无操作，30分钟自动销毁**
     
-            //1. 获取Session对象
-            HttpSession session = request.getSession();
-            System.out.println(session);
+    -   对于这个失效时间，是可以通过**配置进行修改**的
+        
+        -   在项目的web.xml中配置
+            
+            ```XML
+            <?xml version="1.0" encoding="UTF-8"?>
+            <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+                     version="3.1">
+            
+                <session-config>
+                    <session-timeout>100</session-timeout>
+                </session-config>
+            </web-app>
+            ```
+            
+        -   如果没有配置，默认是30分钟，默认值是在Tomcat的web.xml配置文件中写死的![](https://i-blog.csdnimg.cn/blog_migrate/0c9b35da34af3150b9b91bf4da6f1922.png)
+            
+-   调用Session对象的**invalidate()**进行**手动销毁**
     
-            // 销毁
-            session.invalidate();
-            //2. 获取数据
-            Object username = session.getAttribute("username");
-            System.out.println(username);
+    -   在SessionDemo2类中添加session销毁的方法
+        
+        ```java
+        @WebServlet("/demo2")
+        public class SessionDemo2 extends HttpServlet {
+            @Override
+            protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                //获取数据，从session中
+        
+                //1. 获取Session对象
+                HttpSession session = request.getSession();
+                System.out.println(session);
+        
+                // 销毁
+                session.invalidate();
+                //2. 获取数据
+                Object username = session.getAttribute("username");
+                System.out.println(username);
+            }
+        
+            @Override
+            protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                this.doGet(request, response);
+            }
         }
-    
-        @Override
-        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-            this.doGet(request, response);
-        }
-    }
-    ```
+        ```
+        
+    -   启动访问测试，先访问demo1将数据存入到session，再次访问demo2从session中获取数据![](https://i-blog.csdnimg.cn/blog_migrate/d6287d7a3424d2e23d422ab4c37640a6.png)
+        
+    -   该销毁方法一般会在**用户手动退出**的时候，需要将session销毁掉。
+        
 
-    ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-    
-
-  - 启动访问测试，先访问demo1将数据存入到session，再次访问demo2从session中获取数据![img](JavaWeb基础7——会话技术Cookie&Session.assets/3a51cff72a304a5a91658fac6c2fbc1c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-    
-
-    
-
-  - 该销毁方法一般会在**用户手动退出**的时候，需要将session销毁掉。
-
-## **1.4 总结，Cookie和Session区别和应用场景**
+### **1.4 总结，Cookie和Session区别和应用场景**
 
 > **Cookie和Session小结**
->
-> - Cookie 和 Session 都是来完成一次会话内多次请求间**数据共享**的。
-> - **区别:**
->   - **存储位置：**Cookie 是将数据存储在客户端，Session 将数据存储在服务端。关闭浏览器，cookie看setMaxAge，session销毁。关闭服务器后两者都依然存在没销毁。
->   - **安全性：**Cookie不安全，Session安全
->   - **数据大小：**Cookie最大3KB，Session无大小限制
->   - **存储时间：**Cookie可以通过setMaxAge()长期存储，Session默认30分钟
->   - **服务器性能：**Cookie不占服务器资源，Session占用服务器资源
-> - **应用场景:**
->   - **购物车:**使用**Cookie**来存储，因为要长期存储，且数据不敏感。
->   - **已登录用户的个人信息展示:**使用**Session**来存储，因为数据敏感
->   - **记住我功能:**使用**Cookie**来存储，因为要长期存储，牺牲安全提升体验
->   - **验证码:**使用**Session**来存储，因为安全重要。发验证码请求和提交验证码请求的验证码只需要短期存储、且安全。
-> - **结论**
->   - **Cookie**是用来保证用户在**未登录情况下**的身份识别
->   - **Session**是用来保存用户**登录后**的数据
+> 
+> -   Cookie 和 Session 都是来完成一次会话内多次请求间**数据共享**的。
+>     
+> -   **区别:**
+>     
+>     -   **存储位置：**Cookie 是将数据存储在客户端，Session 将数据存储在服务端。关闭浏览器，cookie看setMaxAge，session销毁。关闭服务器后两者都依然存在没销毁。
+>         
+>     -   **安全性：**Cookie不安全，Session安全
+>         
+>     -   **数据大小：**Cookie最大3KB，Session无大小限制
+>         
+>     -   **存储时间：**Cookie可以通过setMaxAge()长期存储，Session默认30分钟
+>         
+>     -   **服务器性能：**Cookie不占服务器资源，Session占用服务器资源
+>         
+> -   **应用场景:**
+>     
+>     -   **购物车:**使用**Cookie**来存储，因为要长期存储，且数据不敏感。
+>         
+>     -   **已登录用户的个人信息展示:**使用**Session**来存储，因为数据敏感
+>         
+>     -   **记住我功能:**使用**Cookie**来存储，因为要长期存储，牺牲安全提升体验
+>         
+>     -   **验证码:**使用**Session**来存储，因为安全重要。发验证码请求和提交验证码请求的验证码只需要短期存储、且安全。
+>         
+> -   **结论**
+>     
+>     -   **Cookie**是用来保证用户在**未登录情况下**的身份识别
+>         
+>     -   **Session**是用来保存用户**登录后**的数据
+>         
 
+### **1.5 案例，**用户登录注册“记住我”和“验证码”
 
-
-## **1.5 案例，**用户登录注册“记住我”和“验证码”
-
-### 1.5.1 需求分析
-
-
+#### 1.5.1 需求分析
 
 1.完成用户登录功能，如果用户勾选“记住用户” ，则下次访问登录页面**自动**填充用户名密码
 
 2.完成注册功能，并实现**验证码**功能
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/3c8c3056d69e422aa382b894b7639407.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/4ac2888fde829e63aa23c2c6c480bb6c.png)
 
+#### 1.5.2 用户登录功能
 
-
-
-
-### 1.5.2 用户登录功能
-
-
-
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/6ab7adb269c341469b34630a41152cd7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/7c9140dd5729032ed4d88d9b74a57f11.png)
 
 用户登录成功后，跳转到列表页面，并在页面上展示当前登录的用户名称
 
@@ -1145,15 +1050,11 @@ session的销毁会有两种方式:
 
 **实现流程分析**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/866fdd03b3ca44deb31d8934dbcf65dd.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/e29598e10999107498d9d6e3a320ea46.png)
 
 (1)前端通过表单发送请求和数据给Web层的LoginServlet
 
-(2)在LoginServlet中接收请求和数据[用户名和密码]
+(2)在LoginServlet中接收请求和数据\[用户名和密码\]
 
 (3)LoginServlet接收到请求和数据后，调用Service层完成根据用户名和密码查询用户对象
 
@@ -1201,8 +1102,6 @@ public interface UserMapper {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 `User.java`放到`pojo`包下:
 
 ```java
@@ -1241,9 +1140,7 @@ public class User {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-`UserMapper.xml`放入到resources/com/itheima/mapper`目录下:
+`UserMapper.xml`放入到resources/com/itheima/mapper\`目录下:
 
 ```XML
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1254,8 +1151,6 @@ public class User {
 
 </mapper>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **(2)完成Service层的代码编写**
 
@@ -1286,17 +1181,11 @@ public class UserService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3)完成页面和Web层的代码编写
 
 (3.1)`webapp`目录:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/fa43cc9d98ba4b0b94b2e083696fc2a8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/26c798f5cd09064dd4855a17faff97ee.png)
 
 (3.2)将login.html内容修改成login.jsp
 
@@ -1329,8 +1218,6 @@ public class UserService {
 </body>
 </html>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (3.3)创建LoginServlet类
 
@@ -1377,8 +1264,6 @@ public class LoginServlet extends HttpServlet {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (3.4)在brand.jsp中<body>标签下添加欢迎当前用户的提示信息:
 
@@ -1434,8 +1319,6 @@ public class LoginServlet extends HttpServlet {
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3.5) 修改login.jsp，将错误信息使用EL表达式来获取，回填错误的用户名密码
 
 ```html
@@ -1447,52 +1330,36 @@ public class LoginServlet extends HttpServlet {
         </c:if>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```html
         <p>Username:<input id="username" name="username" type="text" value="${username}"></p>
 
         <p>Password:<input id="password" name="password" type="password" value="${password}"></p>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 **(4)启动，访问测试**
 
 (4.1) 进入登录页面，输入错误的用户名或密码
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/4563fb5e852c41609d8a4b4720686caf.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/8223aa2c0ad9f93d1fe235a109792e70.png)
 
 (4.2)输入正确的用户和密码信息
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/38363737d0944a51bae5e96194ade7ad.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/022bf5c09ad18bf57cb06dfe2a481f0f.png)
 
 > **小结**
->
-> - 在LoginServlet中，将登录成功的**用户数据存入session**中，方法在列表页面中获取当前登录用户信息进行展示
-> - 在LoginServlet中，将**登录失败的错误信息存入到request**中，如果存入到session中就会出现这次会话的所有请求都有登录失败的错误信息，这个是不需要的，所以不用存入到session中
+> 
+> -   在LoginServlet中，将登录成功的**用户数据存入session**中，方法在列表页面中获取当前登录用户信息进行展示
+>     
+> -   在LoginServlet中，将**登录失败的错误信息存入到request**中，如果存入到session中就会出现这次会话的所有请求都有登录失败的错误信息，这个是不需要的，所以不用存入到session中
+>     
 
-### 1.5.3 记住我-设置Cookie
+#### 1.5.3 记住我-设置Cookie
 
 **1.需求:**
 
 如果用户勾选“记住用户” ，则下次访问登陆页面自动填充用户名密码。这样可以提升用户的体验。
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/d6517266712846ee8a90075cb7f825b0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/048e687a55f95469ddaf0c0dfe267ab0.png)
 
 对应上面这个需求，最大的问题就是: 如何自动填充用户名和密码?
 
@@ -1510,13 +1377,7 @@ public class LoginServlet extends HttpServlet {
 
 2.用户必须在登录页面勾选了`记住我`的复选框
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/8797401ee1324a40be4f3f44551e9fef.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/eda9c45abd7c93c3ee2a5b1d959eeb5c.png)
 
 (1)前端需要在发送请求和数据的时候，多携带一个用户是否勾选`Remember`的数据
 
@@ -1576,8 +1437,6 @@ public class LoginServlet extends HttpServlet {
 </body>
 </html>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (2)在LoginServlet获取复选框的值并在登录成功后进行设置Cookie
 
@@ -1641,29 +1500,19 @@ public class LoginServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3)启动访问测试，
 
 只有当前用户名和密码输入正确，并且勾选了Remeber的复选框，在响应头中才可以看得cookie的相关数据
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/668a4249a6cf45d4a0ecc4f976a64ae0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a5ed5986f6bb83d2ecb6b2d07a7dcf89.png)
 
-
-
-
-
-### 1.5.4 记住我-获取Cookie
+#### 1.5.4 记住我-获取Cookie
 
 **1.需求**
 
 登录成功并勾选了Remeber后，后端返回给前端的Cookie数据就已经存储好了，接下来就需要在页面获取Cookie中的数据，并把数据设置到登录页面的用户名和密码框中。
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/8aa551328fb0434ea21306b948b211a7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/fc8b51c46e46b4a44f3a0118c4e0adf5.png)
 
 如何在页面直接获取Cookie中的值呢?
 
@@ -1673,11 +1522,7 @@ public class LoginServlet extends HttpServlet {
 
 key:指的是存储在cookie中的键名称
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/eb3649182bf84363880a08235d6d509e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/0a1986296e9f3d9614f55638473c8ab3.png)
 
 (1)在login.jsp用户名的表单输入框使用value值给表单元素添加默认值，value可以使用`${cookie.username.value}`
 
@@ -1718,17 +1563,11 @@ key:指的是存储在cookie中的键名称
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 4.访问测试，重新访问登录页面，就可以看得用户和密码已经被填充。
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/eeb1591d3bc14155afb27c5cb34e1d0d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/3a8db5aade35cd6b26c0e24a0048f213.png)
 
-
-
-
-
-### 1.5.5 用户注册功能
+#### 1.5.5 用户注册功能
 
 **需求**
 
@@ -1738,21 +1577,13 @@ key:指的是存储在cookie中的键名称
 
 展示验证码：展示验证码图片，并可以点击切换
 
-校验验证码：验证码填写不正确，则注册失败![img](JavaWeb基础7——会话技术Cookie&Session.assets/bad1f9a05ccc409ba1f5b0c30336a22b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+校验验证码：验证码填写不正确，则注册失败![](https://i-blog.csdnimg.cn/blog_migrate/9de53c82ec15451dabada38facb3a6d7.png)
 
-
-
-
-
-**2.实现流程分析**![img](JavaWeb基础7——会话技术Cookie&Session.assets/cab16a5a416b46f2af8d976ba0691f32.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+**2.实现流程分析**![](https://i-blog.csdnimg.cn/blog_migrate/0eba5d0870296d75788b27a80967560b.png)
 
 (1)前端通过表单发送请求和数据给Web层的RegisterServlet
 
-(2)在RegisterServlet中接收请求和数据[用户名和密码]
+(2)在RegisterServlet中接收请求和数据\[用户名和密码\]
 
 (3)RegisterServlet接收到请求和数据后，调用Service层完成用户信息的保存
 
@@ -1799,8 +1630,6 @@ public class UserService {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (3)完成页面和Web层的代码编写
 
@@ -1858,8 +1687,6 @@ public class UserService {
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3.2)编写RegisterServlet
 
 ```java
@@ -1901,16 +1728,12 @@ public class RegisterServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3.3)需要在页面上展示后台返回的错误信息，需要修改register.jsp
 
 ```html
 修改前:<span id="username_err" class="err_msg" style="display:none">用户名不太受欢迎</span>
 修改后:<span id="username_err" class="err_msg">${register_msg}</span>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (3.4)如果注册成功，需要把成功信息展示在登录页面，所以也需要修改login.jsp
 
@@ -1919,8 +1742,6 @@ public class RegisterServlet extends HttpServlet {
 修改后:<div id="errorMsg">${login_msg} ${register_msg}</div>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3.5)修改login.jsp，将注册跳转地址修改为register.jsp
 
 ```html
@@ -1928,42 +1749,29 @@ public class RegisterServlet extends HttpServlet {
 修改后: <a href="register.jsp">没有账号？</a>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (3.6)启动测试，
 
 如果是注册的用户信息已经存在:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/d96337bbcd074dbabdb6c94a55ad2b3d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/f15a9432c733d9692758ec17a095100a.png)
 
 如果注册的用户信息不存在，注册成功:
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/d156bdc01e354b68bf2840b10f019877.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/f37e7c66372031712c55ef42a9ef88d8.png)
 
-
-
-
-
-### 1.5.6 验证码-展示
+#### 1.5.6 验证码-展示
 
 **1.需求分析**
 
 展示验证码：展示验证码图片，并可以点击切换
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/41fb585341044fd7810dcb3338fd938b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/c9bdbca59175b26eebe8e11c7bd58d3a.png)
 
 验证码的生成是通过工具类来实现的，具体的工具类参考
 
-```
-CheckCodeUtil.java
+`CheckCodeUtil.java`
+
+```java
 package package1.util;
 
 import javax.imageio.ImageIO;
@@ -2248,9 +2056,8 @@ public class CheckCodeUtil {
 
     }
 }
-```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+```
 
 在该工具类中编写main方法进行测试:
 
@@ -2264,20 +2071,16 @@ public static void main(String[] args) throws IOException {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 生成完验证码以后，我们就可以知晓:
 
-- 验证码就是使用Java代码生成的一张图片
-- 验证码的作用:防止机器自动注册，攻击服务器
+-   验证码就是使用Java代码生成的一张图片
+    
+-   验证码的作用:防止机器自动注册，攻击服务器
+    
 
 **2.实现流程分析**
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/8dffb836180346169f5510bd46e79780.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/dcee4e15caca125987de1302821d35f9.png)
 
 (1)前端发送请求给CheckCodeServlet
 
@@ -2310,8 +2113,6 @@ public static void main(String[] args) throws IOException {
 </script>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 (2)编写CheckCodeServlet类，用来接收请求生成验证码
 
 ```java
@@ -2331,31 +2132,25 @@ public class CheckCodeServlet extends HttpServlet {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 1.5.7 验证码-校验
+#### 1.5.7 验证码-校验
 
 **1.需求**
 
-- 判断程序生成的验证码 和 用户输入的验证码 是否一样，如果不一样，则阻止注册
-- 验证码图片访问和提交注册表单是**两次**请求，所以要将程序生成的验证码存入Session中
+-   判断程序生成的验证码 和 用户输入的验证码 是否一样，如果不一样，则阻止注册
+    
+-   验证码图片访问和提交注册表单是**两次**请求，所以要将程序生成的验证码存入Session中
+    
 
-![img](JavaWeb基础7——会话技术Cookie&Session.assets/9780ac8b4d8e43fa83fbd2adda571ef0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/2aa0bdcb847fcfd01919663876320b54.png)
 
 思考:为什么要把验证码数据存入到Session中呢?
 
-- 生成验证码和校验验证码是两次请求，此处就需要在一个会话的两次请求之间共享数据
-- 验证码属于安全数据类的，所以我们选中Session来存储验证码数据。
+-   生成验证码和校验验证码是两次请求，此处就需要在一个会话的两次请求之间共享数据
+    
+-   验证码属于安全数据类的，所以我们选中Session来存储验证码数据。
+    
 
 **2.实现流程分析**
-
-
-
-
 
 (1)在CheckCodeServlet中生成验证码的时候，将验证码数据存入Session对象
 
@@ -2392,8 +2187,6 @@ public class CheckCodeServlet extends HttpServlet {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 (2)在RegisterServlet中，获取页面的和session对象中的验证码，进行对比
 
@@ -2462,7 +2255,5 @@ public class RegisterServlet extends HttpServlet {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 至此，用户的注册登录功能就已经完成了。

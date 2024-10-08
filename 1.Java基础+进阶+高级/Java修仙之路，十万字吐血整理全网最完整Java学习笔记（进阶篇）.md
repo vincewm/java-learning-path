@@ -1,74 +1,355 @@
 > **导航：**
->
-> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/黑马旅游/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289)
->
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析](https://blog.csdn.net/qq_40991313/article/details/126646289 "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析")
+> 
 > **推荐视频：**
->
-> [黑马程序员全套Java教程_哔哩哔哩](https://www.bilibili.com/video/BV18J411W7cE/?spm_id_from=333.337.search-card.all.click)
->
-> [尚硅谷Java入门视频教程_哔哩哔哩](https://www.bilibili.com/video/BV1Kb411W75N/?spm_id_from=333.337.search-card.all.click)
->
+> 
+> [黑马程序员全套Java教程\_哔哩哔哩](https://www.bilibili.com/video/BV18J411W7cE/?spm_id_from=333.337.search-card.all.click "黑马程序员全套Java教程_哔哩哔哩")
+> 
+> [尚硅谷Java入门视频教程\_哔哩哔哩](https://www.bilibili.com/video/BV1Kb411W75N/?spm_id_from=333.337.search-card.all.click "尚硅谷Java入门视频教程_哔哩哔哩")
+> 
 > **推荐书籍：**
->
-> 《Java编程思想 （第4版）》 
->
+> 
+> 《Java编程思想 （第4版）》 
+> 
 > 《Java核心技术·卷I（原书第12版） : 开发基础》
 
-[TOC]
+**目录**
 
+[六、异常](#%E5%BC%82%E5%B8%B8)
 
+[6.1 基本介绍](#6.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
 
-# 六、异常
+[6.2 详细介绍](#Throwable)
 
-## 6.1 基本介绍
+[6.2.1 Throwable类](#6.2.1%20Throwable%E7%B1%BB)
 
-**什么是异常？**
- 在Java中，异常（Exception）是指在程序执行过程中出现问题的一种情况，它可以中断程序的正常执行。
+[6.2.2 知识加油站](#6.2.2%20%E7%9F%A5%E8%AF%86%E5%8A%A0%E6%B2%B9%E7%AB%99)
+
+[6.2.2.1 异常的追踪栈](#6.2.2.1%20%E5%BC%82%E5%B8%B8%E7%9A%84%E8%BF%BD%E8%B8%AA%E6%A0%88)
+
+[6.2.2.2 日志规范：不建议使用e.printStackTrace()](#6.2.2.2%C2%A0%E6%97%A5%E5%BF%97%E8%A7%84%E8%8C%83%EF%BC%9A%E4%B8%8D%E5%BB%BA%E8%AE%AE%E4%BD%BF%E7%94%A8e.printStackTrace%28%29%C2%A0) 
+
+[6.2.3 Error类](#6.2.3%C2%A0Error%E7%B1%BB)
+
+[6.2.4 Exception类](#6.2.4%C2%A0Exception%E7%B1%BB)
+
+[6.3 异常的两种处理方式](#6.3%20%E5%BC%82%E5%B8%B8%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F)
+
+[6.3.1 抛出异常](#6.3.1%20%E6%8A%9B%E5%87%BA%E5%BC%82%E5%B8%B8)
+
+[6.3.2 捕获异常（推荐）](#6.3.2%20%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89)
+
+[6.4 自定义异常：继承异常类](#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8)
+
+[七、集合](#%E9%9B%86%E5%90%88)
+
+[7.1 集合体系](#%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB)
+
+[7.1.1 集合和映射](#7.1.1%20%E9%9B%86%E5%90%88%E5%92%8C%E6%98%A0%E5%B0%84)
+
+[7.1.2 思考：Map是不是集合？](#7.1.2%C2%A0%E6%80%9D%E8%80%83%EF%BC%9AMap%E6%98%AF%E4%B8%8D%E6%98%AF%E9%9B%86%E5%90%88%EF%BC%9F)
+
+[7.1.3 常见集合的底层和性能对比](#7.1.3%C2%A0%E5%B8%B8%E8%A7%81%E9%9B%86%E5%90%88%E7%9A%84%E5%BA%95%E5%B1%82%E5%92%8C%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94)
+
+[7.1.4 知识加油站：](#7.1.4%20%E7%9F%A5%E8%AF%86%E5%8A%A0%E6%B2%B9%E7%AB%99%EF%BC%9A)
+
+[7.1.4.1 集合的线程安全性](#7.1.4.1%20%E9%9B%86%E5%90%88%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7)
+
+[7.1.4.2 思考：什么是线程不安全？](#7.1.4.2%20%E6%80%9D%E8%80%83%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%EF%BC%9F)
+
+[7.1.2 常用API](#7.1.2%20%E5%B8%B8%E7%94%A8API)
+
+[7.1.2.1 Collection：](#7.1.2.1%C2%A0Collection%EF%BC%9A)
+
+[7.1.2.2 Map](#7.1.2.2%C2%A0Map)
+
+[7.1.​​3 常用工具类](#7.1.%E2%80%8B%E2%80%8B3%20%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7%E7%B1%BB)
+
+[7.1.3.1 集合工具类Collections](#7.1.3.1%C2%A0%E9%9B%86%E5%90%88%E5%B7%A5%E5%85%B7%E7%B1%BBCollections)
+
+[7.1.3.2 数组工具类Arrays](#7.1.3.2%C2%A0%E6%95%B0%E7%BB%84%E5%B7%A5%E5%85%B7%E7%B1%BBArrays)
+
+[7.2 ArrayList](#7.2%20ArrayList)
+
+[7.2.1 基本介绍](#7.2.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[7.2.2 底层源码和扩容机制](#7.2.2%20%E5%BA%95%E5%B1%82%E6%BA%90%E7%A0%81%E5%92%8C%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6)
+
+[7.2.3 线程不安全问题和解决方案](#7.2.3%C2%A0%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+
+[7.2.4 六种遍历方法](#7.2.4%C2%A0%E5%85%AD%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95)
+
+[7.2.4.1. 常规 for 循环](#7.2.4.1.%20%E5%B8%B8%E8%A7%84%C2%A0for%20%E5%BE%AA%E7%8E%AF)
+
+[7.2.4.2. 增强 for 循环（只遍历不修改）](#7.2.4.2.%20%E5%A2%9E%E5%BC%BA%20for%20%E5%BE%AA%E7%8E%AF%EF%BC%88%E5%8F%AA%E9%81%8D%E5%8E%86%E4%B8%8D%E4%BF%AE%E6%94%B9%EF%BC%89)
+
+[7.2.4.3. 迭代器 Iterator（遍历并修改）](#7.2.4.3.%20%E8%BF%AD%E4%BB%A3%E5%99%A8%20Iterator%EF%BC%88%E9%81%8D%E5%8E%86%E5%B9%B6%E4%BF%AE%E6%94%B9%EF%BC%89)
+
+[7.2.4.4. 迭代器 ListIterator （双向遍历并修改）](#7.2.4.4.%20%E8%BF%AD%E4%BB%A3%E5%99%A8%20ListIterator%20%EF%BC%88%E5%8F%8C%E5%90%91%E9%81%8D%E5%8E%86%E5%B9%B6%E4%BF%AE%E6%94%B9%EF%BC%89)
+
+[7.2.4.5.  forEach + Lambda 表达式（只遍历不修改）](#7.2.4.5.%C2%A0%20forEach%20%2B%20Lambda%20%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%88%E5%8F%AA%E9%81%8D%E5%8E%86%E4%B8%8D%E4%BF%AE%E6%94%B9%EF%BC%89)
+
+[7.2.4.6. Stream API 遍历（推荐，并发遍历并修改）](#7.2.4.6.%20Stream%20API%20%E9%81%8D%E5%8E%86%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%8C%E5%B9%B6%E5%8F%91%E9%81%8D%E5%8E%86%E5%B9%B6%E4%BF%AE%E6%94%B9%EF%BC%89)
+
+[7.2.4.7 小结：六种遍历方法的适用场景](#7.2.4.7%C2%A0%E5%B0%8F%E7%BB%93%EF%BC%9A%E5%85%AD%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95%E7%9A%84%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF)
+
+[7.3 List接口](#7.3%20List%E6%8E%A5%E5%8F%A3)
+
+[7.3.1 主要实现类](#7.3.1%20%E4%B8%BB%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%B1%BB)
+
+[7.3.2 特点](#7.3.2%20%E7%89%B9%E7%82%B9)
+
+[7.3.3 常用方法](#7.3.3%20%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95)
+
+[7.3.4 代码示例](#7.3.4%C2%A0%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B)
+
+[7.3.5 面向接口编程](#7.3.5%20%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3%E7%BC%96%E7%A8%8B)
+
+[7.4 LinkedList](#LinkedList)
+
+[7.4.1 基本介绍](#7.4.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D%C2%A0) 
+
+[7.4.2 ArrayList和LinkedList的区别](#7.4.2%C2%A0ArrayList%E5%92%8CLinkedList%E7%9A%84%E5%8C%BA%E5%88%AB)
+
+[7.5 Hashset](#Hashset)
+
+[7.5.1 基本介绍](#7.5.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[7.5.2 去重原理：hashCode值](#7.5.2%C2%A0%E5%8E%BB%E9%87%8D%E5%8E%9F%E7%90%86%EF%BC%9AhashCode%E5%80%BC)
+
+[7.5.3 知识加油站](#7.5.3%20%E7%9F%A5%E8%AF%86%E5%8A%A0%E6%B2%B9%E7%AB%99)
+
+[7.5.3.1 equals()和hashcode()的关系](#7.5.3.1%20equals%28%29%E5%92%8Chashcode%28%29%E7%9A%84%E5%85%B3%E7%B3%BB)
+
+[7.5.3.2 ==与equals()的区别](#7.5.3.2%20%3D%3D%E4%B8%8Eequals%28%29%E7%9A%84%E5%8C%BA%E5%88%AB)
+
+[7.6 HashMap](#HashMap%E5%92%8CHashSet%E5%8C%BA%E5%88%AB)
+
+[7.6.1 基本介绍](#7.6.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[7.6.2 HashMap和HashSet区别](#7.6.2%20HashMap%E5%92%8CHashSet%E5%8C%BA%E5%88%AB)
+
+[7.6.3 知识加油站：HashMap的底层原理](#7.6.3%20%E7%9F%A5%E8%AF%86%E5%8A%A0%E6%B2%B9%E7%AB%99%EF%BC%9AHashMap%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86)
+
+[7.6.3.1 线程不安全](#7.6.3.1%20%E7%BA%BF%E7%A8%8B%E4%B8%8D%E5%AE%89%E5%85%A8)
+
+[7.6.3.2 底层数据结构](#7.6.3.2%C2%A0%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+
+[7.6.3.3 扩容机制](#7.6.3.3%C2%A0%E6%89%A9%E5%AE%B9%E6%9C%BA%E5%88%B6%C2%A0) 
+
+[7.6.3.4 put()流程](#7.6.3.4%C2%A0put%28%29%E6%B5%81%E7%A8%8B)
+
+[7.6.3.5 HashMap容量为什么是2的n次方？](#7.6.3.5%C2%A0HashMap%E5%AE%B9%E9%87%8F%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF2%E7%9A%84n%E6%AC%A1%E6%96%B9%EF%BC%9F)
+
+[7.6.3.6 JDK7扩容时死循环问题](#7.6.3.6%C2%A0JDK7%E6%89%A9%E5%AE%B9%E6%97%B6%E6%AD%BB%E5%BE%AA%E7%8E%AF%E9%97%AE%E9%A2%98)
+
+[7.6.3.7 JDK8 put时数据覆盖问题：](#7.6.3.7%C2%A0JDK8%20put%E6%97%B6%E6%95%B0%E6%8D%AE%E8%A6%86%E7%9B%96%E9%97%AE%E9%A2%98%EF%BC%9A)
+
+[7.6.3.8 modCount非原子性自增问题](#7.6.3.8%C2%A0modCount%E9%9D%9E%E5%8E%9F%E5%AD%90%E6%80%A7%E8%87%AA%E5%A2%9E%E9%97%AE%E9%A2%98)
+
+[7.7 TreeSet](#TreeSet)
+
+[7.7.1 基本介绍](#7.7.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[7.7.2 HashSet和TreeSet的区别](#articleContentId)
+
+[八、泛型](#%E6%B3%9B%E5%9E%8B)
+
+[8.1 基本介绍](#14.11.1%20%E6%A6%82%E5%BF%B5)
+
+[8.2 格式](#8.2%C2%A0%E6%A0%BC%E5%BC%8F)
+
+[8.2.1 泛型参数类型](#8.2.1%20%E6%B3%9B%E5%9E%8B%E5%8F%82%E6%95%B0%E7%B1%BB%E5%9E%8B)
+
+[8.2.2 泛型类](#%E6%B3%9B%E5%9E%8B%E7%B1%BB)
+
+[8.2.3 泛型接口](#%C2%A0%E6%B3%9B%E5%9E%8B%E6%8E%A5%E5%8F%A3)
+
+[8.2.4 泛型方法](#%E6%B3%9B%E5%9E%8B%E6%96%B9%E6%B3%95)
+
+[8.3 类型通配符](#%C2%A0%E7%B1%BB%E5%9E%8B%E9%80%9A%E9%85%8D%E7%AC%A6)
+
+[8.4 可变参数](#14.13%20%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0)
+
+[8.5 知识加油站](#8.5%20%E7%9F%A5%E8%AF%86%E5%8A%A0%E6%B2%B9%E7%AB%99)
+
+[8.5.1 泛型的向上转型](#8.5.1%C2%A0%E6%B3%9B%E5%9E%8B%E7%9A%84%E5%90%91%E4%B8%8A%E8%BD%AC%E5%9E%8B)
+
+[8.5.2 泛型擦除](#8.5.2%20%E6%B3%9B%E5%9E%8B%E6%93%A6%E9%99%A4)
+
+[九、JDK8新特性](#%E4%B9%9D%E3%80%81JDK8%E6%96%B0%E7%89%B9%E6%80%A7)
+
+[9.1 基本介绍](#9.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[9.2 Lambda表达式](#9.2%20Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+
+[9.3 Stream流](#9.3%20Stream%E6%B5%81%C2%A0) 
+
+[9.3.1 基本介绍](#9.3.1%20%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[9.3.2 生成](#9.3.2%20%E7%94%9F%E6%88%90)
+
+[9.3.3 中间操作](#9.3.3%20%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C)
+
+[9.3.4 终结和收集](#9.3.4%20%E7%BB%88%E7%BB%93%E5%92%8C%E6%94%B6%E9%9B%86)
+
+[9.3 函数式接口](#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3)
+
+[9.3.1 基本介绍](#21.1%20%E6%A6%82%E5%BF%B5%C2%A0) 
+
+[9.3.2 生产者接口Supplier](#%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3Supplier%E6%8E%A5%E5%8F%A3)
+
+[9.3.3 函数式接口Consumer](#%C2%A0%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3Consumer)
+
+[9.3.4 函数式接口Predicate](#%C2%A0%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3Predicate)
+
+[9.4 方法引用](#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8)
+
+[9.4.1 概念](#20.1%20%E6%A6%82%E5%BF%B5)
+
+[9.4.2 引用实例方法](#%E5%BC%95%E7%94%A8%E7%B1%BB%E7%9A%84%E6%96%B9%E6%B3%95)
+
+[9.4.4 引用构造器](#%E5%BC%95%E7%94%A8%E6%9E%84%E9%80%A0%E5%99%A8)
+
+[9.5 接口组成更新](#%E6%8E%A5%E5%8F%A3%E7%BB%84%E6%88%90%E6%9B%B4%E6%96%B0)
+
+[9.5.1 接口默认方法](#%E6%8E%A5%E5%8F%A3%E4%B8%ADdefault%E9%BB%98%E8%AE%A4%E6%96%B9%E6%B3%95)
+
+[9.5.2 接口静态方法](#%E6%8E%A5%E5%8F%A3%E4%B8%AD%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95)
+
+[9.5.3 知识加油站：JDK9接口私有方法](#%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%A7%81%E6%9C%89%E6%96%B9%E6%B3%95)
+
+[十、I/O流](#i%2Fo%E6%B5%81)
+
+[10.1 基本介绍](#%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E3%80%81%E8%B7%AF%E5%BE%84%E6%96%9C%E6%9D%A0)
+
+[10.2 File类](#File)
+
+[10.3 字节流的超类](#10.3%20%E5%AD%97%E8%8A%82%E6%B5%81%E7%9A%84%E8%B6%85%E7%B1%BB)
+
+[10.3.1 字节输出流OutputStream](#%E5%AD%97%E8%8A%82%E8%BE%93%E5%87%BA%E6%B5%81OutputStream)
+
+[10.3.2 字节输入流InputStream](#%E5%AD%97%E8%8A%82%E8%BE%93%E5%85%A5%E6%B5%81InputStream)
+
+[10.4 字节文件流](#10.4%20%E5%AD%97%E8%8A%82%E6%96%87%E4%BB%B6%E6%B5%81)
+
+[10.4.1 文件输出流FileOutputStream](#%E5%AD%97%E8%8A%82%E8%BE%93%E5%87%BA%E6%B5%81)
+
+[10.4.2 文件输入流 FileInputStream](#%E5%AD%97%E8%8A%82%E8%BE%93%E5%85%A5%E6%B5%81)
+
+[10.5 字节缓冲流（推荐）](#%E5%AD%97%E8%8A%82%E7%BC%93%E5%86%B2%E6%B5%81)
+
+[10.5.1 字节缓冲输出流BufferedOutputStream](#BufferedOutputStream)
+
+[10.5.2 字节缓冲输入流BufferedInputStream](#BufferedInputStream)
+
+[10.6 字符流](#%E5%AD%97%E7%AC%A6%E6%B5%81)
+
+[10.6.1 继承关系](#10.6.1%20%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB)
+
+[10.6.2 字符流的编码和解码](#%E6%A6%82%E8%A6%81%E5%92%8C%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB)
+
+[10.6.3 字符输入输出流](#10.6.3%20%E5%AD%97%E7%AC%A6%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81)
+
+[10.6.3.1 字符输出流OutputStreamWriter](#%C2%A0OutputStreamWriter)
+
+[10.6.3.2 字符输入流InputStreamReader](#InputStreamReader)
+
+[10.6.4 FileWriter和FileReader：简化字符流](#FileWriter%E5%92%8CFileReader)
+
+[10.6.5 字符缓冲流（推荐）](#%E5%AD%97%E7%AC%A6%E7%BC%93%E5%86%B2%E6%B5%81)
+
+[10.7 知识加油站：I/O流JDK7异常处理](#I%2FO%E6%B5%81JDK7%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86)
+
+[10.8 特殊操作流](#%E7%89%B9%E6%AE%8A%E6%93%8D%E4%BD%9C%E6%B5%81%C2%A0) 
+
+[10.8.1 标准输入输出流：System.in和System.out](#%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E6%B5%81)
+
+[10.8.1.1 标准输出流](#10.8.1.1%C2%A0%E6%A0%87%E5%87%86%E8%BE%93%E5%87%BA%E6%B5%81)
+
+[基本介绍](#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[常用格式化符号](#%E5%B8%B8%E7%94%A8%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%AC%A6%E5%8F%B7%C2%A0) 
+
+[10.8.1.2 标准输入流](#10.8.1.2%20%E6%A0%87%E5%87%86%E8%BE%93%E5%85%A5%E6%B5%81)
+
+[基本介绍](#%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D)
+
+[Scanner类](#Scanner%E7%B1%BB)
+
+[10.8.2 打印流](#10.8%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B.2%20%E6%89%93%E5%8D%B0%E6%B5%81)
+
+[10.8.2.1 字节打印流：PrintStream](#%E5%AD%97%E8%8A%82%E6%89%93%E5%8D%B0%E6%B5%81PrintStream)
+
+[10.8.2.2 字符打印流：PrintWriter](#%E5%AD%97%E7%AC%A6%E6%89%93%E5%8D%B0%E6%B5%81)
+
+[10.8.3 序列号流和反序列化流](#10.8%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B.3%20%E5%BA%8F%E5%88%97%E5%8F%B7%E6%B5%81%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%B5%81)
+
+[10.8​​​​​​​.3.1 Serializable 接口和serialVersionUID变量](#10.8%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B.3.1%C2%A0Serializable%20%E6%8E%A5%E5%8F%A3%E5%92%8CserialVersionUID%E5%8F%98%E9%87%8F)
+
+[10.8​​​​​​​.3​​​​​​​.2 对象序列化流：ObjectOutputStream](#%E5%AF%B9%E8%B1%A1%E5%BA%8F%E5%88%97%E5%8C%96%E6%B5%81)
+
+[10.8​​​​​​​.3​​​​​​​.3 对象反序列化流：ObjectInputStream](#%E5%AF%B9%E8%B1%A1%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%B5%81ObjectInputStream)
+
+--
+
+## 六、异常
+
+### 6.1 基本介绍
+
+**什么是异常？**  
+在Java中，异常（Exception）是指在程序执行过程中出现问题的一种情况，它可以中断程序的正常执行。
 
 异常通常是指由于错误、非法操作或意外情况导致的问题，比如文件未找到、数组越界、空指针引用等等。
 
 **异常的分类：**
 
-- **Error**：错误类，无法通过代码解决，所以也**不能处理**。通常是由于系统资源不足或者JVM内部错误等导致的，需要通过修改环境或者配置等方式来解决。例如系统内存不够时抛出的内存溢出错误OutOfMemoryError，递归栈太深时抛出栈溢出错误StackOverflowError，这些通过代码没法解决，需要提升服务器配置，或者完全重构代码，换一种时间、空间复杂度更低的方案。![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\4bb5ecf0abe848f286b4e242ccd148bd.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-- **Exception**：异常类，程序**可以处理**的问题。它是一个类的实例，用于表示程序在运行过程中出现的意外情况。Java中所有的异常都是Throwable类的子类。Exception分为两种主要类型：运行时异常（RuntimeException及其子类）和非运行时异常。当一段代码有异常风险时应该通过try-catch或者throws进行处理，防止程序出现问题。例如往数据库插入记录时要捕获并打日志，从而对违反主键约束之类等问题进行排查。![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\dd0e706b4cf0490d91789637427b9c09.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-  - **RuntimeException**：运行时异常，编译不出错，运行出错，要try-catch处理。这类异常通常是由**程序错误或者逻辑错误**导致的，例如空指针引用、数组越界等。由于RuntimeException在编译时不受检查，所以需要在代码编写阶段考虑如何处理这类异常，以确保程序的健壮性。![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\23a3e4e42f464563bbc267b0c26a6ce8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-  - **非RuntimeException**：编译时异常，编译时出错使程序不能运行，要try-catch处理或者throws抛出去。它是在编译时必须处理的异常类型，否则程序无法通过编译。这类异常通常表示程序运行环境出现的异常情况，例如IO异常IOException、数据库操作异常等。
+-   **Error**：错误类，无法通过代码解决，所以也**不能处理**。通常是由于系统资源不足或者JVM内部错误等导致的，需要通过修改环境或者配置等方式来解决。例如系统内存不够时抛出的内存溢出错误OutOfMemoryError，递归栈太深时抛出栈溢出错误StackOverflowError，这些通过代码没法解决，需要提升服务器配置，或者完全重构代码，换一种时间、空间复杂度更低的方案。![](https://i-blog.csdnimg.cn/blog_migrate/a31bcfbe3856bff3d9d8b7313daa4b14.png)
+    
+-   **Exception**：异常类，程序**可以处理**的问题。它是一个类的实例，用于表示程序在运行过程中出现的意外情况。Java中所有的异常都是Throwable类的子类。Exception分为两种主要类型：运行时异常（RuntimeException及其子类）和非运行时异常。当一段代码有异常风险时应该通过try-catch或者throws进行处理，防止程序出现问题。例如往数据库插入记录时要捕获并打日志，从而对违反主键约束之类等问题进行排查。![](https://i-blog.csdnimg.cn/blog_migrate/134e7e7ee52a9acdcb70c870ae39350d.png)
+    
+    -   **RuntimeException**：运行时异常，编译不出错，运行出错，要try-catch处理。这类异常通常是由**程序错误或者逻辑错误**导致的，例如空指针引用、数组越界等。由于RuntimeException在编译时不受检查，所以需要在代码编写阶段考虑如何处理这类异常，以确保程序的健壮性。![](https://i-blog.csdnimg.cn/blog_migrate/a787af7dee97e5d7293229ddf1609fc2.png)
+        
+    -   **非RuntimeException**：编译时异常，编译时出错使程序不能运行，要try-catch处理或者throws抛出去。它是在编译时必须处理的异常类型，否则程序无法通过编译。这类异常通常表示程序运行环境出现的异常情况，例如IO异常IOException、数据库操作异常等。
+        
 
  **异常继承体系 ：**
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\63ebc52dc6424fe98e8c21e00db0d63b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e915d0a267b690ec3de3afcd44992b5e.png)​
 
 > **异常：** 
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\ddb3c7cc3eae4882816d8fa3f29df75d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/ca4b9f7216dc18f7fa04dc997271f80f.png)
 
-## 6.2 详细介绍
+### 6.2 详细介绍
 
-### 6.2.1 Throwable类
+#### 6.2.1 Throwable类
 
 **Throwable：**
 
 Throwable 是所有异常和错误（Exception 和 Error）的基类。也就是说，所有的异常、错误都是Throwable类的子类。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\25887659549b4d1f82f711a6ecb9341d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/4466f7daba383bfd687ca73cdd9a7083.png)
 
 > Throwable译为可抛出的。
->
+> 
 > Throwable类实现了Serializable，定义了serialVersionUID成员变量，这个接口和变量是用于序列化的，具体在后文的I/O流那块会详细讲。
 
 **Throwable 最重要的三个方法：**
 
-- **getMessage()：**返回此 throwable 的详细信息字符串。
-- **printStackTrace()：**控制台打印异常跟踪栈详细信息。它包含 throwable 的类名、消息，以及每个方法的调用序列。 
-- **toString()：**返回此 Throwable 的简短描述。
+-   **getMessage()：**返回此 throwable 的详细信息字符串。
+    
+-   **printStackTrace()：**控制台打印异常跟踪栈详细信息。它包含 throwable 的类名、消息，以及每个方法的调用序列。 
+    
+-   **toString()：**返回此 Throwable 的简短描述。
+    
 
-程序运行出错，JVM会将异常的名称、原因、位置输出到控制台，并让程序停止运行。 
+程序运行出错，JVM会将异常的名称、原因、位置输出到控制台，并让程序停止运行。 
 
+#### 6.2.2 知识加油站
 
-
-### 6.2.2 知识加油站
-
-#### 6.2.2.1 异常的追踪栈
+##### 6.2.2.1 异常的追踪栈
 
 程序出现异常后会打印异常的跟踪栈信息，根据跟踪栈信息我们可以找到异常的位置，并跟踪异常一路向上层方法传播的过程。
 
@@ -104,18 +385,16 @@ public class Demo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a4a9a11892c991beda60d4a2c45e352e.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b1e103b27bfc4d66b5d469ba6f2ac571.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### 6.2.2.2 **日志规范：不建议使用e.printStackTrace()** 
+##### 6.2.2.2 **日志规范：不建议使用e.printStackTrace()** 
 
 在catch块中，不建议用e.printStackTrace()，建议改成log.error("你的程序有异常啦",e);
 
 **e.printStackTrace()缺点：**
 
-- **日志混乱：**e.printStackTrace()打印出的堆栈日志跟业务代码日志是交错混合在一起的，通常排查异常日志不太方便。
-- **性能问题：**printStackTrace()方法会生成大量的字符串对象，对系统性能有一定的影响。
+-   **日志混乱：**e.printStackTrace()打印出的堆栈日志跟业务代码日志是交错混合在一起的，通常排查异常日志不太方便。
+-   **性能问题：**printStackTrace()方法会生成大量的字符串对象，对系统性能有一定的影响。
 
 **代码示例：**捕获空指针异常并打印错误日志
 
@@ -152,29 +431,27 @@ public class Demo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 可以看到错误发生的时间、类的全路径名、方法名、具体的异常名、异常错误帧信息、出问题的具体行数，在生产环境将可以更快的排查出问题：
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\897e2af841a541218d9eaa419f893eb5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/fecba5a1f102a8e94ffd7ec4acf1c51f.png)
 
-### 6.2.3 **Error类**
+#### 6.2.3 **Error类**
 
 Java中的Error类表示严重的错误情况，通常由虚拟机或其他底层自身的失效造成的，例如内存溢出、栈溢出，会导致应用程序终止。
 
 通常程序不应该捕获Error，特定情境下可以捕获OutOfMemoryError处理内存溢出问题。使用try-catch-finally块捕获异常，并在finally块中进行资源清理、销毁、报告错误、终止应用程序等操作。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\4bb5ecf0abe848f286b4e242ccd148bd.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a31bcfbe3856bff3d9d8b7313daa4b14.png)
 
 **常见的错误包括：**
 
-- **OutOfMemoryError：**内存溢出错误，通常是由于应用程序试图分配比可用内存更多的内存而导致。
-- **StackOverflowError：**堆栈溢出错误，发生在方法递归调用所需的堆栈空间已经用完的情况下。
-- **NoClassDefFoundError：**类未找到错误，通常是由于JVM无法找到应用程序尝试使用的某个类而导致。
-- **UnsatisfiedLinkError：**链接未满足错误，通常是由于调用本地方法时出现的链接问题而导致。
+-   **OutOfMemoryError：**内存溢出错误，通常是由于应用程序试图分配比可用内存更多的内存而导致。
+-   **StackOverflowError：**堆栈溢出错误，发生在方法递归调用所需的堆栈空间已经用完的情况下。
+-   **NoClassDefFoundError：**类未找到错误，通常是由于JVM无法找到应用程序尝试使用的某个类而导致。
+-   **UnsatisfiedLinkError：**链接未满足错误，通常是由于调用本地方法时出现的链接问题而导致。
 
 > **模拟栈溢出错误：**
->
+> 
 > ```java
 > /**
 >  * @Author: vince
@@ -203,48 +480,47 @@ Java中的Error类表示严重的错误情况，通常由虚拟机或其他底�
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b4fb6f0595e849ecb389a0230d8f8d5c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/ae591109fa4ff46bef1eeaf74dbe38f5.png)
 
-### 6.2.4 **Exception类**
+#### 6.2.4 **Exception类**
 
 Exception的子类包括编译时异常和运行时异常：
 
-- **编译时异常：**在编译阶段就能检查出来的异常。例如FileNotFoundException、ClassNotFoundException、NoSuchFieldException、NoSuchMethodException、SQLException、ParseException（解析异常）等。如果程序要去处理这些异常，必须显式地使用try-catch语句块或者在方法定义中使用throws子句声明异常。
-- **运行时异常：**在运行时才会出现的异常。例如，NullPointerException、ArrayIndexOutOfBoundsException等。这些异常通常是**由程序代码中的逻辑错误引起的，**在编程时不会提示，运行时才报错。 因此，在编写程序时，通常无法处理这些异常，但是在程序开发完毕后，需要对这些异常进行一些处理，以防程序运行时崩溃。
-  - NullPointerException **空指针异常**；出现原因：访问未初始化的对象或不存在的对象。
-  - ClassNotFoundException **类找不到异常**；出现原因：类的名称和路径加载错误；
-  - NumberFormatException **数字格式化异常**；出现原因：转数字的字符型中包含非数字型字符。
-  - IndexOutOfBoundsException **索引超出边界异常**；出现原因：访问数组越界元素
-  - IllegalArgumentException **不合法参数异常**。出现原因：传递了不合法参数
-  - MethodArgumentNotValidException **方法参数无效异常**。出现原因：JSR303校验不通过
-  - ClassCastException **类转换异常**。出现原因：把对象强制转为没继承关系对象时报错。这个异常是在类加载过程的元数据验证阶段验证继承关系时报错。
-  - ArithmeticException **算术异常**。出现原因：除以0时。 
+-   **编译时异常：**在编译阶段就能检查出来的异常。例如FileNotFoundException、ClassNotFoundException、NoSuchFieldException、NoSuchMethodException、SQLException、ParseException（解析异常）等。如果程序要去处理这些异常，必须显式地使用try-catch语句块或者在方法定义中使用throws子句声明异常。
+    
+-   **运行时异常：**在运行时才会出现的异常。例如，NullPointerException、ArrayIndexOutOfBoundsException等。这些异常通常是**由程序代码中的逻辑错误引起的，**在编程时不会提示，运行时才报错。 因此，在编写程序时，通常无法处理这些异常，但是在程序开发完毕后，需要对这些异常进行一些处理，以防程序运行时崩溃。
+    
+    -   NullPointerException **空指针异常**；出现原因：访问未初始化的对象或不存在的对象。
+    -   ClassNotFoundException **类找不到异常**；出现原因：类的名称和路径加载错误；
+    -   NumberFormatException **数字格式化异常**；出现原因：转数字的字符型中包含非数字型字符。
+    -   IndexOutOfBoundsException **索引超出边界异常**；出现原因：访问数组越界元素
+    -   IllegalArgumentException **不合法参数异常**。出现原因：传递了不合法参数
+    -   MethodArgumentNotValidException **方法参数无效异常**。出现原因：JSR303校验不通过
+    -   ClassCastException **类转换异常**。出现原因：把对象强制转为没继承关系对象时报错。这个异常是在类加载过程的元数据验证阶段验证继承关系时报错。
+    -   ArithmeticException **算术异常**。出现原因：除以0时。  
 
+### 6.3 异常的两种处理方式
 
-
-## 6.3 异常的两种处理方式
-
-### 6.3.1 抛出异常
+#### 6.3.1 抛出异常
 
 **抛出异常的方式：**
 
-- throws：
-  - **位置：**在方法签名中使用，其后跟着异常类名。
-  - **特点：**它表示方法可能会抛出异常，但并不保证一定会发生这个异常。
-  - **数量：**可以声明抛出多个异常,多个一场之间用逗号隔开
-  - **处理异常：**异常会传递给该方法的调用者来处理。
-- throw：
-  - **位置：**在方法体内使用，其后跟着异常对象名。
-  - **特点：**它表示方法内部一定已经发生了某种异常情况，并将这个异常抛出。
-  - **数量：**throw语句抛出的是一个异常实例,不是一个异常类,而且每次只能抛出一个异常实例
-  - **处理异常：**执行该关键字必定会抛出异常。异常由方法体内的语句来处理。 
+-   **throws：**
+    -   **位置：**在方法签名中使用，其后跟着异常类名。
+    -   **特点：**它表示方法可能会抛出异常，但并不保证一定会发生这个异常。
+    -   **数量：**可以声明抛出多个异常,多个一场之间用逗号隔开
+    -   **处理异常：**异常会传递给该方法的调用者来处理。
+-   **throw：**
+    -   **位置：**在方法体内使用，其后跟着异常对象名。
+    -   **特点：**它表示方法内部一定已经发生了某种异常情况，并将这个异常抛出。
+    -   **数量：**throw语句抛出的是一个异常实例,不是一个异常类,而且每次只能抛出一个异常实例
+    -   **处理异常：**执行该关键字必定会抛出异常。异常由方法体内的语句来处理。 
 
 > 代码示例：
->
+> 
 > ```java
+> 
 > /**
 >  * @Author: vincewm
 >  * @CreateTime: 2024/05/20
@@ -268,12 +544,10 @@ Exception的子类包括编译时异常和运行时异常：
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 6.3.2 捕获异常（推荐）
+#### 6.3.2 捕获异常（推荐）
 
-使用 try 和 catch 关键字可以捕获异常，需要将try/catch 包围在异常可能发生的地方。 
+使用 try 和 catch 关键字可以捕获异常，需要将try/catch 包围在异常可能发生的地方。 
 
 **try/catch语法：**
 
@@ -284,8 +558,6 @@ try{
    // 异常处理代码
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **try/catch/finally语法：**
 
@@ -299,19 +571,15 @@ try{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **finally块最终执行：**
 
-- **只要程序不崩溃，finally块的代码都最终执行：**即使try块、catch块中有return或throw语句，程序也会在执行finally块的代码后再return或throw。这里需要注意，禁止在finally块中使用return或throw。因为如果finally块里也使用了return或throw等语句,finally块会终止方法,系统将不会跳回去执行try块、catch块里的任何代码。这将会导致try块、catch块中的return、throw语句失效
-- 如果程序终止，finally代码块不执行：
-  - ******线程终止：**如果一个线程在执行 try 语句块或者catch语句块时被打断interrupted，或者被终止killed，与其相对应的 finally 语句块可能不会执行。
-  - **退出虚拟机：**如果在try块或catch块中使用 `System.exit(1);` 来退出虚拟机,则finally块将失去执行的机会。
+-   **只要程序不崩溃，finally块的代码都最终执行：**即使try块、catch块中有return或throw语句，程序也会在执行finally块的代码后再return或throw。这里需要注意，禁止在finally块中使用return或throw。因为如果finally块里也使用了return或throw等语句,finally块会终止方法,系统将不会跳回去执行try块、catch块里的任何代码。这将会导致try块、catch块中的return、throw语句失效
+-   **如果程序终止，finally代码块不执行：**
+    -   **​​​​​****线程终止：**如果一个线程在执行 try 语句块或者catch语句块时被打断interrupted，或者被终止killed，与其相对应的 finally 语句块可能不会执行。
+    -   **退出虚拟机：**如果在try块或catch块中使用 \`System.exit(1);\` 来退出虚拟机,则finally块将失去执行的机会。
 
-
-
-> **代码示例：**捕获数组越界异常 
->
+> **代码示例：**捕获数组越界异常 
+> 
 > ```java
 >     public static void main(String[] args) throws ParseException {
 >         // 测试数组越界异常
@@ -327,32 +595,28 @@ try{
 > 
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **运行结果：**
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\db286aa81cee4ec69c037cbe8d9bc872.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/68ddf87fef11a4d0ae3b877c474417a4.png)
 
-
-
-## 6.4 自定义异常：继承异常类
+### 6.4 自定义异常：继承异常类
 
 在一些业务场景中，预定义的异常类并不能完全满足我们的需求，这时我们就需要自定义异常，以便于在程序出现问题时，可以及时抛出或处理。
 
 例如电商项目的库存不足异常、商品找不到异常，论坛项目中的“帖子找不到异常”、“无效评论异常”等等。
 
-**自定义异常的方法：** 可以通过继承异常根类，或者它们的子类，重写父类的方法，以达到自定义异常的效果：
+**自定义异常的方法：** 可以通过继承异常根类，或者它们的子类，重写父类的方法，以达到自定义异常的效果：
 
-- **编译时异常类：**需要继承 Exception 类。
-- **运行时异常类：**需要继承 RuntimeException 类。
+-   **编译时异常类：**需要继承 Exception 类。
+-   **运行时异常类：**需要继承 RuntimeException 类。
 
 > **代码示例：**
->
+> 
 > 自定义分数异常类，如果学生成绩小于0分或大于100分，则抛出此异常。
->
+> 
 > **1.定义分数异常类：**
->
+> 
 > ```java
 > /**
 >  * @Author: vincewm
@@ -367,11 +631,9 @@ try{
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> **2.定义学生类**，其中有个方法判断分数是否合格 
->
+> 
+> **2.定义学生类**，其中有个方法判断分数是否合格 
+> 
 > ```java
 > /**
 >  * @Author: vincewm
@@ -396,11 +658,9 @@ try{
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **3.测试类：**传参分数，校验是否合法：
->
+> 
 > ```java
 > /**
 >  * @Author: vincewm
@@ -420,25 +680,23 @@ try{
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **运行结果：**
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\de6bd93d5a85456194da7494e4e9edc0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/56fb409ed89d0903d51274eb5419bcf1.png)
 
-# 七、集合
+## 七、集合
 
-## 7.1 集合体系
+### 7.1 集合体系
 
-### 7.1.1 集合和映射
+#### 7.1.1 集合和映射
 
 在Java中，集合是一组用于操作和存储数据的接口和类。 它主要包括Collection和Map两种。
 
-- **集合（Collection）：**一组单独的元素。它通常应用了某种规则，例如 List（列表）必须按特定的顺序容纳元素，而一个Set（集）不可包含任何重复的元素。
-- **映射（Map）：**一系列“键－值”对的集合。它的存储内容是一系列键值对，如果知道了键（key），我们可以直接获取到这个键所对应的值（value），时间复杂度是O(1)。散列表是Map的一种较为普遍的展现。
+-   **集合（Collection）：**一组单独的元素。它通常应用了某种规则，例如 List（列表）必须按特定的顺序容纳元素，而一个Set（集）不可包含任何重复的元素。
+-   **映射（Map）：**一系列“键－值”对的集合。它的存储内容是一系列键值对，如果知道了键（key），我们可以直接获取到这个键所对应的值（value），时间复杂度是O(1)。散列表是Map的一种较为普遍的展现。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\f12433c3fcb74cdfb7557fd2f3fa48db.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/8bdf760cb0c060c2b5120aac066e4c3f.png)
 
 Java中的集合类分为4大类,分别由4个接口来代表,它们是Set、List、Queue、Map。其中,Set、List、Queue接口都继承自Collection接口，Map接口不继承自其他接口。
 
@@ -452,9 +710,7 @@ Java中的集合类分为4大类,分别由4个接口来代表,它们是Set、Lis
 
 Java提供了众多集合的实现类,它们都是这些接口的直接或间接的实现类,其中比较常用的有：HashSet、TreeSet、ArrayList、LinkedList、ArrayDeque、HashMap、TreeMap等。
 
-
-
-### 7.1.2 **思考：Map是不是集合？**
+#### 7.1.2 **思考：Map是不是集合？**
 
 对于集合一直有个争议，一些人认为集合是个狭窄的概念，只包括Collection接口下的实现类，毕竟Collection就译为“集合”。因为Map不是Collection接口的实现类，所以Map不属于集合。
 
@@ -463,58 +719,55 @@ Java提供了众多集合的实现类,它们都是这些接口的直接或间接
 事实上，两种说法都可以说是对的，区别仅仅在于“集合”这个概念的理解区别、广义和狭义。
 
 > **《Java编程思想》原文：**
->
-> Java 实用类库还提供了一套相当完整的容器类来解决这个问题，其中基本的类型是List、
->  Set、Queue和Map。这些对象类型也称为集合类，但由于Java的类库中使用了Collection这个名字来指代该类库的一个特殊子集，所以我使用了范围更广的术语“容器”称呼它们。容器提供了完善的方法来保存对象，你可以使用这些工具来解决数量惊人的问题。
+> 
+> Java 实用类库还提供了一套相当完整的容器类来解决这个问题，其中基本的类型是List、  
+> Set、Queue和Map。这些对象类型也称为集合类，但由于Java的类库中使用了Collection这个名字来指代该类库的一个特殊子集，所以我使用了范围更广的术语“容器”称呼它们。容器提供了完善的方法来保存对象，你可以使用这些工具来解决数量惊人的问题。
 
+#### 7.1.3 **常见集合的底层和性能对比**
 
-
-### 7.1.3 **常见集合的底层和性能对比**
-
-- ArrayList：
-  - **使用场景：**频繁查询但不经常增删元素
-  - **底层：**数组 。允许存储多个null值。
-  - **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
-- LinkedList：
-  - **使用场景：**频繁增删元素但不经常查询
-  - **底层：**链表 。允许存储多个null值。
-  - **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
-- Stack：
-  - **使用场景：**需要后进先出（LIFO）访问顺序的数据结构，例如递归、回溯算法等。线程安全，因为它是Vector的实现类
-  - **底层：**数组（因为它是Vector的实现类）。允许存储多个 null 值。
-  - **性能：** 增删改查都是在栈顶操作，所以时间复杂度都是O(1)
-  - **常用方法：**
-    - **push(E item)**：将元素压入栈顶
-    - **pop()**：移除并返回栈顶元素
-    - **peek()**：返回栈顶元素但不移除
-    - **isEmpty()**：检查栈是否为空
-    - **search(Object o)**：返回元素在栈中的位置，以 1 为基准
-- HashSet：
-  - **使用场景：**需要高效去重、快速查找、不考虑内存浪费的场景
-  - **底层：**哈希表（快速查找）和Set（去重）。它自动对元素进行去重（通过 hashCode 和 equals 方法），并且无序（存入后顺序会乱），允许存储一个null值。
-  - **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
-- TreeSet：
-  - **使用场景：**适用于多读少写、排序的场景。
-  - **底层：**红黑树（快速查找、排序）和Set（去重）。**不允许存储null值**
-  - **性能：**插入、删除、查找操作的时间复杂度为O(log n)，因为操作需要维护树的平衡，所以适用于多读少写的场景。
-- HashMap：
-  - **使用场景：**适用于多读少写、需要快速读的场景。
-  - **底层：**哈希表（快速查找）和Map（键值对）。可以存储一个null键（key）和多个null值（value）。
-  - **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
+-   **ArrayList：**
+    -   **使用场景：**频繁查询但不经常增删元素
+    -   **底层：**数组 。允许存储多个null值。
+    -   **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
+-   **LinkedList：**
+    -   **使用场景：**频繁增删元素但不经常查询
+    -   **底层：**链表 。允许存储多个null值。
+    -   **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
+-   **Stack：**
+    -   **使用场景：**需要后进先出（LIFO）访问顺序的数据结构，例如递归、回溯算法等。线程安全，因为它是Vector的实现类
+    -   **底层：**数组（因为它是Vector的实现类）。允许存储多个 null 值。
+    -   **性能：** 增删改查都是在栈顶操作，所以时间复杂度都是O(1)
+    -   **常用方法：**
+        
+        -   **push(E item)**：将元素压入栈顶
+        -   **pop()**：移除并返回栈顶元素
+        -   **peek()**：返回栈顶元素但不移除
+        -   **isEmpty()**：检查栈是否为空
+        -   **search(Object o)**：返回元素在栈中的位置，以 1 为基准
+-   **HashSet：**
+    -   **使用场景：**需要高效去重、快速查找、不考虑内存浪费的场景
+    -   **底层：**哈希表（快速查找）和Set（去重）。它自动对元素进行去重（通过 hashCode 和 equals 方法），并且无序（存入后顺序会乱），允许存储一个null值。
+    -   **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
+-   **TreeSet：**
+    -   **使用场景：**适用于多读少写、排序的场景。
+    -   **底层：**红黑树（快速查找、排序）和Set（去重）。**不允许存储null值**
+    -   **性能：**插入、删除、查找操作的时间复杂度为O(log n)，因为操作需要维护树的平衡，所以适用于多读少写的场景。
+-   **HashMap：**
+    -   **使用场景：**适用于多读少写、需要快速读的场景。
+    -   **底层：**哈希表（快速查找）和Map（键值对）。可以存储一个null键（key）和多个null值（value）。
+    -   **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
 
 > **红黑树：** 近似平衡二叉树，左右子树高差有可能大于 1，查找效率略低于平衡二叉树，但增删效率高于平衡二叉树，适合频繁插入删除。
->
-> - 结点非黑即红；
-> - 根结点是黑色，叶节点是黑色空节点（常省略）；
-> - 任何相邻节点不能同时为红色；
-> - 从任一结点到其每个叶子的所有路径都包含相同数目的黑色结点；
-> - **查询性能稳定O(logN)**，高度最高2log(n+1)；
+> 
+> -   结点非黑即红；
+> -   根结点是黑色，叶节点是黑色空节点（常省略）；
+> -   任何相邻节点不能同时为红色；
+> -   从任一结点到其每个叶子的所有路径都包含相同数目的黑色结点；
+> -   **查询性能稳定O(logN)**，高度最高2log(n+1)；
 
+#### 7.1.4 知识加油站：
 
-
-### 7.1.4 知识加油站：
-
-#### 7.1.4.1 集合的线程安全性
+##### 7.1.4.1 集合的线程安全性
 
 **线程不安全的集合：**
 
@@ -522,29 +775,23 @@ Java提供了众多集合的实现类,它们都是这些接口的直接或间接
 
 **线程安全的集合：**
 
-1. Collections工具类：
+1.  **Collections工具类：**Collections工具类的synchronizedXxx()方法，将ArrayList等集合类包装成线程安全的集合类。例如
+    
+    ```java
+    List list = Collections.synchronizedList(new ArrayList());
+    ```
+    
+2.  **古老api：**java.util包下性能差的古老api，如Vector、Hashtable，它们在JDK1就出现了，不推荐使用，因为线程安全的方案不成熟，性能差。
+3.  **降低锁粒度的并发容器（推荐）：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。适用于读写操作都很频繁的场景。
+4.  **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时写入时复制技术实现的并发容器，如CopyOnWriteArrayList。写操作时，先将当前数组进行一次复制，对复制后的数组进行操作，操作完成后再将原来的数组引用指向复制后的数组。避免了并发修改同一数组的线程安全问题。适用于读操作比写操作频繁且数据量不大的场景。适用于读操作远多于写操作的场景。
 
-   Collections工具类的synchronizedXxx()方法，将ArrayList等集合类包装成线程安全的集合类。例如 	
-
-   ```java
-   List list = Collections.synchronizedList(new ArrayList());
-   ```
-
-   ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-2. **古老api：**java.util包下性能差的古老api，如Vector、Hashtable，它们在JDK1就出现了，不推荐使用，因为线程安全的方案不成熟，性能差。
-
-3. **降低锁粒度的并发容器（推荐）：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。适用于读写操作都很频繁的场景。
-
-4. **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时写入时复制技术实现的并发容器，如CopyOnWriteArrayList。写操作时，先将当前数组进行一次复制，对复制后的数组进行操作，操作完成后再将原来的数组引用指向复制后的数组。避免了并发修改同一数组的线程安全问题。适用于读操作比写操作频繁且数据量不大的场景。适用于读操作远多于写操作的场景。
-
-#### 7.1.4.2 思考：什么是线程不安全？
+##### 7.1.4.2 思考：什么是线程不安全？
 
 线程不安全是指在多线程环境下，当多个线程并发地访问和修改共享数据时，由于缺乏适当的同步机制，可能导致数据的不一致、错误或者程序行为不可预测的现象。
 
 **以HashMap为例：**
 
-在JDK8中,HashMap底层是采用“数组+单向链表+红黑树”来实现的。数组用作哈希查找，链表用作链地址法处理冲突，红黑树替换长度为8的链表。 
+在JDK8中,HashMap底层是采用“数组+单向链表+红黑树”来实现的。数组用作哈希查找，链表用作链地址法处理冲突，红黑树替换长度为8的链表。 
 
 **JDK7扩容时死循环问题：**
 
@@ -552,11 +799,9 @@ Java提供了众多集合的实现类,它们都是这些接口的直接或间接
 
 假如有T1、T2两个线程同时对某链表扩容，他们都标记头结点和第二个结点，此时T2阻塞，T1执行完扩容后链表结点顺序反过来，此时T2恢复运行再进行翻转就会产生环形链表，即B.next=A; A.next=B，从而死循环。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\97ea93a253522b8008fafd72007239bc.jpeg)
+![](https://i-blog.csdnimg.cn/blog_migrate/b87febbd1cf67ce4ab62b727ae125a2b.jpeg)
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-**JDK8 尾插法：**JDK8中，HashMap采用尾插法，扩容时链表节点位置不会翻转，解决了扩容死循环问题，但是性能差了一点，因为要遍历链表再查到尾部。 
+**JDK8 尾插法：**JDK8中，HashMap采用尾插法，扩容时链表节点位置不会翻转，解决了扩容死循环问题，但是性能差了一点，因为要遍历链表再查到尾部。 
 
 **JDK8 put时数据覆盖问题：**
 
@@ -575,37 +820,31 @@ HashMap非线程安全，如果两个并发线程插入的数据hash取余后相
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **线程安全解决方案：**
 
-- 使用Hashtable（古老api不推荐）
+-   使用Hashtable（古老api不推荐）
+-   使用Collections工具类，将HashMap包装成线程安全的HashMap。
+    
+    ```java
+    Collections.synchronizedMap(map);
+    ```
+    
+-   **使用更安全的ConcurrentHashMap（推荐）**，ConcurrentHashMap通过对槽（链表头结点）加锁，以较小的性能来保证线程安全。
+-   使用synchronized或Lock加锁HashMap之后，再进行操作，相当于多线程排队执行（比较麻烦，也不建议使用）。
 
-- 使用Collections工具类，将HashMap包装成线程安全的HashMap。 
+#### 7.1.2 常用API
 
-  ```java
-  Collections.synchronizedMap(map);
-  ```
+##### 7.1.2.1 **Collection：**
 
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+-   **add()：**向集合中添加一个元素。
+-   **获取元素：**没有直接提供获取指定位置元素的方法，因为它的实现类元素不一定有序。若需访问，需要通过迭代器iterator()
+-   **remove()：**从集合中移除一个指定的元素。
+-   **contains(Object o):** 检查集合中是否包含指定元素。
+-   **size():** 返回集合中的元素数量。
+-   **isEmpty():** 检查集合是否为空。
+-   **clear():** 移除集合中的所有元素。
 
-- **使用更安全的ConcurrentHashMap（推荐）**，ConcurrentHashMap通过对槽（链表头结点）加锁，以较小的性能来保证线程安全。
-
-- 使用synchronized或Lock加锁HashMap之后，再进行操作，相当于多线程排队执行（比较麻烦，也不建议使用）。
-
-### 7.1.2 常用API
-
-#### 7.1.2.1 **Collection：**
-
-- **add()：**向集合中添加一个元素。
-- **获取元素：**没有直接提供获取指定位置元素的方法，因为它的实现类元素不一定有序。若需访问，需要通过迭代器iterator()
-- **remove()：**从集合中移除一个指定的元素。
-- **contains(Object o):** 检查集合中是否包含指定元素。
-- **size():** 返回集合中的元素数量。
-- **isEmpty():** 检查集合是否为空。
-- **clear():** 移除集合中的所有元素。
-
-**代码示例：** 
+**代码示例：** 
 
 ```java
 /**
@@ -664,20 +903,18 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/cd56adf3dfb631d3580106e404cab39e.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\ec67f8606431430d98eba3194709792a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### 7.1.2.2 **Map**
 
-#### 7.1.2.2 **Map**
-
-- **put()：**向映射中添加一个键值对。如果键已经存在，则更新其对应的值。
-- **get()：**根据键获取对应的值。
-- **remove(Object key):** 根据键移除键值对。
-- **containsKey(Object key):** 检查是否包含指定键。
-- **containsValue(Object value):** 检查是否包含指定值。
-- **size():** 返回映射中的键值对数量。
-- **isEmpty():** 检查映射是否为空。
-- **clear():** 移除映射中的所有键值对。
+-   **put()：**向映射中添加一个键值对。如果键已经存在，则更新其对应的值。
+-   **get()：**根据键获取对应的值。
+-   **remove(Object key):** 根据键移除键值对。
+-   **containsKey(Object key):** 检查是否包含指定键。
+-   **containsValue(Object value):** 检查是否包含指定值。
+-   **size():** 返回映射中的键值对数量。
+-   **isEmpty():** 检查映射是否为空。
+-   **clear():** 移除映射中的所有键值对。
 
 代码示例：
 
@@ -732,31 +969,27 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/725439d28071163e4fcf36799ce3e426.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\25df6fb22eec47499fee9122b07c2588.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 7.1.​​3 常用工具类
 
-### 7.1.3 常用工具类
+Java 的集合框架提供了许多有用的工具类，用于简化集合的操作。最常见的工具类是 java.util.Collections 和 java.util.Arrays。这些工具类提供了许多静态方法，可以对集合进行排序、搜索、填充、反转等操作。 
 
-Java 的集合框架提供了许多有用的工具类，用于简化集合的操作。最常见的工具类是 java.util.Collections 和 java.util.Arrays。这些工具类提供了许多静态方法，可以对集合进行排序、搜索、填充、反转等操作。 
-
-
-
-#### 7.1.3.1 **集合工具类Collections**
+##### 7.1.3.1 **集合工具类Collections**
 
 **Collections工具类常用方法：**
 
-- **sort(List<T> list)：**对指定的列表按自然顺序进行升序排序。
-- sort(List<T> list, Comparator<? super T> c)：使用指定的比较器对指定的列表进行排序。
-- **reverse(List<?> list)：**反转指定列表中元素的顺序。
-- **max(Collection<? extends T> coll)：**返回给定集合的最大元素，按自然顺序比较。
-- max(Collection<? extends T> coll, Comparator<? super T> comp)：返回给定集合的最大元素，使用指定的比较器比较。
-- **binarySearch(List<? extends T> list, T key)：**使用二分法搜索指定列表以查找指定对象。
-- **copy(List<? super T> dest, List<? extends T> src)：**将源列表的所有元素复制到目标列表中。
-- **fill(List<? super T> list, T obj)：**用指定的元素替换指定列表中的所有元素。
-- **frequency(Collection<?> c, Object o)：**返回指定集合中等于指定对象的元素数。
-- **indexOfSubList(List<?> source, List<?> target)：**返回指定源列表中首次出现指定目标列表的起始位置。
-- **swap(List<?> list, int i, int j)：**交换指定列表中指定位置的元素。
+-   **sort(List<T> list)：**对指定的列表按自然顺序进行升序排序。
+-   sort(List<T> list, Comparator<? super T> c)：使用指定的比较器对指定的列表进行排序。
+-   **reverse(List<?> list)：**反转指定列表中元素的顺序。
+-   **max(Collection<? extends T> coll)：**返回给定集合的最大元素，按自然顺序比较。
+-   max(Collection<? extends T> coll, Comparator<? super T> comp)：返回给定集合的最大元素，使用指定的比较器比较。
+-   **binarySearch(List<? extends T> list, T key)：**使用二分法搜索指定列表以查找指定对象。
+-   **copy(List<? super T> dest, List<? extends T> src)：**将源列表的所有元素复制到目标列表中。
+-   **fill(List<? super T> list, T obj)：**用指定的元素替换指定列表中的所有元素。
+-   **frequency(Collection<?> c, Object o)：**返回指定集合中等于指定对象的元素数。
+-   **indexOfSubList(List<?> source, List<?> target)：**返回指定源列表中首次出现指定目标列表的起始位置。
+-   **swap(List<?> list, int i, int j)：**交换指定列表中指定位置的元素。
 
 **代码示例：**
 
@@ -806,28 +1039,26 @@ public class CollectionsExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/5aac2600bbc31a0de13d977f28d61aee.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\a65649fe98b44338bce8ac6a9845b035.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### 7.1.3.2 **数组工具类Arrays**
+##### 7.1.3.2 **数组工具类Arrays**
 
 **Arrays工具类常用方法：**
 
-- **asList(T... a)**：将数组转换为列表。
-- **sort(T[] a)**：对指定数组按自然顺序进行升序排序。
-- **sort(T[] a, Comparator<? super T> c)**：使用指定的比较器对数组进行排序。
-- **binarySearch(T[] a, T key)**：使用二分法搜索指定数组以查找指定对象。
-- **binarySearch(T[] a, T key, Comparator<? super T> c)**：使用二分法搜索指定数组以查找指定对象，使用指定的比较器。
-- **copyOf(T[] original, int newLength)**：复制指定的数组，截取或填充 null 以使副本具有指定的长度。
-- **copyOfRange(T[] original, int from, int to)**：复制指定的数组，从指定的起始位置开始到终止位置结束。
-- **equals(Object[] a, Object[] a2)**：如果两个指定数组彼此相等，则返回 true。一维数组时比较内容是否一致，多维数组时只比较最外层数组对象的内容。
-- **deepEquals(Object[] a1, Object[] a2)**：如果两个指定数组彼此深度相等，则返回 true。一维和多维数组比较内容是否一致。
-- **fill(T[] a, T val)**：用指定的值填充指定数组。
-- **toString(T[] a)**：返回指定数组内容的字符串表示形式。
-- **deepToString(Object[] a)**：返回指定数组内容的深层字符串表示形式。
+-   **asList(T... a)**：将数组转换为列表。
+-   **sort(T\[\] a)**：对指定数组按自然顺序进行升序排序。
+-   **sort(T\[\] a, Comparator<? super T> c)**：使用指定的比较器对数组进行排序。
+-   **binarySearch(T\[\] a, T key)**：使用二分法搜索指定数组以查找指定对象。
+-   **binarySearch(T\[\] a, T key, Comparator<? super T> c)**：使用二分法搜索指定数组以查找指定对象，使用指定的比较器。
+-   **copyOf(T\[\] original, int newLength)**：复制指定的数组，截取或填充 null 以使副本具有指定的长度。
+-   **copyOfRange(T\[\] original, int from, int to)**：复制指定的数组，从指定的起始位置开始到终止位置结束。
+-   **equals(Object\[\] a, Object\[\] a2)**：如果两个指定数组彼此相等，则返回 true。一维数组时比较内容是否一致，多维数组时只比较最外层数组对象的内容。
+-   **deepEquals(Object\[\] a1, Object\[\] a2)**：如果两个指定数组彼此深度相等，则返回 true。一维和多维数组比较内容是否一致。
+-   **fill(T\[\] a, T val)**：用指定的值填充指定数组。
+-   **toString(T\[\] a)**：返回指定数组内容的字符串表示形式。
+-   **deepToString(Object\[\] a)**：返回指定数组内容的深层字符串表示形式。
 
-**代码示例：** 
+**代码示例：** 
 
 ```java
 /**
@@ -876,32 +1107,30 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/fbc508cd296e161e0b6df3526e015fa9.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\7165aaefaabb4470887a099407aa991f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### **7.2 ArrayList**
 
-## **7.2 ArrayList**
+#### **7.2.1 基本介绍**
 
-### **7.2.1 基本介绍**
-
-- **基本介绍：**可以动态修改的数组，没有固定大小的限制。
-- **使用场景：**频繁查询但不经常增删元素
-- **底层：**数组 。允许存储多个null值。
-- **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
-- 常用API：
-  - Collection接口的add()、remove()等方法
-  - **get()：**获取一个指定下标的元素
-  - **subList(int fromIndex, int toIndex)：**返回从 fromIndex（包括）到 toIndex（不包括）之间的部分列表。
-  - **trimToSize()：**将 ArrayList 的容量调整为当前元素的数量，以节省内存。
+-   **基本介绍：**可以动态修改的数组，没有固定大小的限制。
+-   **使用场景：**频繁查询但不经常增删元素
+-   **底层：**数组 。允许存储多个null值。
+-   **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
+-   **常用API：**
+    -   Collection接口的add()、remove()等方法
+    -   **get()：**获取一个指定下标的元素
+    -   **subList(int fromIndex, int toIndex)：**返回从 fromIndex（包括）到 toIndex（不包括）之间的部分列表。
+    -   **trimToSize()：**将 ArrayList 的容量调整为当前元素的数量，以节省内存。
 
 **排序方法：**
 
-- **Collections工具类的sort()方法：**Collections.sort(list);
-- **stream流：**list.stream().sort();
-- **比较器：**list.sort(new Comparator<Integer>() {})
-- **手写排序：**冒泡排序、选择排序、插入排序、二分法排序、快速排序、堆排序。
+-   **Collections工具类的sort()方法：**Collections.sort(list);
+-   **stream流：**list.stream().sort();
+-   **比较器：**list.sort(new Comparator<Integer>() {})
+-   **手写排序：**冒泡排序、选择排序、插入排序、二分法排序、快速排序、堆排序。
 
- **代码示例：** 
+ **代码示例：** 
 
 ```java
     public static void main(String[] args) {
@@ -942,29 +1171,24 @@ public class Test {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/0bdaeca1ec4b7b99f5fe9c7c715eadf2.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\9bd916375a274c30a0016f22ee9288d7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### **7.2.2 底层源码和扩容机制**
+#### **7.2.2 底层源码和扩容机制**
 
 **数组实现：**
 
-ArrayList是**基于数组实现的**,它的内部封装了一个**Object[]数组**。
+ArrayList是**基于数组实现的**,它的内部封装了一个**Object\[\]数组**。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\ef4b49c215ab446383ff6d71120b7fef.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/6d39f56da5fa2e31e389e3fffb2f08b9.png)
 
 ```java
+
     transient Object[] elementData; // non-private to simplify nested class access
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 通过**默认构造器**创建容器时,该数组先被**初始化为空数组**,之后在**首次添加数据**时再将其初始化成**长度为10的数组**。我们也可以使用有参构造器来创建容器,并通过参数来显式指定数组的容量,届时该数组被初始化为指定容量的数组。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\f0c70c3818a2452dbf64a2f9d4472344.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/faa17c1bb4880a157b2fa89ed7091d07.png)
 
 ```java
     /**
@@ -972,10 +1196,6 @@ ArrayList是**基于数组实现的**,它的内部封装了一个**Object[]数�
      */
     private static final int DEFAULT_CAPACITY = 10;
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 **每次扩容1.5倍：**
 
@@ -999,10 +1219,6 @@ private void grow(int minCapacity) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 **手动缩容：**
 
 ArrayList支持缩容,但**不会自动缩容**,即便是ArrayList中只剩下少量数据时也不会主动缩容。如果我们希望缩减ArrayList的容量,则需要自己调用它的**trimToSize()方法**,届时数组将按照元素的实际个数进行缩减，底层也是通过创建新数组拷贝实现的。
@@ -1023,11 +1239,7 @@ public void trimToSize() {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### **7.2.3** 线程不安全问题和解决方案
+#### **7.2.3** 线程不安全问题和解决方案
 
 添加元素add()方法的源码：
 
@@ -1041,66 +1253,48 @@ public boolean add(E e) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **1.某线程刚扩容后就失去调度**
 
-在JVM中，CPU在多个线程中通过程序计数器来回调度，同一时刻一个CPU只能运行一个线程，所以就存在add()时，某个线程在刚刚ensureCapacityInternal()扩容后、还没往数组存元素时被暂停，等待被调度，然后其他线程add()成功把数组存满了，此时原线程恢复运行，执行elementData[size++] = e，因为数组容量已经满了，就会报错数组越界异常ArrayIndexOutOfBoundsException。
+在JVM中，CPU在多个线程中通过程序计数器来回调度，同一时刻一个CPU只能运行一个线程，所以就存在add()时，某个线程在刚刚ensureCapacityInternal()扩容后、还没往数组存元素时被暂停，等待被调度，然后其他线程add()成功把数组存满了，此时原线程恢复运行，执行elementData\[size++\] = e，因为数组容量已经满了，就会报错数组越界异常ArrayIndexOutOfBoundsException。
 
 **例如：**
 
-表大小为9，线程A新增一个元素，判断容量是不是足够，同时线程B也新增一个元素，判断容量是不是足够，线程A开始进行设置值操作， elementData[size++] = e 操作。此时size变为10，线程B也开始进行设置值操作，它尝试设置elementData[10] = e，而elementData没有进行过扩容，它的下标最大为9。于是此时会报出一个数组越界的异常ArrayIndexOutOfBoundsException.
+表大小为9，线程A新增一个元素，判断容量是不是足够，同时线程B也新增一个元素，判断容量是不是足够，线程A开始进行设置值操作， elementData\[size++\] = e 操作。此时size变为10，线程B也开始进行设置值操作，它尝试设置elementData\[10\] = e，而elementData没有进行过扩容，它的下标最大为9。于是此时会报出一个数组越界的异常ArrayIndexOutOfBoundsException.
 
-**2.数组存值时不是原子操作**
- 另外第二步 elementData[size++] = e 设置值的操作同样会导致线程不安全。从这儿可以看出，这步操作也不是一个原子操作。
+**2.数组存值时不是原子操作**  
+另外第二步 elementData\[size++\] = e 设置值的操作同样会导致线程不安全。从这儿可以看出，这步操作也不是一个原子操作。
 
 **解决方案：**
 
-- 原子类
+-   原子类
+-   volatile
+-   锁
+-   **线程安全的集合：**
+    -   **Collections工具类：**Collections工具类的synchronizedXxx()方法**，**将ArrayList等集合类包装成线程安全的集合类。例如
+        
+        ```
+        Collections.synchronizedList(new ArrayList<>());
+        ```
+        
+    -   **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
+    -   **降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
+    -   **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
 
-- volatile
+#### **7.2.4** 六种遍历方法
 
-- 锁
-
-- 线程安全的集合：
-
-  - Collections工具类：
-
-    Collections工具类的synchronizedXxx()方法
-
-    ，
-
-    将ArrayList等集合类包装成线程安全的集合类。例如 	
-
-    ```
-    Collections.synchronizedList(new ArrayList<>());
-    ```
-
-    ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-    
-
-  - **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
-
-  - **降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
-
-  - **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
-
-### **7.2.4** 六种遍历方法
-
-#### **7.2.4.**1. 常规 for 循环
+##### **7.2.4.**1\. 常规 for 循环
 
 普通 for 循环适用于遍历数组和实现了 List 接口的集合。它通过索引访问元素，性能通常较好。
 
 **优点：**
 
-- **性能高：**性能通常优于增强 for 循环和迭代器，尤其是对于数组和 ArrayList。
-- **复杂操作：**允许在遍历过程中进行复杂的控制操作。
+-   **性能高：**性能通常优于增强 for 循环和迭代器，尤其是对于数组和 ArrayList。
+-   **复杂操作：**允许在遍历过程中进行复杂的控制操作。
 
 **缺点：**
 
-- **可读性差：**代码相对冗长，需要手动管理循环变量。
-- **只能通过索引访问：**仅适用于可以通过索引下标访问元素的集合。
+-   **可读性差：**代码相对冗长，需要手动管理循环变量。
+-   **只能通过索引访问：**仅适用于可以通过索引下标访问元素的集合。
 
 **通过for循环，用get(下标) 的方法遍历：**
 
@@ -1126,18 +1320,16 @@ public class ForLoopExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### **7.2.4.**2. 增强 for 循环（只遍历不修改）
+##### **7.2.4.**2\. 增强 for 循环（只遍历不修改）
 
 在某些情况下，常规的遍历方式容易显得代码臃肿，增强for可以简化数组和Collection集合的遍历，增强代码的可读性。
 
 **增强 for 循环：**一种**简洁**的遍历集合的方法，它适用于遍历数组和实现了 Iterable 接口的所有集合。
 
 > **Collection实现类都实现了Iterable 接口：**
->
-> 在标准的 Java Collections Framework 中，所有主要的集合实现类都实现了 Iterable 接口。换句话说，如果一个类实现了 Collection 接口，那么它也会实现 Iterable 接口，因为这是 Collection 接口的一个基本要求。 
->
+> 
+> 在标准的 Java Collections Framework 中，所有主要的集合实现类都实现了 Iterable 接口。换句话说，如果一个类实现了 Collection 接口，那么它也会实现 Iterable 接口，因为这是 Collection 接口的一个基本要求。 
+> 
 > **tip：**Map集合没有实现Iterable 接口，因为它也没有实现Collection接口。
 
 **格式：**
@@ -1152,23 +1344,23 @@ public class ForLoopExample {
         }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **IDEA快捷键：**输入iter然后回车：
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\d4d3f90bcec04fe9b7585f529732c86d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/54925c88d661dcbfc744b800a201e999.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\4adcc79b7aa341fa8f2f738456898bbf.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/293682e26dc39cb9a4336199c1e13bfe.png)
 
 **优点：**
 
-- **简洁易读**：增强 for 循环语法简洁，代码更容易阅读。
-- **避免错误**：相比传统的 for 循环，不需要手动管理循环变量，减少了出错的可能性。
+-   **简洁易读**：增强 for 循环语法简洁，代码更容易阅读。
+    
+-   **避免错误**：相比传统的 for 循环，不需要手动管理循环变量，减少了出错的可能性。
+    
 
 **缺点：**
 
-- **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
-- 不允许修改；
+-   **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
+-   不允许修改；
 
 **代码示例：**
 
@@ -1192,28 +1384,26 @@ public class EnhancedForLoopExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### **7.2.4.**3\. 迭代器 Iterator（遍历并修改）
 
-#### **7.2.4.**3. 迭代器 Iterator（遍历并修改）
-
-迭代器是遍历Collection集合的通用方式，它不需要关注集合和集合内元素的类型，对集合内的元素进行读取、添加、修改操作。  
+迭代器是遍历Collection集合的通用方式，它不需要关注集合和集合内元素的类型，对集合内的元素进行读取、添加、修改操作。  
 
 **基本方法：**
 
-- **hasNext()：**返回 true 如果还有未遍历的元素。
-- **next()：**返回下一个元素。
-- **remove()：**从集合中移除 next() 返回的最后一个元素。
+-   **hasNext()：**返回 true 如果还有未遍历的元素。
+-   **next()：**返回下一个元素。
+-   **remove()：**从集合中移除 next() 返回的最后一个元素。
 
 **优点：**
 
-- **各类型集合统一迭代器**：不需要了解集合的内部实现，通过 Iterator 可以统一遍历不同类型的集合。
-- **安全**：在遍历过程中，如果其他线程修改了集合，Iterator 可以抛出 ConcurrentModificationException 以防止不一致性。
+-   **各类型集合统一迭代器**：不需要了解集合的内部实现，通过 Iterator 可以统一遍历不同类型的集合。
+-   **安全**：在遍历过程中，如果其他线程修改了集合，Iterator 可以抛出 ConcurrentModificationException 以防止不一致性。
 
 **缺点：**
 
-- **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
-- **复杂：**相比增强for，需要next()、hasNext()，麻烦了一些
-- 不能双向遍历
+-   **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
+-   **复杂：**相比增强for，需要next()、hasNext()，麻烦了一些
+-   不能双向遍历
 
 ```java
 import java.util.ArrayList;
@@ -1251,9 +1441,7 @@ public class IteratorRemoveExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### **7.2.4.**4. 迭代器 ListIterator （双向遍历并修改）
+##### **7.2.4.**4\. 迭代器 ListIterator （双向遍历并修改）
 
 Set、List、Queue都是Collection的子接口,它们都继承了父接口的iterator()方法,从而具备了迭代的能力。Map使用迭代器必须通过先entrySet()转为Set，然后再使用迭代器或for遍历。
 
@@ -1263,28 +1451,26 @@ ListIterator在Iterator的基础上,增加了listIterator.previous()**向前遍�
 
 **常用方法：**
 
-- hasNext()：如果列表中有下一个元素，则返回 true。
-- **next()：**返回列表中的下一个元素。
-- hasPrevious()：如果列表中有上一个元素，则返回 true。
-- **previous()：**返回列表中的上一个元素。
-- nextIndex()：返回下一元素的索引。
-- previousIndex()：返回上一元素的索引。
-- remove()：移除上一个通过 next() 或 previous() 返回的元素。
-- set(E e)：替换上一个通过 next() 或 previous() 返回的元素。
-- add(E e)：在列表中插入指定元素。 
+-   hasNext()：如果列表中有下一个元素，则返回 true。
+-   **next()：**返回列表中的下一个元素。
+-   hasPrevious()：如果列表中有上一个元素，则返回 true。
+-   **previous()：**返回列表中的上一个元素。
+-   nextIndex()：返回下一元素的索引。
+-   previousIndex()：返回上一元素的索引。
+-   remove()：移除上一个通过 next() 或 previous() 返回的元素。
+-   set(E e)：替换上一个通过 next() 或 previous() 返回的元素。
+-   add(E e)：在列表中插入指定元素。 
 
 **优点：**
 
-- 可读性高；
-- **安全：**在遍历过程中，如果其他线程修改了集合，迭代器可以抛出 ConcurrentModificationException 以防止不一致性。
-- 双向遍历；
+-   可读性高；
+-   **安全：**在遍历过程中，如果其他线程修改了集合，迭代器可以抛出 ConcurrentModificationException 以防止不一致性。
+-   双向遍历；
 
 **缺点：**
 
-- **只支持List：**只适用于实现了 List 接口的集合（如 ArrayList 和 LinkedList）。
-- **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
-
-
+-   **只支持List：**只适用于实现了 List 接口的集合（如 ArrayList 和 LinkedList）。
+-   **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了可读性 
 
 ```java
 public class ListIteratorExample {
@@ -1314,22 +1500,20 @@ public class ListIteratorExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### **7.2.4.**5. forEach + Lambda 表达式（只遍历不修改）
+##### **7.2.4.**5.  forEach + Lambda 表达式（只遍历不修改）
 
 在 Java 8 及以上版本中，forEach 方法与 Lambda 表达式的结合提供了一种简洁、功能强大的方式来遍历集合。forEach 方法**属于 Iterable 接口**，允许对集合中的每个元素执行指定的操作。
 
 **优点：**
 
-- **简洁：**相比于传统的 for 循环和迭代器，代码更简洁，减少样板代码。
-- **可读性强：**使用 Lambda 表达式和方法引用，使代码更加易读和表达意图明确。
+-   **简洁：**相比于传统的 for 循环和迭代器，代码更简洁，减少样板代码。
+-   **可读性强：**使用 Lambda 表达式和方法引用，使代码更加易读和表达意图明确。
 
 **缺点：**
 
-- **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了代码的优雅性可读性 ；同时各个元素之间的遍历是顺序执行的，不像Stream流的forEach是并发执行的，性能略差。
-- **不允许修改元素：**因为 Lambda 表达式的参数是 final 或等效于 final 的，所以不允许修改集合中的元素。想修改的话，只能创建另一个集合，然后在遍历时将处理后的元素add进另一个集合。
-- **版本限制：**只适用JDK8及以上；
+-   **性能略差：**性能略差于普通for循环，以略微的性能代价，提高了代码的优雅性可读性 ；同时各个元素之间的遍历是顺序执行的，不像Stream流的forEach是并发执行的，性能略差。
+-   **不允许修改元素：**因为 Lambda 表达式的参数是 final 或等效于 final 的，所以不允许修改集合中的元素。想修改的话，只能创建另一个集合，然后在遍历时将处理后的元素add进另一个集合。
+-   **版本限制：**只适用JDK8及以上；
 
 ```java
 import java.util.ArrayList;
@@ -1351,25 +1535,19 @@ public class ForEachLambdaExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-#### **7.2.4.**6. Stream API 遍历（推荐，并发遍历并修改）
+##### **7.2.4.**6\. Stream API 遍历（推荐，并发遍历并修改）
 
 Stream 流是 Java 8 引入的一项新特性，用于对集合进行函数式编程风格的操作。它允许我们以声明性方式对数据进行过滤、加工、遍历、排序等操作，而不是以命令式方式逐个操作元素。
 
 **优点：**
 
-- **简洁：**相比于传统的 for 循环和迭代器，代码更简洁，减少样板代码。
-- **生成修改后的新集合：**允许通过map()、filter()等方法修改元素，然后收集成一个新集合。
-- **性能高：**因为是并发的，所以性能高。
+-   **简洁：**相比于传统的 for 循环和迭代器，代码更简洁，减少样板代码。
+-   **生成修改后的新集合：**允许通过map()、filter()等方法修改元素，然后收集成一个新集合。
+-   **性能高：**因为是并发的，所以性能高。
 
 **缺点：**
 
-- **版本限制：**只适用JDK8及以上；
-
-
+-   **版本限制：**只适用JDK8及以上；
 
 ```java
 import java.util.ArrayList;
@@ -1391,99 +1569,82 @@ public class StreamExample {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### **7.2.4.7** 小结：六种遍历方法的适用场景
 
+-   **需要根据索引下标遍历：**普通for
+-   **只需要顺序读取元素：**建议增强for，也可以用其他所有遍历方法
+-   **需要修改元素：**普通for、迭代器、Stream流
+-   **需要双向遍历：**ListIterator 
+-   **需要过滤、加工、排序等高级操作：**Stream流
 
+### 7.3 List接口
 
-
-
-#### **7.2.4.7** 小结：六种遍历方法的适用场景
-
-- **需要根据索引下标遍历：**普通for
-- **只需要顺序读取元素：**建议增强for，也可以用其他所有遍历方法
-- **需要修改元素：**普通for、迭代器、Stream流
-- **需要双向遍历：**ListIterator 
-- **需要过滤、加工、排序等高级操作：**Stream流
-
-
-
-## 7.3 List接口
-
-### **7.3.1 主要实现类**
+#### **7.3.1 主要实现类**
 
 Collection将集合划分为两大类，即List和Set。
 
-常见的 List 实现类包括 ArrayList、LinkedList、Vector（JDK1的上古集合，虽然线程安全但性能差，已经基本不用） 和 Stack。 
+常见的 List 实现类包括 ArrayList、LinkedList、Vector（JDK1的上古集合，虽然线程安全但性能差，已经基本不用） 和 Stack。 
 
-**主要实现类** 
+**主要实现类** 
 
-- ArrayList：
-  - **使用场景：**频繁查询但不经常增删元素
-  - **底层：**数组 。允许存储多个null值。
-  - **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
-- LinkedList：
-  - **使用场景：**频繁增删元素但不经常查询
-  - **底层：**链表 。允许存储多个null值。
-  - **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
+-   **ArrayList：**
+    -   **使用场景：**频繁查询但不经常增删元素
+    -   **底层：**数组 。允许存储多个null值。
+    -   **性能：**查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
+-   **LinkedList：**
+    -   **使用场景：**频繁增删元素但不经常查询
+    -   **底层：**链表 。允许存储多个null值。
+    -   **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
 
-- Vector：
+-   **Vector：**
+    -   **使用场景：**需要线程安全且频繁查询的场景（JDK1的上古集合，虽然线程安全但性能差，已经基本不用。**线程安全集合：**
+        -   **Collections工具类：**Collections工具类的synchronizedXxx()方法**，**将ArrayList等集合类包装成线程安全的集合类。
+        -   **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
+        -   无序列表**降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
+        -   **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
+    -   **底层：**数组。允许存储多个 null 值。
+    -   **性能：** 查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
+-   **Stack：**
+    -   **使用场景：**需要后进先出（LIFO）访问顺序的数据结构，例如递归、回溯算法等。线程安全，因为它是Vector的实现类
+    -   **底层：**数组（因为它是Vector的实现类）。允许存储多个 null 值。
+    -   **性能：** 增删改查都是在栈顶操作，所以时间复杂度都是O(1)
+    -   **常用方法：**
+        
+        -   **push(E item)**：将元素压入栈顶
+        -   **pop()**：移除并返回栈顶元素
+        -   **peek()**：返回栈顶元素但不移除
+        -   **isEmpty()**：检查栈是否为空
+        -   **search(Object o)**：返回元素在栈中的位置，以 1 为基准 
 
-  - 使用场景：
+#### **7.3.2 特点**
 
-    需要线程安全且频繁查询的场景（JDK1的上古集合，虽然线程安全但性能差，已经基本不用。
+主要特点：​​​​​​
 
-    线程安全集合：
+-   有序【存储有序】
+-   可重复
+-   可以存储 null值
+-   部分子集合线程安全，部分不安全 例如 ArrayList 和 Vector
 
-    - **Collections工具类：**Collections工具类的synchronizedXxx()方法**，**将ArrayList等集合类包装成线程安全的集合类。
-    - **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
-    - 无序列表**降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
-    - **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
+#### **7.3.3 常用方法**
 
-  - **底层：**数组。允许存储多个 null 值。
+-   增：
+    -   **void add(int index, E element)**：在指定索引 **index** 处插入元素 **element**。
+    -   **boolean addAll(int index, Collection<? extends E> c)**：在指定索引 **index** 处插入集合 **c** 中的所有元素。
+-   删：
+    -   **E remove(int index)**：删除指定索引 **index** 处的元素。
+-   改：
+    -   **E set(int index, E element)**：修改指定索引 **index** 处的元素为 **element**。
+-   遍历：
+    -   **E get(int index) + int size()**：使用 **for** 循环遍历集合中的每一个元素。
+    -   **ListIterator listIterator()**：通过列表迭代器遍历集合中的每一个元素。
+    -   **ListIterator listIterator(int index)**：通过列表迭代器从指定索引处开始正向或者逆向遍历集合中的元素。
+-   获取：
+    -   **E get(int index)**：获取指定索引处的元素。
+    -   **int indexOf(Object o)**：从左往右查找，获取指定元素在集合中的索引，如果元素不存在返回 -1。
+    -   **int lastIndexOf(Object o)**：从右往左查找，获取指定元素在集合中的索引,如果元素不存在返回 -1
+    -   **List<E> subList(int fromIndex, int toIndex)：** 截取从 fromIndex 开始到 toIndex-1 处的元素
 
-  - **性能：** 查询（get、contains）操作时间复杂度为O(1)，添加（add）和删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为O(n)。
-
-- Stack：
-
-  - **使用场景：**需要后进先出（LIFO）访问顺序的数据结构，例如递归、回溯算法等。线程安全，因为它是Vector的实现类
-  - **底层：**数组（因为它是Vector的实现类）。允许存储多个 null 值。
-  - **性能：** 增删改查都是在栈顶操作，所以时间复杂度都是O(1)
-  - **常用方法：**
-    - **push(E item)**：将元素压入栈顶
-    - **pop()**：移除并返回栈顶元素
-    - **peek()**：返回栈顶元素但不移除
-    - **isEmpty()**：检查栈是否为空
-    - **search(Object o)**：返回元素在栈中的位置，以 1 为基准 
-
-### **7.3.2 特点**
-
-主要特点：
-
-- 有序【存储有序】
-- 可重复
-- 可以存储 null值
-- 部分子集合线程安全，部分不安全 例如 ArrayList 和 Vector
-
-### **7.3.3 常用方法**
-
-- 增： 
-  - **void add(int index, E element)**：在指定索引 **index** 处插入元素 **element**。
-  - **boolean addAll(int index, Collection<? extends E> c)**：在指定索引 **index** 处插入集合 **c** 中的所有元素。
-- 删： 
-  - **E remove(int index)**：删除指定索引 **index** 处的元素。
-- 改： 
-  - **E set(int index, E element)**：修改指定索引 **index** 处的元素为 **element**。
-- 遍历： 
-  - **E get(int index) + int size()**：使用 **for** 循环遍历集合中的每一个元素。
-  - **ListIterator listIterator()**：通过列表迭代器遍历集合中的每一个元素。
-  - **ListIterator listIterator(int index)**：通过列表迭代器从指定索引处开始正向或者逆向遍历集合中的元素。
-- 获取： 
-  - **E get(int index)**：获取指定索引处的元素。
-  - **int indexOf(Object o)**：从左往右查找，获取指定元素在集合中的索引，如果元素不存在返回 -1。
-  - **int lastIndexOf(Object o)**：从右往左查找，获取指定元素在集合中的索引,如果元素不存在返回 -1
-  - **List<E> subList(int fromIndex, int toIndex)：** 截取从 fromIndex 开始到 toIndex-1 处的元素
-
-### **7.3.4** 代码示例
+#### **7.3.4** 代码示例
 
 ```java
     public static void main(String[] args) {
@@ -1535,13 +1696,9 @@ Collection将集合划分为两大类，即List和Set。
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d960aecf94f98c9f3804f836f05ea677.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\65cd4a2d1cf94efc9998e72e203a0969.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### **7.3.5 面向接口编程**
+#### **7.3.5 面向接口编程**
 
 **面向接口编程：**
 
@@ -1552,72 +1709,68 @@ Collection将集合划分为两大类，即List和Set。
 **注意：**因为是接口的引用，所以该引用的变量不能使用实现类中有、但接口中没有的方法（实现类中没有重写的方法，自添加的方法）。
 
 > **以面向接口编程为原则，以多态的形式创建集合对象：**
->
+> 
 > 以下两种方法都可以创建ArrayList，但是更推荐第一种方法：
->
+> 
 > ```java
 > // 推荐，面向接口编程，多态形式，对象实例指向接口引用
 > List<Integer> arrayList = new ArrayList<>();
 > // 不推荐，常规创建对象形式
 > ArrayList<Integer> arrayList = new ArrayList<>();
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 因为前者符合设计模式中的依赖倒置原则。即程序要尽量依赖于抽象，不依赖于具体。
->
-> 在Java语法中，这种方式符合Java三大特性中的多态，即使用接口引用指向具体实现。
->  依赖倒转的好处是，后期扩展方便。比如，你若希望用LinkedList的实现来替代ArrayList的话，只需改动一行即可，其他的所有的都不需要改动：
->
+> 
+> 在Java语法中，这种方式符合Java三大特性中的多态，即使用接口引用指向具体实现。  
+> 依赖倒转的好处是，后期扩展方便。比如，你若希望用LinkedList的实现来替代ArrayList的话，只需改动一行即可，其他的所有的都不需要改动：
+> 
 > ```java
 > List<Integer> list=new LinkedList<>()；
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 这也是一种很好的设计模式，符合面向接口编程原则.一个接口有多种实现,当你想换一种实现方式时,你需要做的改动很小.
 
 **优点：**
 
-- **解耦合**：声明的变量与具体实现类解耦。变量只依赖于接口，而不是具体实现，这样可以很容易地替换具体实现类，而不需要修改客户端代码。
-- **可扩展性**：当需要添加新功能时，只需实现新的接口，让原引用指向新的实现类，而不需要修改现有代码。例如SpringBoot项目中，我们经常用XxxService接口和XxxServiceImpl1、XxxServiceImpl2等业务实现类，在使用时，通常将这个接口引用通过@Autowired等注解注入XxxService，然后通过@Primary、@Qualifier等注解指定具体注入XxxServiceImpl1还是XxxServiceImpl2，方便扩展。
-- **可测试性**：在单元测试中，可以轻松地使用接口的模拟实现来替换真实的实现，从而进行隔离测试。
+-   **解耦合**：声明的变量与具体实现类解耦。变量只依赖于接口，而不是具体实现，这样可以很容易地替换具体实现类，而不需要修改客户端代码。
+-   **可扩展性**：当需要添加新功能时，只需实现新的接口，让原引用指向新的实现类，而不需要修改现有代码。例如SpringBoot项目中，我们经常用XxxService接口和XxxServiceImpl1、XxxServiceImpl2等业务实现类，在使用时，通常将这个接口引用通过@Autowired等注解注入XxxService，然后通过@Primary、@Qualifier等注解指定具体注入XxxServiceImpl1还是XxxServiceImpl2，方便扩展。
+-   **可测试性**：在单元测试中，可以轻松地使用接口的模拟实现来替换真实的实现，从而进行隔离测试。
 
 **符合设计原则：**
 
-- **开闭原则OCP(Open－Close Principle)：** 对拓展开放、对修改关闭。
-- **依赖倒置原则DIP(Dependency Inversion Principle)：** 抽象不应该依赖于细节、细节应该依赖于抽象。例如我们开发中要用Service接口和ServiceImpl实现类，而不是直接一个ServiceImpl类中写业务。
+-   **开闭原则OCP(Open－Close Principle)：** 对拓展开放、对修改关闭。
+-   **依赖倒置原则DIP(Dependency Inversion Principle)：** 抽象不应该依赖于细节、细节应该依赖于抽象。例如我们开发中要用Service接口和ServiceImpl实现类，而不是直接一个ServiceImpl类中写业务。
 
 > **设计原则详细参考：**
->
-> [设计模式——设计模式简介和七大原则_理解设计模式的核心思想和基本理念是什么-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/130403757?spm=1001.2014.3001.5502)
+> 
+> [设计模式——设计模式简介和七大原则\_理解设计模式的核心思想和基本理念是什么-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/130403757?spm=1001.2014.3001.5502 "设计模式——设计模式简介和七大原则_理解设计模式的核心思想和基本理念是什么-CSDN博客")
 
-## 7.4 LinkedList
+### 7.4 LinkedList
 
-### 7.4.1 基本介绍 
+#### 7.4.1 基本介绍 
 
 **LinkedList：**
 
-- **使用场景：**频繁增删元素但不经常查询
-- **底层：**链表 。允许存储多个null值。
-- **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
+-   **使用场景：**频繁增删元素但不经常查询
+-   **底层：**链表 。允许存储多个null值。
+-   **性能：** 查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为O(n) ），增删很快（只需调整链表的指针，插入（add）和删除（remove）操作时间复杂度为O(1)）。
 
 **常用方法：**
 
-| 方法                                  | 描述                     |
-| ------------------------------------- | ------------------------ |
-| public void add(int index, E element) | 向指定位置插入元素。     |
-| public void addFirst(E e)             | 元素添加到头部。         |
-| public void addLast(E e)              | 元素添加到尾部。         |
-| public void clear()                   | 清空链表。               |
-| public E remove(int index)            | 删除指定位置的元素。     |
-| public E removeFirst()                | 删除并返回第一个元素。   |
-| public E removeLast()                 | 删除并返回最后一个元素。 |
-| public boolean contains(Object o)     | 判断是否含有某一元素。   |
-| public E getFirst()                   | 返回第一个元素。         |
-| public E getLast()                    | 返回最后一个元素。       |
+| 方法 | 描述 |
+| --- | --- |
+| public void add(int index, E element) | 向指定位置插入元素。 |
+| public void addFirst(E e) | 元素添加到头部。 |
+| public void addLast(E e) | 元素添加到尾部。 |
+| public void clear() | 清空链表。 |
+| public E remove(int index) | 删除指定位置的元素。 |
+| public E removeFirst() | 删除并返回第一个元素。 |
+| public E removeLast() | 删除并返回最后一个元素。 |
+| public boolean contains(Object o) | 判断是否含有某一元素。 |
+| public E getFirst() | 返回第一个元素。 |
+| public E getLast() | 返回最后一个元素。 |
 
-**代码示例：** 
+**代码示例：** 
 
 ```java
     public static void main(String[] args) {
@@ -1629,32 +1782,26 @@ Collection将集合划分为两大类，即List和Set。
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 7.4.2 **ArrayList和**LinkedList的区别
 
-### 7.4.2 **ArrayList和**LinkedList的区别
+| **特性** | **ArrayList** | **LinkedList** |
+| --- | --- | --- |
+| **使用场景** | 频繁查询但不经常增删元素 | 频繁增删元素但不经常查询 |
+| **底层** | 数组 | 链表 |
+| **允许存储 null 值** | 是。允许存储多个null值 | 是。允许存储多个null值 |
+| **查询性能** | 快。根据索引查询（get、contains）操作时间复杂度为 O(1) | 慢。根据索引查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为 O(n)） |
+| **添加性能** | 慢。添加（add）元素时，可能需要移动数组中的元素，导致时间复杂度为 O(n) | 快。插入（add）操作时间复杂度为 O(1)，插入后不需要移动元素 |
+| **删除性能** | 慢。删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为 O(n) | 快。删除（remove）操作时间复杂度为 O(1)，删除后不需要移动元素 |
 
-| **特性**             | **ArrayList**                                                | **LinkedList**                                               |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **使用场景**         | 频繁查询但不经常增删元素                                     | 频繁增删元素但不经常查询                                     |
-| **底层**             | 数组                                                         | 链表                                                         |
-| **允许存储 null 值** | 是。允许存储多个null值                                       | 是。允许存储多个null值                                       |
-| **查询性能**         | 快。根据索引查询（get、contains）操作时间复杂度为 O(1)       | 慢。根据索引查询很慢（需要从头（或尾）遍历链表，查询操作时间复杂度为 O(n)） |
-| **添加性能**         | 慢。添加（add）元素时，可能需要移动数组中的元素，导致时间复杂度为 O(n) | 快。插入（add）操作时间复杂度为 O(1)，插入后不需要移动元素   |
-| **删除性能**         | 慢。删除（remove）元素时，可能需要移动数组中的元素，导致时间复杂度为 O(n) | 快。删除（remove）操作时间复杂度为 O(1)，删除后不需要移动元素 |
+### 7.5 Hashset
 
-
-
-## 7.5 Hashset
-
-### 7.5.1 基本介绍
+#### 7.5.1 基本介绍
 
 **HashSet：**
 
-- **使用场景：**需要高效去重、快速查找、不考虑内存浪费的场景
-- **底层：**哈希表（快速查找）和Set（去重）。它自动对元素进行去重（通过 hashCode 和 equals 方法），并且无序（存入后顺序会乱），允许存储一个null值。
-- **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
-
-
+-   **使用场景：**需要高效去重、快速查找、不考虑内存浪费的场景
+-   **底层：**哈希表（快速查找）和Set（去重）。它自动对元素进行去重（通过 hashCode 和 equals 方法），并且无序（存入后顺序会乱），允许存储一个null值。
+-   **性能：**底层是哈希表，所以插入、删除和查找操作的时间复杂度都是O(1)，代价是浪费一些空间。
 
 哈希表是元素为链表的数组，默认容量16，负载因子0.75，处理冲突方法是链地址法。
 
@@ -1674,9 +1821,7 @@ public class Test2 {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\92f59c3af59f4716bc588cd8d5ba6cc6.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/6bd937ae10154820a66f7dceb15de847.png)
 
 如果Hashset里的元素是对象，若想将成员变量相同视为对象相同，要重写hashCode()：
 
@@ -1693,8 +1838,6 @@ public class Test {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 ```java
 package package1;
@@ -1737,9 +1880,7 @@ public class Dog extends Animal{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 7.5.2 **去重原理：**hashCode值
+#### 7.5.2 **去重原理：**hashCode值
 
 **HashSet自动去重的原理：**hashCode值。
 
@@ -1764,13 +1905,7 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\d69c47ea9a20268ce868b88e46c94abf.png)
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/5afc109e5653a19b2425d0ca3388791f.png)
 
 HashSet通过hashCode值来判断重复元素的，hashCode值是通过HashCode()方法返回的。
 
@@ -1848,24 +1983,18 @@ class Student {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 运行main方法后，结果：
 
+![](https://i-blog.csdnimg.cn/blog_migrate/1662186f44e84774a3e8673cf48de5ad.png)
 
+#### 7.5.3 知识加油站
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\186105f99c1bd1bd762b9c4575b9e20b.png)
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 7.5.3 知识加油站
-
-#### 7.5.3.1 equals()和hashcode()的关系
+##### 7.5.3.1 equals()和hashcode()的关系
 
 **两者在用途上的区别：**
 
-- hashCode()方法的主要用途是获取哈希码；
-- equals()主要用来比较两个对象是否相等。
+-   hashCode()方法的主要用途是获取哈希码；
+-   equals()主要用来比较两个对象是否相等。
 
 **为什么重写equals()就要重写hashcode()？** 
 
@@ -1875,22 +2004,18 @@ class Student {
 
 如果两个对象相等,它们必须有相同的哈希码；但如果两个对象的哈希码相同,他们却不一定相等。
 
-#### 7.5.3.2 ==与equals()的区别
+##### 7.5.3.2 ==与equals()的区别
 
-- **==** 比较基本数据类型时，比较的是两个数值是否相等； 比较引用类型是，比较的是对象的内存地址是否相等。
-- **equals()** 没有重写时，Object类默认以==来实现，即比较两个对象的内存地址是否相等； 重写以后，按照重写的逻辑进行比较。
+-   **\==** 比较基本数据类型时，比较的是两个数值是否相等； 比较引用类型是，比较的是对象的内存地址是否相等。
+    
+-   **equals()** 没有重写时，Object类默认以==来实现，即比较两个对象的内存地址是否相等； 重写以后，按照重写的逻辑进行比较。
+    
 
+![](https://i-blog.csdnimg.cn/blog_migrate/ad65400ed12473f969247715f904444e.png)
 
+### 7.6 HashMap
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\939d218f39f97ced63ac71cc39ab3327.png)
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-## 7.6 HashMap
-
-### 7.6.1 基本介绍
+#### 7.6.1 基本介绍
 
 **使用场景**: 适用于需要基于键值对快速查找数据的场景。“键”可以理解为钥匙，通过这个钥匙，可以找到它唯一对应的“值”。
 
@@ -1898,27 +2023,27 @@ class Student {
 
 **性能**:
 
-- **查询性能**: 快，时间复杂度为 O(1)。
-- **添加性能**: 快，时间复杂度为 O(1)。
-- **删除性能**: 快，时间复杂度为 O(1)。
+-   **查询性能**: 快，时间复杂度为 O(1)。
+-   **添加性能**: 快，时间复杂度为 O(1)。
+-   **删除性能**: 快，时间复杂度为 O(1)。
 
 **是否允许 null**:
 
-- 键可以为 null（但最多一个键为 null）。
-- 值可以为 null。
+-   键可以为 null（但最多一个键为 null）。
+-   值可以为 null。
 
 **常用方法：**
 
-- **put()：**向映射中添加一个键值对。如果键已经存在，则更新其对应的值。
-- **get()：**根据键获取对应的值。
-- **getOrDefault()：**获取指定 key 对应对 value，如果找不到 key ，则返回设置的默认值
-- **keySet()：**返回所有key的Set集合。
-- **remove(Object key):** 根据键移除键值对。
-- **containsKey(Object key):** 检查是否包含指定键。
-- **containsValue(Object value):** 检查是否包含指定值。
-- **size():** 返回映射中的键值对数量。
-- **isEmpty():** 检查映射是否为空。
-- **clear():** 移除映射中的所有键值对。
+-   **put()：**向映射中添加一个键值对。如果键已经存在，则更新其对应的值。
+-   **get()：**根据键获取对应的值。
+-   **getOrDefault()：**获取指定 key 对应对 value，如果找不到 key ，则返回设置的默认值
+-   **keySet()：**返回所有key的Set集合。
+-   **remove(Object key):** 根据键移除键值对。
+-   **containsKey(Object key):** 检查是否包含指定键。
+-   **containsValue(Object value):** 检查是否包含指定值。
+-   **size():** 返回映射中的键值对数量。
+-   **isEmpty():** 检查映射是否为空。
+-   **clear():** 移除映射中的所有键值对。
 
 **代码示例：**
 
@@ -1980,79 +2105,76 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/b3a2483e473b21ca53b96729f240cdac.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\8ffa88527e5e4b20a6a3a3b6c140a379.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 7.6.2 HashMap和HashSet区别
+#### 7.6.2 HashMap和HashSet区别
 
 **相同点：**
 
-- 他们的前缀的是HashXxx，代表他们底层都是哈希表，用hashCode()判断元素是否重复。
+-   他们的前缀的是HashXxx，代表他们底层都是哈希表，用hashCode()判断元素是否重复。
 
 > 哈希表增删改查的时间复杂度是O(1)，缺点是可能出现冲突。
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\cb185ad65a484a988c4bf1a1f20f2d04.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/7b40944c9ac06dd6f93499620be12d82.png)
+> 
 > HashXxx都使用哈希算法来确定元素的存储位置，因此插入元素的速度通常比较快。哈希表插入时主要看是否发生冲突，如果key通过哈希算法计算后的值所处位置已有元素，则需要根据链地址法或开放地址法处理冲突。
 
 **不同点：**
 
-| 特性             | HashMap                                    | HashSet                                                      |
-| ---------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| **接口**         | 实现了 Map 接口                            | 实现了 Set 接口                                              |
-| **存储结构**     | 存储键值对（Key-Value pairs）              | 仅存储对象（Unique elements）                                |
-| **存储方式**     | 使用 put() 方法将元素放入 Map 中           | 使用 add() 方法将元素放入 Set 中                             |
-| **底层实现**     | 基于哈希表，使用数组和链表（或红黑树）     | 基于 HashMap 实现，每个元素作为 HashMap 的键，值为一个常量对象 |
-| **存储内容**     | 键和值都可以为 null，键最多只能有一个 null | 仅允许一个 null 元素                                         |
-| **是否允许重复** | 键不允许重复，值可以重复                   | 不允许重复元素                                               |
-| **时间复杂度**   | 插入、删除、查找的平均时间复杂度为 O(1)    | 插入、删除、查找的平均时间复杂度为 O(1)，但 contains() 时间复杂度可能更高 |
-| **插入速度**     | 比较快，因为底层是哈希表                   | 比较快，因为底层是哈希表                                     |
-| **使用场景**     | 需要键值对映射的场景                       | 需要存储唯一元素的场景                                       |
+| 特性 | HashMap | HashSet |
+| --- | --- | --- |
+| **接口** | 实现了 Map 接口 | 实现了 Set 接口 |
+| **存储结构** | 存储**键值对**（Key-Value pairs） | 仅存储**对象**（Unique elements） |
+| **存储方式** | 使用 put() 方法将元素放入 Map 中 | 使用 add() 方法将元素放入 Set 中 |
+| **底层实现** | 基于哈希表，使用数组+链表+红黑树 | 
+基于 **HashMap** 实现
 
-### 7.6.3 知识加油站：HashMap的底层原理
+**HashMap 的key是每个元素**
 
-#### 7.6.3.1 线程不安全
+value是一个私有常量对象PRESENT，仅用于占位。
+
+ |
+| **存储内容** | 键和值都可以为 null，键最多只能有一个 null | 
+
+仅允许一个 null 元素
+
+因为它底层是HashMap的key，键只允许一个null
+
+ |
+| **是否允许重复** | 键不允许重复，值可以重复 | 不允许重复元素 |
+| **时间复杂度** | 插入、删除、查找的平均时间复杂度为 O(1) | 插入、删除、查找的平均时间复杂度为 O(1)，但 contains() 时间复杂度可能更高 |
+| **插入速度** | 比较快，因为底层是哈希表 | 比较快，因为底层是哈希表 |
+| **使用场景** | 需要键值对映射的场景 | 需要存储唯一元素、自动去重的场景 |
+
+#### 7.6.3 知识加油站：HashMap的底层原理
+
+##### 7.6.3.1 线程不安全
 
 HashMap是线程不安全的，多线程环境下建议使用Collections工具类和JUC包的ConcurrentHashMap。
 
-> - **线程安全：**程序在多线程环境下可以持续进行正确的处理，不会产生数据竞争（例如死锁）和不一致的问题。
+> -   **线程安全：**程序在多线程环境下可以持续进行正确的处理，不会产生数据竞争（例如死锁）和不一致的问题。
 
-**线程安全的解决方案：**原子类、volatile、锁、线程安全的集合 
+**线程安全的解决方案：**原子类、volatile、锁、线程安全的集合 
 
 **线程安全的集合：**
 
-1. Collections工具类：
+1.  **Collections工具类：**Collections工具类的synchronizedXxx()方法**，**将ArrayList等集合类包装成线程安全的集合类。
+    
+    ```java
+    Collections.synchronizedMap(map);
+    ```
+    
+2.  **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
+3.  **降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
+4.  **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
 
-   Collections工具类的synchronizedXxx()方法
-
-   ，
-
-   将ArrayList等集合类包装成线程安全的集合类。 	
-
-   ```java
-   Collections.synchronizedMap(map);
-   ```
-
-   ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-2. **古老api：**java.util包下性能差的古老api，如Vector、Hashtable
-
-3. **降低锁粒度的并发容器：**JUC包下Concurrent开头的、以降低锁粒度来提高并发性能的容器，如ConcurrentHashMap。
-
-4. **复制技术实现的并发容器：**JUC包下以CopyOnWrite开头的、采用写时复制技术实现的并发容器，如CopyOnWriteArrayList。 
-
-
-
-#### 7.6.3.2 **底层数据结构**
+##### 7.6.3.2 **底层数据结构**
 
 在JDK8中,HashMap底层是采用“数组+单向链表+红黑树”来实现的。数组用作哈希查找，链表用作链地址法处理冲突，红黑树替换长度为8的链表。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\e369a185ff574420a3ab6fe179d42652.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/1c79cbab0dd872f244418bc83f71c2f2.png)
 
-#### 7.6.3.3 **扩容机制** 
+##### 7.6.3.3 **扩容机制** 
 
 HashMap中，数组的默认初始容量为16，这个容量会以2的指数进行扩容。具体来说，当数组中的元素达到一定比例的时候HashMap就会扩容，这个比例叫做负载因子，默认为0.75。
 
@@ -2060,25 +2182,27 @@ HashMap中，数组的默认初始容量为16，这个容量会以2的指数进�
 
 数组每个元素存的是链表头结点地址，链地址法处理冲突，若链表的长度达到了8，红黑树代替链表。
 
-#### 7.6.3.4 **put()流程**
+##### 7.6.3.4 **put()流程**
 
 put()方法的执行过程中,主要包含四个步骤：
 
-1. 计算key存取位置，与运算hash&(2^n-1），实际就是哈希值取余，位运算效率更高。
-2. 判断数组，若发现数组为空，则进行首次扩容为初始容量16。
-3. 判断数组存取位置的头节点，若发现头节点为空，则新建链表节点，存入数组。
-4. 判断数组存取位置的头节点，若发现头节点非空，则看情况将元素覆盖或插入链表（JDK7头插法，JDK8尾插法）、红黑树。
-5. 插入元素后，判断元素的个数，若发现超过阈值则以2的指数再次扩容。
+1.  计算key存取位置，与运算hash&(2^n-1），实际就是哈希值取余，位运算效率更高。
+2.  判断数组，若发现数组为空，则进行首次扩容为初始容量16。
+3.  判断数组存取位置的头节点，若发现头节点为空，则新建链表节点，存入数组。
+4.  判断数组存取位置的头节点，若发现头节点非空，则看情况将元素覆盖或插入链表（JDK7头插法，JDK8尾插法）、红黑树。
+5.  插入元素后，判断元素的个数，若发现超过阈值则以2的指数再次扩容。
 
 其中，第3步又可以细分为如下三个小步骤：
 
-1. 若元素的key与头节点的key一致，则直接覆盖头节点。
-2. 若元素为树型节点，则将元素追加到树中。
-3. 若元素为链表节点，则将元素追加到链表中。追加后，需要判断链表长度以决定是否转为红黑树。若链表长度达到8、数组容量未达到64，则扩容。若链表长度达到8、数组容量达到64，则转为红黑树。
+1\. 若元素的key与头节点的key一致，则直接覆盖头节点。
+
+2\. 若元素为树型节点，则将元素追加到树中。
+
+3\. 若元素为链表节点，则将元素追加到链表中。追加后，需要判断链表长度以决定是否转为红黑树。若链表长度达到8、数组容量未达到64，则扩容。若链表长度达到8、数组容量达到64，则转为红黑树。
 
 **哈希表处理冲突：**开放地址法（线性探测、二次探测、再哈希法）、链地址法
 
-#### 7.6.3.5 **HashMap容量为什么是2的n次方？**
+##### 7.6.3.5 **HashMap容量为什么是2的n次方？**
 
 2^n-1和2^(n+1)-1的二进制除了第一位，后几位都是相同的。这样可以使得添加的元素均匀分布在HashMap的每个位置上，防止哈希碰撞。
 
@@ -2094,19 +2218,17 @@ put()方法的执行过程中,主要包含四个步骤：
 
 17&(2^4-1)=1；17&(2^5-1)=17。所以扩容后，key为1的一部分value位置没变，一部分value迁移到扩容后的新位置。
 
-#### 7.6.3.6 **JDK7扩容时死循环问题**
+##### 7.6.3.6 **JDK7扩容时死循环问题**
 
 单线程扩容流程：JDK7中，HashMap链地址法处理冲突时采用头插法，在扩容时依然头插法，所以链表里结点顺序会反过来。
 
 假如有T1、T2两个线程同时对某链表扩容，他们都标记头结点和第二个结点，此时T2阻塞，T1执行完扩容后链表结点顺序反过来，此时T2恢复运行再进行翻转就会产生环形链表，即B.next=A; A.next=B，从而死循环。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\97ea93a253522b8008fafd72007239bc.jpeg)
+![](https://i-blog.csdnimg.cn/blog_migrate/b87febbd1cf67ce4ab62b727ae125a2b.jpeg)
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+**JDK8 尾插法：**JDK8中，HashMap采用尾插法，扩容时链表节点位置不会翻转，解决了扩容死循环问题，但是性能差了一点，因为要遍历链表再查到尾部。 
 
-**JDK8 尾插法：**JDK8中，HashMap采用尾插法，扩容时链表节点位置不会翻转，解决了扩容死循环问题，但是性能差了一点，因为要遍历链表再查到尾部。 
-
-#### 7.6.3.7 **JDK8 put时数据覆盖问题：**
+##### 7.6.3.7 **JDK8 put时数据覆盖问题：**
 
 HashMap非线程安全，如果两个并发线程插入的数据hash取余后相等，就可能出现数据覆盖。
 
@@ -2123,38 +2245,28 @@ HashMap非线程安全，如果两个并发线程插入的数据hash取余后相
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### 7.6.3.8 **modCount非原子性自增问题**
 
-#### 7.6.3.8 **modCount非原子性自增问题**
+put会执行modCount++操作（modCount是HashMap的成员变量，用于记录HashMap被修改次数），这步操作分为读取、增加、保存，不是一个原子性操作，也会出现线程安全问题。 
 
-put会执行modCount++操作（modCount是HashMap的成员变量，用于记录HashMap被修改次数），这步操作分为读取、增加、保存，不是一个原子性操作，也会出现线程安全问题。 
+### 7.7 TreeSet
 
-
-
-
-
-## 7.7 TreeSet
-
-### 7.7.1 基本介绍
+#### 7.7.1 基本介绍
 
 **TreeSet：**
 
-- 特点：
-
-  有序（自然顺序或自定义排序器），去重复。 	
-
-  - **元素为基本类型时自然有序：**new TreeSet<int>()。如果TreeSet内元素是**基本数据类型**，它会自动去重有序。
-  - **元素为类时自然或比较器排序：**new TreeSet<类>(Comperable c)。如果TreeSet内元素是类，要实现去重有序，有两种方法。
-    - **自然排序：**类要实现Comparable<>接口，并重写compareTo（T）方法；
-    - **比较器排序：**以比较器作为构造参数，创建TreeSet对象。如果即实现了Comparable<>接口，又指定了比较器，则使用比较器排序。
-
-- **使用场景：**适用于多读少写、排序的场景。
-
-- **底层：**红黑树（快速查找、排序）和Set（去重）。**不允许存储null值**
-
-- **性能：**插入、删除、查找操作的时间复杂度为O(log n)，因为操作需要维护树的平衡，所以适用于多读少写的场景。
-
-
+-   **特点：**有序（自然顺序或自定义排序器），去重复。
+    -   **元素为基本类型时自然有序：**new TreeSet<int>()。如果TreeSet内元素是**基本数据类型**，它会自动去重有序。
+        
+    -   **元素为类时自然或比较器排序：**new TreeSet<类>(Comperable c)。如果TreeSet内元素是类，要实现去重有序，有两种方法。
+        
+        -   **自然排序：**类要实现Comparable<>接口，并重写compareTo（T）方法；
+            
+        -   **比较器排序：**以比较器作为构造参数，创建TreeSet对象。如果即实现了Comparable<>接口，又指定了比较器，则使用比较器排序。
+            
+-   **使用场景：**适用于多读少写、排序的场景。
+-   **底层：**红黑树（快速查找、排序）和Set（去重）。**不允许存储null值**
+-   **性能：**插入、删除、查找操作的时间复杂度为O(log n)，因为操作需要维护树的平衡，所以适用于多读少写的场景。
 
 **方法一：自然排序**
 
@@ -2195,8 +2307,6 @@ public class Dog  implements Comparable<Dog>{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```java
 /**
  * @Author: vince
@@ -2220,9 +2330,7 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\2518f4d0515f4e34ba27aab3704ada16.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/b4731c7fa7ddbfb7e77343c78301c5c0.png)
 
 **方法二：比较器排序**
 
@@ -2270,10 +2378,6 @@ public class Dog {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 ```java
 /**
  * @Author: vince
@@ -2306,34 +2410,28 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/8ec22fe35d991a97d27faca13b8d6bea.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\3fec1814bbc8434cb31202f06539ccd1.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 7.7.2 HashSet和TreeSet的区别
+#### 7.7.2 HashSet和TreeSet的区别
 
 **相同点：**元素都可以自动去重
 
 **不同点：**
 
-|                        | **HashSet**                                        | **TreeSet**                                           |
-| ---------------------- | -------------------------------------------------- | ----------------------------------------------------- |
-| **实现**               | 基于哈希表 实现                                    | 基于红黑树 (Red-Black Tree) 实现                      |
-| **排序**               | 不保证顺序                                         | 按自然顺序或指定的比较器排序                          |
-| **性能**               | 插入、删除和查找操作的时间复杂度为 O(1)            | 插入、删除和查找操作的时间复杂度为 O(log n)           |
-| **是否允许 null 元素** | 允许存储一个 null 元素                             | 不允许存储 null 元素                                  |
-| **适用场景**           | 适用于对顺序无要求、自动去重、快速查找和插入的场景 | 适用于需要自动有序、去重存储的场景                    |
-| **去重原理**           | 通过复写hashCode()方法和equals()方法来保证的       | Treeset是通过Compareable接口的compareto方法来保证的。 |
+|  | **HashSet** | **TreeSet** |
+| --- | --- | --- |
+| **实现** | 基于哈希表 实现 | 基于红黑树 (Red-Black Tree) 实现 |
+| **排序** | 不保证顺序 | 按自然顺序或指定的比较器排序 |
+| **性能** | 插入、删除和查找操作的时间复杂度为 O(1) | 插入、删除和查找操作的时间复杂度为 O(log n) |
+| **是否允许 null 元素** | 允许存储一个 null 元素 | 不允许存储 null 元素 |
+| **适用场景** | 适用于对顺序无要求、自动去重、快速查找和插入的场景 | 适用于需要自动有序、去重存储的场景 |
+| **去重原理** | 通过复写hashCode()方法和equals()方法来保证的 | Treeset是通过Compareable接口的compareto方法来保证的。 |
 
+## 八、泛型
 
+### 8.1 基本介绍
 
-
-
-# 八、泛型
-
-## 8.1 基本介绍
-
-泛型本质是将类、接口和方法中具体的类型参数化，并且提供了编译时类型安全检测机制。通过使用泛型，可以避免使用Object类导致的类型转换错误和减少了代码的冗余。 
+泛型本质是将类、接口和方法中具体的类型参数化，并且提供了编译时类型安全检测机制。通过使用泛型，可以避免使用Object类导致的类型转换错误和减少了代码的冗余。 
 
 尖括号“<>”是泛型的标志，例如ArrayList<E>就是一个泛型，“<E>”将实际的集合元素类型参数化了，这样我们使用时可以指定new ArrayList<String>，将它指定：
 
@@ -2351,20 +2449,16 @@ public class ArrayList<E> extends AbstractList<E>
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-我们在使用ArrayList时，尖括号指定<String>，这样它就只能存String类型的元素了： 
+我们在使用ArrayList时，尖括号指定<String>，这样它就只能存String类型的元素了： 
 
 ```java
 // 我们在使用ArrayList时，尖括号指定<String>，这样它就只能存String类型的元素了
 ArrayList<String> list = new ArrayList<String>();
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 这样，如果给它存String类型参数，就是正常的，一旦存其他类型，就会在代码下面出现红色波浪线，编译期间就报错：
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\70f643151b1149cd9cefb06fc64a5ac7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/60d55c22e312ae2d51529b9c31f0e464.png)
 
 这也是泛型的优点，如果我们不用泛型，而用public class ArrayList<Object>{}方式声明ArrayList，就可以往集合里存所有类型的参数，编译是也不报错，但是可读性很差，你不知道它具体应该存哪些类型，存的类型不是业务中需要类型时，编译期间也不报错，直到生产环境运行时报错，就会出现不好的影响了。
 
@@ -2386,29 +2480,31 @@ ArrayList<String> list = new ArrayList<String>();
 
 这也是泛型的优点：
 
-1. **防止运行时报错：**可以在编译时检查类型安全，防止在程序运行期间出现BUG。
-2. **隐式转换：**所有的强制转换都是自动和隐式的，可以提高代码的重用率。
+1.  **防止运行时报错：**可以在编译时检查类型安全，防止在程序运行期间出现BUG。
+2.  **隐式转换：**所有的强制转换都是自动和隐式的，可以提高代码的重用率。
 
-## 8.2 **格式**
+### 8.2 **格式**
 
-### 8.2.1 泛型参数类型
+#### 8.2.1 泛型参数类型
 
-我们可以看见，前面 ArrayList<E>，尖括号内是“E”，然后我们可能看见其他泛型尖括号内是“T”，具体是哪个大写字母，其实并没有特定的要求，只是遵循了某些约定俗成的惯例。
+我们可以看见，前面 ArrayList<E>，尖括号内是“E”，然后我们可能看见其他泛型尖括号内是“T”，具体是哪个大写字母，其实并没有特定的要求，只是遵循了某些约定俗成的惯例。
 
 **泛型参数类型的惯例：**
 
-- **<E>**：表示元素（Element），通常在集合类中使用。例如，List<E>，Set<E>。
-- **<T>**：表示类型（Type），通常在一般类型中使用。例如，Box<T>，Comparable<T>。
-- **<K>** 和 **<V>**：分别表示键（Key）和值（Value），通常在映射（Map）类中使用。例如，Map<K, V>，Entry<K, V>。
-- **<N>**：表示数字（Number），在需要表示数字的泛型中使用。
+-   **<E>**：表示元素（Element），通常在集合类中使用。例如，List<E>，Set<E>。
+    
+-   **<T>**：表示类型（Type），通常在一般类型中使用。例如，Box<T>，Comparable<T>。
+    
+-   **<K>** 和 **<V>**：分别表示键（Key）和值（Value），通常在映射（Map）类中使用。例如，Map<K, V>，Entry<K, V>。
+    
+-   **<N>**：表示数字（Number），在需要表示数字的泛型中使用。
+    
 
+#### 8.2.2 泛型类
 
+泛型类定义了一个泛型参数，创建对象时给它传入这个参数的实际类型。 
 
-### 8.2.2 泛型类
-
-泛型类定义了一个泛型参数，创建对象时给它传入这个参数的实际类型。 
-
-**格式：** 
+**格式：** 
 
 ```java
 /**
@@ -2422,11 +2518,9 @@ class ClassName<T> {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **代码示例：**
 
-模拟ArrayList增、查、扩容： 
+模拟ArrayList增、查、扩容： 
 
 ```java
 /**
@@ -2517,24 +2611,22 @@ public class MyList<E> {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e7899b852a176e7a06383cec8b09c940.png)  
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\c5f3adadca5d4d139066c52726c39d6f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
-
-### 8.2.3 泛型接口
+#### 8.2.3 泛型接口
 
 泛型接口和泛型类类似，也是定义了一个泛型参数。不同的点是，泛型接口在被实现或者被继承时需要指定具体类型。
 
 如果泛型接口的实现类不是泛型：
 
-- 实现泛型接口时，如果没有省略尖括号“<>”，则必须在接口“<>”中指定类型
-- 实现泛型接口时，如果省略了尖括号“<>”，则默认“<>”内是Object类
+-   实现泛型接口时，如果没有省略尖括号“<>”，则必须在接口“<>”中指定类型
+-   实现泛型接口时，如果省略了尖括号“<>”，则默认“<>”内是Object类
 
 如果泛型接口的实现类是泛型：
 
-- 实现泛型接口时，实现类也必须是泛型类，并且类型与泛型接口保持一致
+-   实现泛型接口时，实现类也必须是泛型类，并且类型与泛型接口保持一致
 
-**格式：** 
+**格式：** 
 
 ```java
 /**
@@ -2548,11 +2640,9 @@ interface InterfaceName<T> {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **代码示例：**
 
-泛型接口： 
+泛型接口： 
 
 ```java
 /**
@@ -2565,8 +2655,6 @@ public interface IGen<E> {
     public void fun(E e);
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 如果泛型接口的实现类不是泛型，实现泛型接口时，如果没有省略尖括号“<>”，则必须在接口“<>”中指定类型：
 
@@ -2584,8 +2672,6 @@ public class Gen implements IGen<Integer>{
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 如果泛型接口的实现类不是泛型，实现泛型接口时，如果省略了尖括号“<>”，则默认“<>”内是Object类
 
@@ -2608,11 +2694,7 @@ public class Gen implements IGen{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 如果泛型接口的实现类是泛型，实现泛型接口时，实现类也必须是泛型类，并且类型与泛型接口保持一致
-
-
 
 ```java
 /**
@@ -2629,17 +2711,13 @@ public class Gen<E> implements IGen<E>{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 8.2.4 泛型方法
+#### 8.2.4 泛型方法
 
 当在一个方法签名中的返回值前面声明了一个 < T > 时，该方法就被声明为一个泛型方法。
 
 然后返回类型、参数类型都可以用这个<T>，当然也可以不用。
 
-**格式：** 
+**格式：** 
 
 ```java
 /**
@@ -2652,10 +2730,6 @@ public <T> 返回类型 方法名(参数类型 parameter) {
     // 方法体
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 **示例：** 
 
@@ -2711,24 +2785,20 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/fcdbbae6b02965b7c3b4ee26a8dfa557.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\536de9cb31d54828968f40094bb900f3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 8.3 类型通配符
+### 8.3 类型通配符
 
 类型通配符跟泛型参数<T>、<E>等类似，用于表示不确定的类型，不同的点在于：
 
-- **类型参数：**用于声明泛型类、泛型接口或泛型方法。声明时是未知类型，使用时擦除成具体的类型（在编译时泛型擦除）。
-- **类型通配符：**用于使用泛型时，表示一种未知的类型。
+-   **类型参数：**用于声明泛型类、泛型接口或泛型方法。声明时是未知类型，使用时擦除成具体的类型（在编译时泛型擦除）。
+-   **类型通配符：**用于使用泛型时，表示一种未知的类型。
 
 **类型通配符有三种：**
 
-- **<?> ：无限定的通配符。**可以用来表示任何类型。无限定通配符只能读Object类型的值，只能写null类型的值，其他类型都不能读写。
-- **<? extends T> ：有上界的通配符。**表示继承自T的任何类型，这里上界指的就是T。它通常用于生产者，即返回T。上界通配符只允许读值，不允许写null以外值。
-- **<? super T> ：有下界的通配符。**表示子类是T的任何类型，这里下界指的就是T。它通常用于消费者，即写入T。下界类型通配符只允许写值，不允许读Object以外的值。
-
-
+-   **<?> ：无限定的通配符。**可以用来表示任何类型。无限定通配符只能读Object类型的值，只能写null类型的值，其他类型都不能读写。
+-   **<? extends T> ：有上界的通配符。**表示继承自T的任何类型，这里上界指的就是T。它通常用于生产者，即返回T。上界通配符只允许读值，不允许写null以外值。
+-   **<? super T> ：有下界的通配符。**表示子类是T的任何类型，这里下界指的就是T。它通常用于消费者，即写入T。下界类型通配符只允许写值，不允许读Object以外的值。
 
 **无限定类型通配符:<?>**
 
@@ -2775,18 +2845,16 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
- **上界类型通配符:List<? extends 指定类型>**
+  
+**上界类型通配符:List<?  extends 指定类型>**
 
 表示继承自T的任何类型，这里上界指的就是T。它主要用于写入数据的场景。
 
 上界类型通配符只允许读值，不允许写null以外的值。
 
 > **tip：**Number是·Integer的父类：
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\28fc600aa92e404cb65a4ee57991bbc3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/ebfded6720abf18bdca605a844cab34a.png)
 
 ```java
     public static void main(String[] args) {
@@ -2812,10 +2880,8 @@ public class Test {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
- **下界类型通配符:List<? super 指定类型>**
+  
+**下界类型通配符:List<?  super 指定类型>**
 
 表示子类是T的任何类型，这里下界指的就是T。它主要用于读取数据的场景。
 
@@ -2848,61 +2914,44 @@ public class Test {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/59d96b47f39054bd643dcdf6248aafc6.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\a511aac59d784e52bd3fd21bea6eb2aa.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 8.4 可变参数
-
-
+### 8.4 可变参数
 
 (int... a)是将所有int参数封装到a数组里。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\595be1d985f143c1989fa277cb6e4c38.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/fde10d6ba02b80112b843c9552908ccc.png)
 
- 注意可变参数要放在后面。例如(int a,int... b)正确，(int... a,int b)会报错。
+ 注意可变参数要放在后面。例如(int a,int... b)正确，(int... a,int b)会报错。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\02e8845d1ff6421bb744b14e70e1beba.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/ec1ede22f04d9f24b86f94f2146d3995.png)
 
+### 8.5 知识加油站
 
-
-## 8.5 知识加油站
-
-### 8.5.1 **泛型的向上转型**
+#### 8.5.1 **泛型的向上转型**
 
 泛型类或接口可以向上转型为父类，泛型符号不能向上转型。
 
 泛型向上转型指的是将一个泛型对象转换为其父类类型或者接口类型的过程。这个过程实际上是将泛型对象的类型参数擦除，重新赋值为其父类或接口类型。
 
-- 泛型类或接口可以向上转型：
+-   **泛型类或接口可以向上转型：**ArrayList<T>可以向上转型为List<T>
+    
+    ```java
+    ArrayList<Integer> arrayList = new ArrayList<>();
+    // 向上转型为 List<Integer>
+    List<Integer> list = arrayList;  
+    ```
+    
+-   **泛型符号不能向上转型：**ArrayList<Integer>泛型不可以向上转化为ArrayList<Number>。因为ArrayList<Number>接收ArrayList<float>，但ArrayList< Integer>不可以接收ArrayList< Float>，不能转回来 
+    
+    ```java
+    ArrayList<Integer> integerList = new ArrayList<>();
+    // 编译错误：不能将 ArrayList<Integer> 向上转型为 ArrayList<Number>
+    // ArrayList<Number> numberList = integerList; 
+    ```
+    
 
-  ArrayList<T>可以向上转型为List<T> 	
-
-  ```java
-  ArrayList<Integer> arrayList = new ArrayList<>();
-  // 向上转型为 List<Integer>
-  List<Integer> list = arrayList;  
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-- 泛型符号不能向上转型：
-
-  ArrayList<Integer>泛型不可以向上转化为ArrayList<Number>。因为ArrayList<Number>接收ArrayList<float>，但ArrayList< Integer>不可以接收ArrayList< Float>，不能转回来 	
-
-  ```java
-  ArrayList<Integer> integerList = new ArrayList<>();
-  // 编译错误：不能将 ArrayList<Integer> 向上转型为 ArrayList<Number>
-  // ArrayList<Number> numberList = integerList; 
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-  
-
-除了向上转型，也有向下转型。 
+除了向上转型，也有向下转型。 
 
 **向下转型：**
 
@@ -2915,13 +2964,11 @@ List<Integer> list = new ArrayList<>();
 ArrayList<Integer> arrayList = (ArrayList<Integer>) list;  // 向下转型为 ArrayList<Integer>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 8.5.2 泛型擦除
 
-### 8.5.2 泛型擦除
+**泛型擦除：**java的泛型是伪泛型，这是因为java在编译期间，所有的泛型类型都会被擦掉，并转换为普通类型。  
 
-**泛型擦除：**java的泛型是伪泛型，这是因为java在编译期间，所有的泛型类型都会被擦掉，并转换为普通类型。 
-
-**泛型擦除：**java的泛型是伪泛型，这是因为java在编译期间，所有的泛型类型都会被擦掉，并转换为普通类型。 
+**泛型擦除：**java的泛型是伪泛型，这是因为java在编译期间，所有的泛型类型都会被擦掉，并转换为普通类型。 
 
 泛型擦除的主要目的是为了向低版本兼容，因为Java泛型是在**JDK 1.5**之后才引入的特性，为了保证旧有的代码能正常运行，Java编译器采用了泛型擦除来**兼容**之前的代码。
 
@@ -2933,58 +2980,45 @@ ArrayList<Integer> arrayList = (ArrayList<Integer>) list;  // 向下转型为 Ar
 
 这也是**泛型的优点：**
 
-1. **防止运行时报错：**可以在编译时检查类型安全，防止在程序运行期间出现BUG。
-2. **隐式转换：**所有的强制转换都是自动和隐式的，可以提高代码的重用率。
+1.  **防止运行时报错：**可以在编译时检查类型安全，防止在程序运行期间出现BUG。
+2.  **隐式转换：**所有的强制转换都是自动和隐式的，可以提高代码的重用率。
 
 > **编译时安全检查：**
->
+> 
 > Java在1.5版本中引入了泛型,**在没有泛型之前,每次从集合中读取对象都必须进行类型转换**,而这么做带来的结果就是：如果有人不小心插入了类型错误的对象,那么在运行时转换处理阶段就会出错。
->
+> 
 > 在提出**泛型**之后,我们可以告诉编译器集合中接受哪些对象类型。编译器会**自动的为你的插入进行转化,并在编译时告知是否插入了类型错误的对象**。这使程序变得更加安全更加清楚
 
-# 九、JDK8新特性
+## 九、JDK8新特性
 
-## 9.1 基本介绍
+### 9.1 基本介绍
 
 Java8是一个拥有丰富特性的版本,新增了很多特性,这里着重介绍几点：
 
-- Lambda表达式：
+-   **Lambda表达式：**Lambda表达式可以被视为一个对象，必须有上下文环境，作用是实现单方法的接口。该特性可以将功能视为方法参数,或者将代码视为数据。上下文环境意思是能证明它是对象，例如让它处在方法或类的实参里，或者赋值给对象引用。
+    -   **省略情况：**形参类型、返回类型可以省略，单参数能省略小括号，单语句能省略return、分号和大括号（全省略或全不省略）
+-   **方法引用：**引用已存在的Lambda表达式，达到相同的效果。引用已有Java类或对象（实例）的静态方法、实例方法、对象方法（System.out::println;）、构造器方法。可以与Lambda联合使用,方法引用可以使语言的构造更紧凑简洁,减少冗余代码。
+-   **接口默认方法：**允许在接口中定义默认方法,默认方法必须使用default修饰。默认方法是接口中有方法体的方法，用于向已有的接口添加新的功能，而无需破坏现有的实现。实现类可以直接调用默认方法，也可以重写默认方法。
+-   **Stream API**：新添加的Stream API（java.util.stream）支持对元素流进行函数式操作。Stream API 集成在 Collections API 中,可以对集合进行批量操作（stream流的生成、操作、收集），例如filter()过滤、distinct()去重、map()加工、sorted()排序等操作。
+-   **Date Time API新增LocalDate、LocalTime、DateTimeFormatter等类：**加强对日期与时间的处理。LocalDate、LocalTime可以获取本地时间。线程安全的DateTimeFormatter代替线程不安全的SimpleDateFormat，用于将日期和字符串之间格式转换。
+-   **HashMap底层引入红黑树：**之前版本HashMap底层是“数组+链表”，当头插法的value链表长度大于等于8时，链表会转为红黑树，红黑树查询性能稳定O(logn)，是近似平衡二叉树，层数最高2logn。
+-   **ConcurrentHashMap降低锁的粒度：**JDK1.8之前采用分段锁，锁粒度是分段segment，JDK1.8采用synchronized+CAS，锁粒度是槽（头节点）
+-   **CompletableFuture：**是Future的实现类，JDK8引入，用于异步编排。
+-   **JVM方法区的实现方式由永久代改为元空间：**元空间属于本地内存，由操作系统直接管理，不再受JVM管理。同时内存空间可以自动扩容，避免内存溢出。默认情况下元空间可以无限使用本地内存，也可以通过-XX:MetaspaceSize限制内存大小。
 
-  Lambda表达式可以被视为一个对象，必须有上下文环境，作用是实现单方法的接口。该特性可以将功能视为方法参数,或者将代码视为数据。上下文环境意思是能证明它是对象，例如让它处在方法或类的实参里，或者赋值给对象引用。 	
+> **JVM内存模型：**  
+> [什么是JVM的内存模型？详细阐述Java中局部变量、常量、类名等信息在JVM中的存储位置\_jvm中主要用于存储类的元数据(类型信息(类的描述信息 类的元数据))、静态变量、常-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/134742377?spm=1001.2014.3001.5501 "什么是JVM的内存模型？详细阐述Java中局部变量、常量、类名等信息在JVM中的存储位置_jvm中主要用于存储类的元数据(类型信息(类的描述信息 类的元数据))、静态变量、常-CSDN博客")
 
-  - **省略情况：**形参类型、返回类型可以省略，单参数能省略小括号，单语句能省略return、分号和大括号（全省略或全不省略）
-
-- **方法引用：**引用已存在的Lambda表达式，达到相同的效果。引用已有Java类或对象（实例）的静态方法、实例方法、对象方法（System.out::println;）、构造器方法。可以与Lambda联合使用,方法引用可以使语言的构造更紧凑简洁,减少冗余代码。
-
-- **接口默认方法：**允许在接口中定义默认方法,默认方法必须使用default修饰。默认方法是接口中有方法体的方法，用于向已有的接口添加新的功能，而无需破坏现有的实现。实现类可以直接调用默认方法，也可以重写默认方法。
-
-- **Stream API**：新添加的Stream API（java.util.stream）支持对元素流进行函数式操作。Stream API 集成在 Collections API 中,可以对集合进行批量操作（stream流的生成、操作、收集），例如filter()过滤、distinct()去重、map()加工、sorted()排序等操作。
-
-- **Date Time API新增LocalDate、LocalTime、DateTimeFormatter等类：**加强对日期与时间的处理。LocalDate、LocalTime可以获取本地时间。线程安全的DateTimeFormatter代替线程不安全的SimpleDateFormat，用于将日期和字符串之间格式转换。
-
-- **HashMap底层引入红黑树：**之前版本HashMap底层是“数组+链表”，当头插法的value链表长度大于等于8时，链表会转为红黑树，红黑树查询性能稳定O(logn)，是近似平衡二叉树，层数最高2logn。
-
-- **ConcurrentHashMap降低锁的粒度：**JDK1.8之前采用分段锁，锁粒度是分段segment，JDK1.8采用synchronized+CAS，锁粒度是槽（头节点）
-
-- **CompletableFuture：**是Future的实现类，JDK8引入，用于异步编排。
-
-- **JVM方法区的实现方式由永久代改为元空间：**元空间属于本地内存，由操作系统直接管理，不再受JVM管理。同时内存空间可以自动扩容，避免内存溢出。默认情况下元空间可以无限使用本地内存，也可以通过-XX:MetaspaceSize限制内存大小。
-
-> **JVM内存模型：**
->  [什么是JVM的内存模型？详细阐述Java中局部变量、常量、类名等信息在JVM中的存储位置_jvm中主要用于存储类的元数据(类型信息(类的描述信息 类的元数据))、静态变量、常-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/134742377?spm=1001.2014.3001.5501)
-
-
-
-## 9.2 Lambda表达式
+### 9.2 Lambda表达式
 
 Lambda 表达式是 Java 8 引入的一种新特性，主要用于实现单方法的接口，符合函数式思想。
 
 > **函数式思想：**
->
+> 
 > 在数学中，函数是一套计算方案，包含输入量和输出量，即“拿数据做操作”。
->
+> 
 > 面向对象思想强调通过对象的形式来完成任务，而函数式思想则尽量忽略面向对象的复杂语法，强调“做什么”，而不是“以什么形式去做”。
->
+> 
 > Lambda表达式正是**函数式思想**的体现。它用来实现单方法接口的方法逻辑，实现过程中的参数可以省略类型（因为类型已经在接口里声明过了），单个表达式时可以省略分号和大括号（因为只有单个语句，不用分号分割也不会有歧义）。
 
 Lambda表达式实际是一个对象，形式是一个方法的逻辑：():{}。
@@ -3001,8 +3035,6 @@ Lambda表达式实际是一个对象，形式是一个方法的逻辑：():{}。
         });
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 可以用Lambda表达式简化成：
 
 ```java
@@ -3010,13 +3042,11 @@ Lambda表达式实际是一个对象，形式是一个方法的逻辑：():{}。
 TreeSet<Dog> dogs = new TreeSet<>((a, b) -> a.weight - b.weight);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > **Lambda和匿名内部类区别：**
->
-> - **接口：**Lambda只能是接口，匿名内部类可以是接口、抽象类、具体类。
-> - **方法：**Lambda只能单方法，匿名内部类可以多方法。
-> - **原理：**Lambda编译后字节码在运行时**动态生成**，匿名内部类编译后生成一个**字节码文件**。
+> 
+> -   **接口：**Lambda只能是接口，匿名内部类可以是接口、抽象类、具体类。
+> -   **方法：**Lambda只能单方法，匿名内部类可以多方法。
+> -   **原理：**Lambda编译后字节码在运行时**动态生成**，匿名内部类编译后生成一个**字节码文件**。
 
 **基本语法：**
 
@@ -3026,17 +3056,15 @@ TreeSet<Dog> dogs = new TreeSet<>((a, b) -> a.weight - b.weight);
 (参数列表) -> { 表达式1;表达式2; }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ **可省略内容：** 
 
- **可省略内容：** 
-
-- 形参类型、返回类型可以省略；
-- 单参数能省略小括号；
-- 单语句能省略return、分号和大括号（全省略或全不省略）
+-   形参类型、返回类型可以省略；
+-   单参数能省略小括号；
+-   单语句能省略return、分号和大括号（全省略或全不省略）
 
 **代码示例：**
 
-- **形参类型、返回类型可以省略**。毕竟接口里也声明了类型，类型必须要么都写要么都省略。例如：
+-   **形参类型、返回类型可以省略**。毕竟接口里也声明了类型，类型必须要么都写要么都省略。例如：
 
 ```java
 public class Demo {
@@ -3068,67 +3096,51 @@ public interface Dog {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 9.3 Stream流 
 
+#### 9.3.1 基本介绍
 
-
-## 9.3 Stream流 
-
-### 9.3.1 基本介绍
-
-Stream 流是 Java 8 引入的一项新特性，用于对集合进行函数式编程风格的操作。它允许我们以声明性方式对数据进行过滤、加工、遍历、排序等操作，而不是以命令式方式逐个操作元素。 
+Stream 流是 Java 8 引入的一项新特性，用于对集合进行函数式编程风格的操作。它允许我们以声明性方式对数据进行过滤、加工、遍历、排序等操作，而不是以命令式方式逐个操作元素。 
 
 **特点：**
 
-- **声明式编程**：使用流操作表达数据处理的意图，而不是具体的实现。声明式编程强调“做什么”而不是“怎么做”。在声明式编程中，程序员专注于描述要完成的任务或问题，而不是描述具体的实现步骤。Stream流把复杂啰嗦的代码改成一串简洁的代码，符合声明式编程。
-- **链式操作**：流操作可以链式调用，使代码更加简洁和易读。链式操作是利用运算符进行的连续运算（操作），如连续的赋值操作，而非拆成多条语句一个个加。例如stringBuilder.append(1).append(2);是链式操作，而stringBuilder.append("a");stringBuilder.append("b");不是链式操作。
-- **惰性求值**：流操作是惰性求值的，即只有在终端操作才会执行实际计算，map等中间操作不会直接计算求值。
-- **并行处理**：遍历的每一层之间是并发处理的，性能高。
+-   **声明式编程**：使用流操作表达数据处理的意图，而不是具体的实现。声明式编程强调“做什么”而不是“怎么做”。在声明式编程中，程序员专注于描述要完成的任务或问题，而不是描述具体的实现步骤。Stream流把复杂啰嗦的代码改成一串简洁的代码，符合声明式编程。
+-   **链式操作**：流操作可以链式调用，使代码更加简洁和易读。链式操作是利用运算符进行的连续运算（操作），如连续的赋值操作，而非拆成多条语句一个个加。例如stringBuilder.append(1).append(2);是链式操作，而stringBuilder.append("a");stringBuilder.append("b");不是链式操作。
+-   **惰性求值**：流操作是惰性求值的，即只有在终端操作才会执行实际计算，map等中间操作不会直接计算求值。
+-   **并行处理**：遍历的每一层之间是并发处理的，性能高。
 
 **常用方法：**
 
 **生成操作：**生成一个流
 
-- Stream.of(T... values)：通过提供的值创建一个流。
-- Stream.ofNullable(T t)：通过单个值创建一个包含该值的流或一个空流。
-- Arrays.stream(T[] array)：通过数组创建一个流。
-- **Collection.stream()**：通过集合创建一个顺序流。
-- Collection.parallelStream()：通过集合创建一个并行流。
-- Stream.generate(Supplier<T> s)：生成一个无限流，元素由提供的 **Supplier** 生成。
-- Stream.iterate(T seed, UnaryOperator<T> f)：生成一个无限流，初始元素为 **seed**，后续元素由一元运算符生成。
+-   Stream.of(T... values)：通过提供的值创建一个流。
+-   Stream.ofNullable(T t)：通过单个值创建一个包含该值的流或一个空流。
+-   Arrays.stream(T\[\] array)：通过数组创建一个流。
+-   **Collection.stream()**：通过集合创建一个顺序流。
+-   Collection.parallelStream()：通过集合创建一个并行流。
+-   Stream.generate(Supplier<T> s)：生成一个无限流，元素由提供的 **Supplier** 生成。
+-   Stream.iterate(T seed, UnaryOperator<T> f)：生成一个无限流，初始元素为 **seed**，后续元素由一元运算符生成。
 
 **中间操作：**中间操作返回一个新的流，可以链式调用多个中间操作。
 
-- **filter(Predicate predicate)**：过滤元素
-
-- map(Function<T, R> mapper)
-
-  ：加工，每个元素处理后返回一个新的元素。 
-
-  - **map和filter区分：**
-     	filter是满足条件的留下，是对原数组的过滤；map则是对原数组的加工，映射成一对一映射的新数组。
-
-- **mapToInt(ToIntFunction<? super T> mapper)**：返回一个 IntStream，除常规流式操作外，还可以取和、平均数等Integer的操作；
-
-- **concat()：**连接
-
-- **skip(long n)：**跳过n个元素
-
-- **distinct()**：去重
-
-- **sorted(比较器)**：排序
-
-- **limit(long maxSize)**：只截取前maxSize个元素
+-   **filter(Predicate predicate)**：过滤元素
+-   **map(Function<T, R> mapper)**：加工，每个元素处理后返回一个新的元素。
+    -   **map和filter区分：**  
+        filter是满足条件的留下，是对原数组的过滤；map则是对原数组的加工，映射成一对一映射的新数组。
+-   **mapToInt(ToIntFunction<? super T> mapper)**：返回一个 IntStream，除常规流式操作外，还可以取和、平均数等Integer的操作；
+-   **concat()：**连接
+-   **skip(long n)：**跳过n个元素
+-   **distinct()**：去重
+-   **sorted(比较器)**：排序
+-   **limit(long maxSize)**：只截取前maxSize个元素
 
 **终端操作：**终端操作触发流的计算，并返回一个结果或副作用。
 
-- **forEach(Consumer action)**：对每个元素执行操作
-- **collect(Collector<T, A, R> collector)**：收集流的元素到一个集合或其他类型
-- **count()**：计算流中的元素数量
+-   **forEach(Consumer action)**：对每个元素执行操作
+-   **collect(Collector<T, A, R> collector)**：收集流的元素到一个集合或其他类型
+-   **count()**：计算流中的元素数量
 
-
-
-**代码示例：** 
+**代码示例：** 
 
 先获取List的stream流，给集合中每个元素+2，然后升序排序、过滤只保留大于20的元素，最后收集成List类型的集合：
 
@@ -3160,21 +3172,19 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/09d52bbc90f5bd4506d123278e443112.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\9f2a62b0e72c4d1b80d89775f72756c2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 9.3.2 生成
+#### 9.3.2 生成
 
 **生成操作：**生成一个流
 
-- Stream.of(T... values)：通过提供的值创建一个流。
-- Stream.ofNullable(T t)：通过单个值创建一个包含该值的流或一个空流。
-- Arrays.stream(T[] array)：通过数组创建一个流。
-- **Collection.stream()**：通过集合创建一个顺序流。
-- Collection.parallelStream()：通过集合创建一个并行流。
-- Stream.generate(Supplier<T> s)：生成一个无限流，元素由提供的 **Supplier** 生成。
-- Stream.iterate(T seed, UnaryOperator<T> f)：生成一个无限流，初始元素为 **seed**，后续元素由一元运算符生成。
+-   Stream.of(T... values)：通过提供的值创建一个流。
+-   Stream.ofNullable(T t)：通过单个值创建一个包含该值的流或一个空流。
+-   Arrays.stream(T\[\] array)：通过数组创建一个流。
+-   **Collection.stream()**：通过集合创建一个顺序流。
+-   Collection.parallelStream()：通过集合创建一个并行流。
+-   Stream.generate(Supplier<T> s)：生成一个无限流，元素由提供的 **Supplier** 生成。
+-   Stream.iterate(T seed, UnaryOperator<T> f)：生成一个无限流，初始元素为 **seed**，后续元素由一元运算符生成。
 
 **代码示例：**
 
@@ -3209,34 +3219,20 @@ public class StreamGeneration {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 9.3.3 中间操作
+#### 9.3.3 中间操作
 
 **中间操作：**中间操作返回一个新的流，可以链式调用多个中间操作。
 
-- **filter(Predicate predicate)**：过滤元素
-
-- map(Function<T, R> mapper)
-
-  ：加工，每个元素处理后返回一个新的元素。 
-
-  - **map和filter区分：**
-     	filter是满足条件的留下，是对原数组的过滤；map则是对原数组的加工，映射成一对一映射的新数组。
-
-- **mapToInt(ToIntFunction<? super T> mapper)**：返回一个 IntStream，除常规流式操作外，还可以取和、平均数等Integer的操作；
-
-- **concat()：**连接
-
-- **skip(long n)：**跳过n个元素
-
-- **distinct()**：去重
-
-- **sorted(比较器)**：排序
-
-- **limit(long maxSize)**：只截取前maxSize个元素
+-   **filter(Predicate predicate)**：过滤元素
+-   **map(Function<T, R> mapper)**：加工，每个元素处理后返回一个新的元素。
+    -   **map和filter区分：**  
+        filter是满足条件的留下，是对原数组的过滤；map则是对原数组的加工，映射成一对一映射的新数组。
+-   **mapToInt(ToIntFunction<? super T> mapper)**：返回一个 IntStream，除常规流式操作外，还可以取和、平均数等Integer的操作；
+-   **concat()：**连接
+-   **skip(long n)：**跳过n个元素
+-   **distinct()**：去重
+-   **sorted(比较器)**：排序
+-   **limit(long maxSize)**：只截取前maxSize个元素
 
 **filter：过滤**
 
@@ -3248,9 +3244,7 @@ List<String> list = Arrays.asList("abc", "", "bc", "efg", "abcd", "", "jkl");
 list.stream().filter(item -> !item.isEmpty()).forEach(System.out::println);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\53f28b571d0f445581c83c72025fe0c3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/73a8d3ee8326969044754225e5d9f7b3.png)
 
 **skip & limit：跳过、限制**
 
@@ -3260,9 +3254,7 @@ list.stream().filter(item -> !item.isEmpty()).forEach(System.out::println);
         list.stream().skip(2).limit(2).forEach(System.out::println);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\72dea28486ed4e0c8b0bd5718dcba47e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a09b01e67c8bb76a1ebb69c64e21c458.png)
 
 **concat 和 distinct：连接和去重**
 
@@ -3272,9 +3264,7 @@ Stream<String> s2 = Stream.of("b", "c", "d");
 Stream.concat(s1, s2).distinct().forEach(System.out::println);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\d0dfff1c55714a6ca3fd379d5e01fa1f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/742dedb531c82a35c2e7107ba10b1667.png)
 
 **sorted 比较器：**
 
@@ -3293,9 +3283,7 @@ sorted() 方法返回由此流的元素组成的流，根据自然顺序排序�
         System.out.println(list);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\463dd9b79a3f4b5e88fa5887fd161e8e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/47be920a1cde9523cbecab88ff45baf5.png)
 
 **map**
 
@@ -3308,9 +3296,7 @@ list = list.stream().map(item -> item.toUpperCase()).collect(Collectors.toList()
 System.out.println(list);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\15c8e8eb751740df904b7db2dc539343.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/2a728e0e7eba01e66bfd766c32dba260.png)
 
 **mapToInt**
 
@@ -3326,17 +3312,13 @@ mapToInt 返回一个 IntStream，其中包含将给定函数应用于此流的�
         System.out.println(sum);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/b914a1aa6e4f057ceb3faaf77c233478.png)
 
+#### 9.3.4 终结和收集
 
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\5778ba0a4f9f4d5399e8aaebdf781ab7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 9.3.4 终结和收集
-
-- **forEach(Consumer action)**：对每个元素执行操作
-- **collect(Collector<T, A, R> collector)**：收集流的元素到一个集合或其他类型
-- **count()**：计算流中的元素数量 
+-   **forEach(Consumer action)**：对每个元素执行操作
+-   **collect(Collector<T, A, R> collector)**：收集流的元素到一个集合或其他类型
+-   **count()**：计算流中的元素数量 
 
 **count**
 
@@ -3348,8 +3330,6 @@ long count = list.stream().mapToInt(Integer::parseInt).count();
 System.out.println(count); // 输出 3
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **forEach**
 
 forEach(IntConsumer action) 方法对此流的每个元素执行操作。
@@ -3359,18 +3339,13 @@ List<String> list = Arrays.asList("10", "20", "30");
 list.stream().mapToInt(Integer::parseInt).forEach(value -> System.out.println(value));
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **collect**
 
-- collect(Collector<T, A, R> collector)
-
-  ：收集流的元素到一个集合或其他类型 	
-
-  - public static <T> Collector toList(): 把元素收集到 List 集合中
-  - public static <T> Collector toSet(): 把元素收集到 Set 集合中
-  - public static Collector toMap(Function keyMapper, Function valueMapper): 把元素收集到 Map 集合中
-     	 
+-   **collect(Collector<T, A, R> collector)**：收集流的元素到一个集合或其他类型
+    -   public static <T> Collector toList(): 把元素收集到 List 集合中
+    -   public static <T> Collector toSet(): 把元素收集到 Set 集合中
+    -   public static Collector toMap(Function keyMapper, Function valueMapper): 把元素收集到 Map 集合中  
+         
 
 ```java
         List<String> list = new ArrayList<>();
@@ -3393,17 +3368,15 @@ list.stream().mapToInt(Integer::parseInt).forEach(value -> System.out.println(va
         System.out.println(ansString);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/db7589bec0b56ee09abffc2707e4acbc.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\c49e2758f3be49f19beef449c8a071ad.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 9.3 函数式接口
 
-## 9.3 函数式接口
+#### 9.3.1 基本介绍 
 
-### 9.3.1 基本介绍 
+函数式接口是指仅包含一个抽象方法的接口，可以使用 Lambda 表达式或方法引用来创建该接口的实例。Java 8 引入了函数式接口，并在 java.util.function 包中提供了许多预定义的函数式接口，例如 Function、Supplier、Consumer、Predicate 等。 
 
-函数式接口是指仅包含一个抽象方法的接口，可以使用 Lambda 表达式或方法引用来创建该接口的实例。Java 8 引入了函数式接口，并在 java.util.function 包中提供了许多预定义的函数式接口，例如 Function、Supplier、Consumer、Predicate 等。 
-
-**函数式接口：**有且仅有一个抽象方法的接口。 Java中函数式编程体现就是Lambda表达式。
+**函数式接口：**有且仅有一个抽象方法的接口。 Java中函数式编程体现就是Lambda表达式。
 
 **函数式接口注解：@FunctionalInterface**
 
@@ -3415,19 +3388,11 @@ list.stream().mapToInt(Integer::parseInt).forEach(value -> System.out.println(va
 
 事实上，JDK自带一些函数式接口：函数式接口Supplier中get获取有返回值的数据，Predicate中test返回boolean型数据，Consumer中accept无返回值数据操作。
 
-| **接口**  | **方法**                  | **作用** | **示例**          |
-| --------- | ------------------------- | -------- | ----------------- |
-| Supplier  | get()，返回各类型的数据   | 获取     | 返回数组最大值    |
-| Function  | apply()，返回各类型数据   | 转换     | 数字字符串转换    |
-| Predicate | test()，返回boolean型数据 | 判断     | 判断数字是否大于5 |
-| Consumer  | accept()，无返回值        | 操作     | 翻转字符串        |
-|           |                           |          |                   |
+<table border="1" cellpadding="1" cellspacing="1"><tbody><tr><td><strong>接口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td><td><strong>方法</strong></td><td><strong>作用</strong></td><td><strong>示例</strong></td></tr><tr><td>Supplier</td><td>get()，返回各类型的数据</td><td>获取</td><td>返回数组最大值</td></tr><tr><td>Function&nbsp;&nbsp;</td><td>apply()，返回各类型数据</td><td>转换</td><td>数字字符串转换</td></tr><tr><td>Predicate</td><td>test()，返回boolean型数据</td><td>判断</td><td>判断数字是否大于5</td></tr><tr><td>Consumer</td><td>accept()，无返回值</td><td>操作</td><td>翻转字符串</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>
 
+#### 9.3.2 生产者接口Supplier
 
-
-### 9.3.2 生产者接口Supplier
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\8535d85118b847808c591624fbda4229.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/affe7e3607debf2f511d1826593e16a2.png)
 
 **作用：**获取到生产出的数据
 
@@ -3471,15 +3436,13 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/6e7b01c7e1095d14bd10c0265373c2c3.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\a9820d489e9c4971bf3183e7813ea46d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+​
 
+#### 9.3.3 函数式接口Consumer
 
-
-### 9.3.3 函数式接口Consumer
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\3274fb78f14e4126bcca5edf588b1897.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/5b93dd1eed3767ad523a71a28a86af79.png)
 
 **作用：**对数据进行操作，无返回值。
 
@@ -3487,9 +3450,7 @@ Consumer是消费型接口，消费的数据类型由泛型指定。
 
 **方法：**
 
-| `void` |                       | `accept(T t)` 		对给定的参数执行此操作。 |                                                              |      |
-| ------ | --------------------- | ---------------------------------------------- | ------------------------------------------------------------ | ---- |
-|        | `default Consumer<T>` |                                                | `andThen(Consumer<? super T> after)` 		返回一个组合的 `Consumer` ，按顺序执行该操作，然后执行 `after`操作。a.andThen(b).accept(t);相当于a.accept(t);b.accept(t); |      |
+<table border="0" cellpadding="3" cellspacing="0"><tbody><tr><td><code>void</code></td><td>&nbsp;&nbsp;</td><td><code><a href="../../../java/util/function/Consumer.html#accept-T-" rel="nofollow">accept</a>(<a href="../../../java/util/function/Consumer.html" rel="nofollow">T</a>&nbsp;t)</code><p>对给定的参数执行此操作。</p></td><td>&nbsp;&nbsp;</td></tr><tr><td>&nbsp;&nbsp;</td><td><code>default <a href="../../../java/util/function/Consumer.html" rel="nofollow">Consumer</a>&lt;<a href="../../../java/util/function/Consumer.html" rel="nofollow">T</a>&gt;</code></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td><code><a href="../../../java/util/function/Consumer.html#andThen-java.util.function.Consumer-" rel="nofollow">andThen</a>(<a href="../../../java/util/function/Consumer.html" rel="nofollow">Consumer</a>&lt;? super <a href="../../../java/util/function/Consumer.html" rel="nofollow">T</a>&gt;&nbsp;after)</code><p>返回一个组合的 <code>Consumer</code> ，按顺序执行该操作，然后执行 <code>after</code>操作。a.andThen(b).accept(t);相当于a.accept(t);b.accept(t);</p></td><td>&nbsp;&nbsp;</td></tr></tbody></table>
 
 **代码示例：**
 
@@ -3537,28 +3498,24 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/290e639be5ea9ac5872be33451bcadec.png)​
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\24e42c2a79314ba0bf876fa9bf507754.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 9.3.4 函数式接口Predicate
 
-### 9.3.4 函数式接口Predicate
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\eb87582af20f46b7a42c172a7973effc.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/9267ab8e3aff57e096d6ec39d31a2cbd.png)
 
 Predicate接口用于表示布尔值函数，判断参数是否满足条件。它接受一个参数，并返回一个布尔值。
 
 译作谓词，谓语。
 
-| 方法签名                                             | 说明                                              |
-| ---------------------------------------------------- | ------------------------------------------------- |
-| boolean test(T t)                                    | 对给定的参数进行判断（谓词操作）。返回布尔值。    |
+| 方法签名 | 说明 |
+| --- | --- |
+| boolean test(T t) | 对给定的参数进行判断（谓词操作）。返回布尔值。 |
 | default Predicate<T> and(Predicate<? super T> other) | 返回一个组合的 Predicate，表示逻辑与（AND）操作。 |
-| default Predicate<T> negate()                        | 返回一个表示逻辑非（NOT）操作的 Predicate。       |
-| default Predicate<T> or(Predicate<? super T> other)  | 返回一个组合的 Predicate，表示逻辑或（OR）操作。  |
+| default Predicate<T> negate() | 返回一个表示逻辑非（NOT）操作的 Predicate。 |
+| default Predicate<T> or(Predicate<? super T> other) | 返回一个组合的 Predicate，表示逻辑或（OR）操作。 |
 
-
-
-方法的形参Predicate，接受的实参是Lambda参数。 
+方法的形参Predicate，接受的实参是Lambda参数。 
 
 ```java
 public class Test {
@@ -3597,17 +3554,11 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e5d6dc411a249bf59c913809a82b6694.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\0e96c2919e0848eb9b76c451a4a97e75.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 9.4 方法引用
 
-
-
-## 9.4 方法引用
-
-
-
-### 9.4.1 概念
+#### 9.4.1 概念
 
 方法引用跟Lambda类似，都可以根据上下文推导。
 
@@ -3617,9 +3568,7 @@ public class Test {
 引用类::不带括号的方法名
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 9.4**.2 引用实例方法**
+#### 9.4**.2 引用实例方法**
 
 还是以前面TreeSet的代码示例为例：
 
@@ -3664,10 +3613,6 @@ public class Dog {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 ```java
 /**
@@ -3716,13 +3661,9 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/c188e18e1e523974e9de6caada7f9bdd.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\0f797a40b6bb41c29878d56d8503ee54.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 9.4.4 引用构造器
+#### 9.4.4 引用构造器
 
 一些场景下，我们需要在使用时才确定创建对象的逻辑，这时就可以引用构造器。
 
@@ -3732,11 +3673,9 @@ public class Test {
 类名::new
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **示例：**
 
-例如我们有个学生类： 
+例如我们有个学生类： ​
 
 ```java
 /**
@@ -3761,8 +3700,6 @@ class Student {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 我们想要在使用时再确认对象的创建逻辑，就需要创建一个StudentBuilder接口，再使用时通过Lambda或者方法引用对它进行实现：
 
 ```java
@@ -3774,8 +3711,6 @@ interface StudentBuilder {
     Student build(String name, int age);
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 ```java
 /**
@@ -3815,23 +3750,13 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/043852883f67d00ad2dd3a3461ddd1e5.png)​
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\ea9256b4852b44a59627fc37da3498f5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-
-
-
-
-## 9.5 接口组成更新
+### 9.5 接口组成更新
 
 java8后加入了默认方法、静态方法。java9后加入了私有方法。
 
-### 9.5.1 接口默认方法
+#### 9.5.1 接口默认方法
 
 之前4.3.2小节有提到过，接口中的方法会被隐式的指定为 public abstract方法，抽象方法不能有实际的内容。但是有一些业务场景，我们需要在接口中扩展一些有业务逻辑的方法，又不想直接改成抽象类（因为抽象类只能单继承），这种情况下，JDK8就扩展了接口的默认方法，需要用defaule关键字修饰方法。
 
@@ -3843,15 +3768,13 @@ java8后加入了默认方法、静态方法。java9后加入了私有方法。
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ **特点：**
 
- **特点：**
+-   默认方法可以有方法体
+-   默认方法可被接口的实现类对象调用。
+-   默认方法不是抽象方法，实现类可以重写，也可以不重写，同名冲突时必须重写（某个类实现了多个包含默认方法fun()的接口，为了防止冲突，此时实现类必须重写这个类）。
 
-- 默认方法可以有方法体
-- 默认方法可被接口的实现类对象调用。
-- 默认方法不是抽象方法，实现类可以重写，也可以不重写，同名冲突时必须重写（某个类实现了多个包含默认方法fun()的接口，为了防止冲突，此时实现类必须重写这个类）。
-
- **示例：**
+ **示例：**
 
 ```java
 /**
@@ -3875,17 +3798,13 @@ public interface MyInterface {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 9.5.2 接口静态方法
+#### 9.5.2 接口静态方法
 
 在 Java 8 中，引入了接口静态方法。接口静态方法与类静态方法类似，但它们属于接口本身，而不是接口的实现类。静态方法常用于在接口中提供静态工具方法，帮助操作或处理与接口相关的数据。
 
 **格式：**
 
-与类的静态方法一致： 
+与类的静态方法一致： 
 
 ```java
     static 返回类型 方法名(参数列表) {
@@ -3893,13 +3812,13 @@ public interface MyInterface {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **特点：**
 
-- **命名冲突时要重写：**因为Java是单继承多实现的，所以存在一个类实现多个接口的情况。如果一个类同时实现了多个接口，并且这些接口都有相同签名的默认方法，则必须在实现类中重写该方法以解决冲突。例如类A实现了有同名静态方法的接口B、C，则A的对象分不清调用哪个接口的方法。
-- **扩展接口功能**：默认方法允许在不破坏现有实现的情况下扩展接口功能，对现有功能影响较小，符合设计模式中的开闭原则。
-- 接口中静态方法跟类的静态方法，属于“类方法”，先于对象产生，所以只能被接口名调用，不能被实现类对象调用。
+-   **命名冲突时要重写：**因为Java是单继承多实现的，所以存在一个类实现多个接口的情况。如果一个类同时实现了多个接口，并且这些接口都有相同签名的默认方法，则必须在实现类中重写该方法以解决冲突。例如类A实现了有同名静态方法的接口B、C，则A的对象分不清调用哪个接口的方法。
+-   **扩展接口功能**：默认方法允许在不破坏现有实现的情况下扩展接口功能，对现有功能影响较小，符合设计模式中的开闭原则。
+    
+-   接口中静态方法跟类的静态方法，属于“类方法”，先于对象产生，所以只能被接口名调用，不能被实现类对象调用。
+    
 
 **示例：**
 
@@ -3912,9 +3831,7 @@ public interface MyInterface {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 9.5.3 知识加油站：JDK9接口私有方法
+#### 9.5.3 知识加油站：JDK9接口私有方法
 
 之前4.3.2小节有提到过，接口中的方法会被隐式的指定为 public abstract方法。为了将接口中多个默认或静态方法中的共性方法抽离出来，JDK9引入了接口私有方法。
 
@@ -3928,8 +3845,6 @@ private 返回类型 方法名(参数列表) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 或者：
 
 ```java
@@ -3938,17 +3853,13 @@ private static 返回类型 方法名(参数列表) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **特点：**
 
-- 接口私有方法可以是普通私有方法，也可以是静态私有方法；
-- 只能被接口内静态、默认方法调用；
-- 必须JDK9及以上版本；
+-   ​接口私有方法可以是普通私有方法，也可以是静态私有方法；
+-   只能被接口内静态、默认方法调用；
+-   必须JDK9及以上版本；
 
 示例：
-
-
 
 ```java
 /**
@@ -3988,8 +3899,6 @@ public interface Animal {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```java
 /**
  * @Author: vince
@@ -4006,8 +3915,6 @@ public class Dog implements Animal {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 运行结果：
 
 ```java
@@ -4017,13 +3924,9 @@ public class Dog implements Animal {
 这是私有实例方法，接口内私有、静态、默认方法都可以调用它：发出声音
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+## 十、I/O流
 
-
-
-# 十、I/O流
-
-## 10.1 基本介绍
+### 10.1 基本介绍
 
 **什么是I/O流？**
 
@@ -4033,58 +3936,47 @@ I/O流（Input/Output Stream），即输入（Input）和输出（Output）流�
 
 **按数据流向：**
 
-- **输入流：**读数据。
-- **输出流：**写数据。
+-   **输入流：**读数据。
+-   **输出流：**写数据。
 
 **按数据类型：**
 
-- 字节流：
+-   **字节流：**它处理单元为**1个字节**（byte），操作字节和字节数组，存储的是**二进制文件**。
+    -   **使用场景：**在Java中，一般用IO流写一个文件输出到操作系统中，或者从操作系统中输入一个文件进行读取。如果是音频文件、图片、歌曲，就用字节流（1byte = 8位）。
+-   **字符流：**它处理的单元为**2个字节**的Unicode字符，分别操作字符、字符数组或字符串，字符流是由Java虚拟机将字节转化为2个字节的Unicode字符为单位的字符而成的。
+    -   **使用场景：**如果是关系到中文（文本）的，用字符流（1Unicode = 2字节 = 16位）；
 
-  它处理单元为
+**字节流和和字符流继承关系：**​ 
 
-  1个字节
+![](https://i-blog.csdnimg.cn/blog_migrate/bffc72787ce736b209ae0fc2cfc19fe4.png)
 
-  （byte），操作字节和字节数组，存储的是
-
-  二进制文件
-
-  。 	
-
-  - **使用场景：**在Java中，一般用IO流写一个文件输出到操作系统中，或者从操作系统中输入一个文件进行读取。如果是音频文件、图片、歌曲，就用字节流（1byte = 8位）。
-
-- 字符流：
-
-  它处理的单元为
-
-  2个字节
-
-  的Unicode字符，分别操作字符、字符数组或字符串，字符流是由Java虚拟机将字节转化为2个字节的Unicode字符为单位的字符而成的。 
-
-  - **使用场景：**如果是关系到中文（文本）的，用字符流（1Unicode = 2字节 = 16位）；
-
-**字节流和和字符流继承关系：** 
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\f68b8f7f34714c879d4fd678f5c4eaad.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\0d5d279fc5e44675b312678255f15b79.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/ec9ba62888fbd621982659f758e5d4e8.png)
 
 **输入字节流 (InputStream)**
 
-- **FileInputStream**：基本的文件输入流，用于读取字节文件（如图片、视频）中的数据。
-- FilterInputStream：过滤输入流，是所有过滤输入流的父类。用于对数据进行解密、校验、转换、过滤、缓存。因为它是抽象类，所以我们一般用它的子类：
-  - **BufferedInputStream**：相比于FileInputStream，它的读取性能会高很多。因为它多了一个缓冲区数组（在内存中），在第一次调用read()读取数据时，他会将数据尽可能多的填满缓冲区，这样再次read()时会优先从缓冲区中读，而不用直接在磁盘中读。我们知道内存读写性能是远高于磁盘的，所以它更快。默认缓冲区大小是8192字节，即8KB，超过这个容量就必须在磁盘读取了。
-  - **DataInputStream：**与相比于FileInputStream，它的读取性能会高很多。因为它直接提供了读取Java中基本数据类型的方法，如 readInt()、readDouble()、readUTF() 等，而不需要额外的解析步骤。
-  - SocketInputStream：网络输入流。
+-   **FileInputStream**：基本的文件输入流，用于读取字节文件（如图片、视频）中的数据。
+    
+-   FilterInputStream：过滤输入流，是所有过滤输入流的父类。用于对数据进行解密、校验、转换、过滤、缓存。因为它是抽象类，所以我们一般用它的子类：
+    
+    -   **BufferedInputStream**：相比于FileInputStream，它的读取性能会高很多。因为它多了一个缓冲区数组（在内存中），在第一次调用read()读取数据时，他会将数据尽可能多的填满缓冲区，这样再次read()时会优先从缓冲区中读，而不用直接在磁盘中读。我们知道内存读写性能是远高于磁盘的，所以它更快。默认缓冲区大小是8192字节，即8KB，超过这个容量就必须在磁盘读取了。
+        
+    -   **DataInputStream：**与相比于FileInputStream，它的读取性能会高很多。因为它直接提供了读取Java中基本数据类型的方法，如 readInt()、readDouble()、readUTF() 等，而不需要额外的解析步骤。
+        
+    -   SocketInputStream：网络输入流。
+        
 
 **输出字节流 (OutputStream)**
 
-- **FileOutputStream**：基本的文件输出流，用于将数据写入字节文件（如图片、视频）。
-- FilterOutputStream：过滤输出流，是所有过滤输出流的父类，提供了基本的输出流功能。用于压缩数据、加密数据等。因为它是抽象类，所以我们一般用它的子类：
-  - **BufferedOutputStream**：为输出流提供缓冲功能，提高写入效率。每次写入数据时，先写进缓冲区，缓冲区满了会自动刷新写入到磁盘中，也可以手动调用flash()方法刷新。
-  - DataOutputStream：性能高，因为它直接提供了写入Java中基本数据类型的方法，如 wirteInt()，而不需要额外的转换步骤。
-  - SocketOutputStream；
+-   **FileOutputStream**：基本的文件输出流，用于将数据写入字节文件（如图片、视频）。
+    
+-   FilterOutputStream：过滤输出流，是所有过滤输出流的父类，提供了基本的输出流功能。用于压缩数据、加密数据等。因为它是抽象类，所以我们一般用它的子类：
+    
+    -   **BufferedOutputStream**：为输出流提供缓冲功能，提高写入效率。每次写入数据时，先写进缓冲区，缓冲区满了会自动刷新写入到磁盘中，也可以手动调用flash()方法刷新。
+        
+    -   DataOutputStream：性能高，因为它直接提供了写入Java中基本数据类型的方法，如 wirteInt()，而不需要额外的转换步骤。
+        
+    -   SocketOutputStream；
+        
 
 **字符流**
 
@@ -4092,17 +3984,23 @@ I/O流（Input/Output Stream），即输入（Input）和输出（Output）流�
 
 **输入字符流 (Reader)**
 
-- **InputStreamReader**：输入流读取类，用于将字节流转换为字符流再读取字符数据。使用系统默认字符编码。
-  - **FileReader**：文件读取类，用于直接从文件中读取字符数据。可以指定字符编码来解码字节流。
-- **BufferedReader**：为字符输入流提供缓冲功能，提高读取效率。
+-   **InputStreamReader**：输入流读取类，用于将字节流转换为字符流再读取字符数据。使用系统默认字符编码。
+    
+    -   **FileReader**：文件读取类，用于直接从文件中读取字符数据。可以指定字符编码来解码字节流。
+        
+-   **BufferedReader**：为字符输入流提供缓冲功能，提高读取效率。
+    
 
 **输出字符流 (Writer)**
 
-- **OutputStreamWriter**：将字符流转换为字节流。
-  - **FileWriter**：用于将字符数据写入文件。
-- **BufferedWriter**：为字符输出流提供缓冲功能，提高写入效率。
+-   **OutputStreamWriter**：将字符流转换为字节流。
+    
+    -   **FileWriter**：用于将字符数据写入文件。
+        
+-   **BufferedWriter**：为字符输出流提供缓冲功能，提高写入效率。
+    
 
-## 10.2 File类
+### 10.2 File类
 
 File类是用于表示文件和目录路径名的类。
 
@@ -4123,26 +4021,22 @@ public class Demo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > **文件默认路径：**
->
+> 
 > 在当前包内IO流，使用File类创建文件时
->
+> 
 > ```java
 > new File("1.txt");
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 默认存的位置是在项目文件夹下，而不是包文件夹下。
->
+> 
 > **关于路径斜杠和反斜杠：**
->
-> 路径斜杠可以是//,/,\\,不能是\，因为它是转义符。 
->
-> 正斜杠“/”和“//”都可以，反斜杠必须“\\”，因为“\”会ASCII转义，“\\”在字符串里才是“\”。
->
+> 
+> 路径斜杠可以是//,/,\\\\,不能是\\，因为它是转义符。 
+> 
+> 正斜杠“/”和“//”都可以，反斜杠必须“\\\\”，因为“\\”会ASCII转义，“\\\\”在字符串里才是“\\”。
+> 
 > ```java
 >         File file = new File("D://1//1.txt");
 >         File file1 = new File("D:/1/2.txt");
@@ -4153,33 +4047,27 @@ public class Demo {
 >         System.out.println(file2.createNewFile());   //true
 > //        System.out.println(file3.createNewFile());   //false 
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **查看当前路径：**
->
+> 
 > ```java
 > System.out.println(System.getProperty("user.dir"));    //D:\workspace\java\test
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **常用方法：**
 
-- **boolean createNewFile()：** 当且仅当具有该名称的文件尚不存在时，原子地（保证线程安全）创建一个由该抽象路径名命名的新空文件。抽象路径名指的是构造 File 对象时传递的路径名字符串。创建File对象时，构造参数的路径并不一定真实存在，可能是虚拟的、等待通过createNewFile等方法进行创建。
-- **boolean mkdir()** **：**创建目录。如果父目录不存在，则不会创建目录，并返回 false。
-- **boolean mkdirs()：** 创建目录。如果父目录不存在，它会一并创建。
-- **boolean delete()：** 删除文件或目录。成功删除文件或目录时返回 true，否则返回 false。注意如果要删除目录，该目录必须为空，否则会返回false。
-- **boolean isDirectory()：** 测试File是否为目录。
-- **boolean isFile()：** 测试File是否为文件。
-- **boolean exists()：** 测试File是否真实存在。
-- **String getAbsolutePath()：** 返回绝对路径名字符串。
-- **String getPath()：** 将抽象路径名。也就是构造 File 对象时传递的路径名字符串，可能是绝对路径，也可能是相对路径。
-- **String getName()：** 返回由此抽象路径名表示的文件或目录的名称。
-- **String[] list()：** 返回对应目录下所有文件的文件名数组。
-- **File[] listFiles()：** 返回对应目录下所有文件的File文件数组。
-
-
+-   **boolean createNewFile()：** 当且仅当具有该名称的文件尚不存在时，原子地（保证线程安全）创建一个由该抽象路径名命名的新空文件。抽象路径名指的是构造 File 对象时传递的路径名字符串。创建File对象时，构造参数的路径并不一定真实存在，可能是虚拟的、等待通过createNewFile等方法进行创建。
+-   **boolean mkdir()** **：**创建目录。如果父目录不存在，则不会创建目录，并返回 false。
+-   **boolean mkdirs()：** 创建目录。如果父目录不存在，它会一并创建。
+-   **boolean delete()：** 删除文件或目录。成功删除文件或目录时返回 true，否则返回 false。注意如果要删除目录，该目录必须为空，否则会返回false。
+-   **boolean isDirectory()：** 测试File是否为目录。
+-   **boolean isFile()：** 测试File是否为文件。
+-   **boolean exists()：** 测试File是否真实存在。
+-   **String getAbsolutePath()：** 返回绝对路径名字符串。
+-   **String getPath()：** 将抽象路径名。也就是构造 File 对象时传递的路径名字符串，可能是绝对路径，也可能是相对路径。
+-   **String getName()：** 返回由此抽象路径名表示的文件或目录的名称。
+-   **String\[\] list()：** 返回对应目录下所有文件的文件名数组。
+-   **File\[\] listFiles()：** 返回对应目录下所有文件的File文件数组。
 
 **举例：**
 
@@ -4208,41 +4096,33 @@ public class Demo {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d860bb26eda530d05e3e3347b8a30c00.png)​
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\1fec16a04bca4be687ddcec5cebe3dc5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 10.3 字节流的超类
 
+#### 10.3.1 字节输出流OutputStream
 
-
-## 10.3 字节流的超类
-
-### 10.3.1 字节输出流OutputStream
-
-**概念：** 
+**概念：**  
 
 Java中的 InputStream 和 OutputStream 都是 io 包中面向字节操作的顶级**抽象类**。所有字节流类都是他们的子类。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\f68b8f7f34714c879d4fd678f5c4eaad.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/bffc72787ce736b209ae0fc2cfc19fe4.png)
 
 **子类：**
 
-- 网络数据传输：SocketOutputStream
-- 文件操作：**FileOutputStream**
-- 字节数据操作：DataOutputStream
-
-
+-   网络数据传输：SocketOutputStream
+-   文件操作：**FileOutputStream**
+-   字节数据操作：DataOutputStream
 
 **常用api：** 
 
-- **void close() ：**关闭此输出流并释放与此流相关联的任何系统资源。
-- **void flush() ：**刷新此输出流并强制任何缓冲的输出字节被写出。
-- **void write(byte[] b) ：**将 b.length 字节从指定的字节数组写入此输出流。
-- **void write(byte[] b, int off, int len) ：** 从指定的字节数组写入 len 个字节，从偏移 off 开始输出到此输出流。
-- **abstract void write(int b) ：**将指定的字节写入此输出流。
+-   **void close() ：**关闭此输出流并释放与此流相关联的任何系统资源。
+-   **void flush() ：**刷新此输出流并强制任何缓冲的输出字节被写出。
+-   **void write(byte\[\] b) ：**将 b.length 字节从指定的字节数组写入此输出流。
+-   **void write(byte\[\] b, int off, int len) ：** 从指定的字节数组写入 len 个字节，从偏移 off 开始输出到此输出流。
+-   **abstract void write(int b) ：**将指定的字节写入此输出流。
 
-
-
-### 10.3.2 字节输入流InputStream
+#### 10.3.2 字节输入流InputStream
 
 **概念：** 
 
@@ -4250,49 +4130,41 @@ Java中的 InputStream 和 OutputStream 都是 io 包中面向字节操作的顶
 
 **子类：**
 
-- 网络数据传输：SocketInputStream
-- 文件操作：FileInputStream
-- 字节数据操作：DataInputStream。与相比于FileInputStream，它的读取性能会高很多。因为它直接提供了读取Java中基本数据类型的方法
-- 带缓冲区的输入流：BufferedInputStream
-
-
+-   网络数据传输：SocketInputStream
+-   文件操作：FileInputStream
+-   字节数据操作：DataInputStream。与相比于FileInputStream，它的读取性能会高很多。因为它直接提供了读取Java中基本数据类型的方法
+-   带缓冲区的输入流：BufferedInputStream
 
 **常用api：** 
 
-- **abstract int read()：**从输入流读取数据的下一个字节。
-- **int read(byte[] b)：**从输入流读取一些字节数，并将它们存储到缓冲区 b，返回值为长度 。
-- **int read(byte[] b, int off, int len)：**从输入流读取最多 len字节的数据到一个字节数组。
+-   **abstract int  read()：**从输入流读取数据的下一个字节。
+-   **int  read(byte\[\] b)：**从输入流读取一些字节数，并将它们存储到缓冲区 b，返回值为长度 。
+-   **int  read(byte\[\] b, int off, int len)：**从输入流读取最多 len字节的数据到一个字节数组。
 
+### 10.4 字节文件流
 
-
-## 10.4 字节文件流
-
-### 10.4.1 文件输出流FileOutputStream
+#### 10.4.1 文件输出流FileOutputStream
 
 基本的文件输出流，用于将数据写入字节文件（如图片、视频）。输出流是写数据，把数据输出到文件里。
 
 **构造方法：**
 
-- **FileOutputStream(File file)：**创建文件输出流以写入由指定的 File对象表示的文件。
-- **FileOutputStream(String name)：**创建文件输出流以指定的名称写入文件
-- **FileOutputStream(String name, boolean append)：**创建文件输出流以指定的名称写入文件。append默认是false，即彻底覆盖写入。append为true时是追加写入。
-- **FileOutputStream(File file, boolean append):** 使用文件对象创建文件输出流，并选择是否追加数据。
+-   **FileOutputStream(File file)：**创建文件输出流以写入由指定的 File对象表示的文件。
+-   **FileOutputStream(String name)：**创建文件输出流以指定的名称写入文件
+-   **FileOutputStream(String name, boolean append)：**创建文件输出流以指定的名称写入文件。append默认是false，即彻底覆盖写入。append为true时是追加写入。
+-   **FileOutputStream(File file, boolean append):** 使用文件对象创建文件输出流，并选择是否追加数据。
 
 **写操作方法**
 
-- **void write(int b)**: 将指定的字节写入输出流。
-- **void write(byte[] b)**: 将字节数组 **b** 写入输出流。
-- **void write(byte[] b, int off, int len)**: 将字节数组 **b** 中从偏移量 **off** 开始的 **len** 个字节写入输出流。
+-   **void write(int b)**: 将指定的字节写入输出流。
+-   **void write(byte\[\] b)**: 将字节数组 **b** 写入输出流。
+-   **void write(byte\[\] b, int off, int len)**: 将字节数组 **b** 中从偏移量 **off** 开始的 **len** 个字节写入输出流。
 
 **关闭方法**
 
-- **void close()**: 关闭文件输出流并释放与此流有关的所有系统资源。
-
-
+-   **void close()**: 关闭文件输出流并释放与此流有关的所有系统资源。
 
 **示例，将“abcde” 写入1.txt文件中：**
-
-
 
 ```java
 /**
@@ -4327,25 +4199,23 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-> 注意：写数据时的换行符，windows系统下是\r\n，linux的换行是\n，mac换行\r.
+> 注意：写数据时的换行符，windows系统下是\\r\\n，linux的换行是\\n，mac换行\\r.
 
 可以看到D盘下多了个1.txt，内容是
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\c453f1a60ad649bfbdddfd753294b7d6.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/da7a3829072b1088f79ab5084dac079c.png)
 
-### 10.4.2 文件输入流 FileInputStream
+#### 10.4.2 文件输入流 FileInputStream
 
 基本的文件输入流，用于读取字节文件（如图片、视频）中的数据。
 
-**常用方法：** 
+**常用方法：** 
 
-- **FileInputStream(File file)：**构造方法，创建一个 FileInputStream，它读取从指定File对象的文件。
-- **FileInputStream(String name)：**构造方法，创建一个 FileInputStream，它读取从指定文件路径名的文件
-- **int read()：**读取一个字节的数据。返回的int是读取字节的个数，如果到达流的末尾，则返回值 -1。
-- **int read(byte[] b)：**读取一定字节（0~b.length，具体长度取决于是否读到了末尾）的数据，将其存储在缓冲区数组 b 中。返回读取的字节数，如果没有可用的字节，则返回 -1。
-- **int read(byte[] b, int off, int len)：**最多读取 len 个字节的数据到一个字节数组。尝试读取最多 len 个字节的数据到缓冲区 b 中，从 off 位置开始。返回读取的字节数，如果没有可用的字节，则返回 -1。
+-   **FileInputStream(File file)：**构造方法，创建一个 FileInputStream，它读取从指定File对象的文件。
+-   **FileInputStream(String name)：**构造方法，创建一个 FileInputStream，它读取从指定文件路径名的文件
+-   **int read()：**读取一个字节的数据。返回的int是读取字节的个数，如果到达流的末尾，则返回值 -1。
+-   **int read(byte\[\] b)：**读取一定字节（0~b.length，具体长度取决于是否读到了末尾）的数据，将其存储在缓冲区数组 b 中。返回读取的字节数，如果没有可用的字节，则返回 -1。
+-   **int read(byte\[\] b, int off, int len)：**最多读取 len 个字节的数据到一个字节数组。尝试读取最多 len 个字节的数据到缓冲区 b 中，从 off 位置开始。返回读取的字节数，如果没有可用的字节，则返回 -1。
 
 **代码示例：**
 
@@ -4371,20 +4241,18 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 可以看到文件已经复制成功：
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b75df823c62e495a86e148ee40961985.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/348f7c0f54ab211ecd84c6ab88dca058.png)
 
 > **扩展**
->
+> 
 > 使用maven后可以导入commons-io包，直接通过工具类复制。
->
->  使用IOUtils.copy(fis,os)进行流的复制（推荐）
->
+> 
+>  使用IOUtils.copy(fis,os)进行流的复制（推荐）
+> 
 > (1)pom.xml添加依赖
->
+> 
 > ```XML
 > <dependency>
 >     <groupId>commons-io</groupId>
@@ -4392,26 +4260,20 @@ public class Test {
 >     <version>2.6</version>
 > </dependency>
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > (2)调用工具类方法实现复制
->
+> 
 > ```java
 > //fis:输入流
 > //os:输出流
 > IOUtils.copy(fis,os);
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 参考文章：
->
-> [JavaWeb基础3——Maven基础&MyBatis](https://blog.csdn.net/qq_40991313/article/details/125818307)
+> 
+> [JavaWeb基础3——Maven基础&MyBatis](https://blog.csdn.net/qq_40991313/article/details/125818307 "JavaWeb基础3——Maven基础&MyBatis")
 
-
-
-## 10.5 字节缓冲流（推荐）
+### 10.5 字节缓冲流（推荐）
 
 **特点：** 
 
@@ -4419,7 +4281,7 @@ public class Test {
 
 字节缓冲流读写数据比基本字节流快很多，因为它有个存在内存中的字节数组，作为缓冲区，读写时先在缓冲区中读写，性能比直接在磁盘中读写快很多。
 
-### 10.5.1 字节缓冲输出流BufferedOutputStream
+#### 10.5.1 字节缓冲输出流BufferedOutputStream
 
 **BufferedOutputStream：**
 
@@ -4431,49 +4293,49 @@ BufferedOutputStream是一个带缓冲区的输出流，它跟FileOutputStream�
 
 **构造方法**
 
-- BufferedOutputStream(OutputStream out): 创建一个新的缓冲输出流，以将数据写入指定的底层输出流。
-- BufferedOutputStream(OutputStream out, int size): 创建一个新的缓冲输出流，以将数据写入指定的底层输出流，并具有指定的缓冲区大小。
+-   BufferedOutputStream(OutputStream out): 创建一个新的缓冲输出流，以将数据写入指定的底层输出流。
+-   BufferedOutputStream(OutputStream out, int size): 创建一个新的缓冲输出流，以将数据写入指定的底层输出流，并具有指定的缓冲区大小。
 
 **写入方法**
 
-- void write(int b): 将指定的字节写入此缓冲输出流。
-- void write(byte[] b, int off, int len): 将字节数组中的指定字节写入此缓冲输出流。
+-   void write(int b): 将指定的字节写入此缓冲输出流。
+-   void write(byte\[\] b, int off, int len): 将字节数组中的指定字节写入此缓冲输出流。
 
 **刷新方法**
 
-- void flush(): 刷新此缓冲输出流，将任何缓冲的输出字节写出到底层输出流。
+-   void flush(): 刷新此缓冲输出流，将任何缓冲的输出字节写出到底层输出流。
 
 **关闭方法**
 
-- void close(): 关闭此输出流并释放与此流相关联的任何系统资源。在关闭流之前，会刷新它。
+-   void close(): 关闭此输出流并释放与此流相关联的任何系统资源。在关闭流之前，会刷新它。
 
 **构造方法**
 
-- BufferedInputStream(InputStream in): 创建一个新的缓冲输入流，以从指定的底层输入流读取数据。
-- BufferedInputStream(InputStream in, int size): 创建一个新的缓冲输入流，以从指定的底层输入流读取数据，并具有指定的缓冲区大小。
+-   BufferedInputStream(InputStream in): 创建一个新的缓冲输入流，以从指定的底层输入流读取数据。
+-   BufferedInputStream(InputStream in, int size): 创建一个新的缓冲输入流，以从指定的底层输入流读取数据，并具有指定的缓冲区大小。
 
 **读取方法**
 
-- int read(): 从输入流中读取数据的下一个字节。
-- int read(byte[] b, int off, int len): 从输入流中将最多 len 个字节的数据读入一个字节数组。
-- int read(byte[] b): 从输入流中读取一定数量的字节，并将其存储在缓冲区数组 b 中。
+-   int read(): 从输入流中读取数据的下一个字节。
+-   int read(byte\[\] b, int off, int len): 从输入流中将最多 len 个字节的数据读入一个字节数组。
+-   int read(byte\[\] b): 从输入流中读取一定数量的字节，并将其存储在缓冲区数组 b 中。
 
 **跳过和可用**
 
-- long skip(long n): 跳过和丢弃输入流中最多 n 个字节的数据。
-- int available(): 返回可以不受阻塞地从输入流中读取的剩余字节数。阻塞（Blocking） 是指程序在等待某些操作完成（例如读取数据、写入数据、获取网络响应等）时停止执行其他操作，直到该操作完成。
+-   long skip(long n): 跳过和丢弃输入流中最多 n 个字节的数据。
+-   int available(): 返回可以不受阻塞地从输入流中读取的剩余字节数。阻塞（Blocking） 是指程序在等待某些操作完成（例如读取数据、写入数据、获取网络响应等）时停止执行其他操作，直到该操作完成。
 
 **标记和重置**
 
-- void mark(int readlimit): 在输入流中标记当前位置。
-- void reset(): 将流重新定位到上次调用 mark 方法时的位置。
-- boolean markSupported(): 测试输入流是否支持 mark 和 reset 方法。
+-   void mark(int readlimit): 在输入流中标记当前位置。
+-   void reset(): 将流重新定位到上次调用 mark 方法时的位置。
+-   boolean markSupported(): 测试输入流是否支持 mark 和 reset 方法。
 
 **关闭**
 
-- void close(): 关闭输入流并释放与此流相关联的任何系统资源。
+-   void close(): 关闭输入流并释放与此流相关联的任何系统资源。
 
-### 10.5.2 字节缓冲输入流BufferedInputStream
+#### 10.5.2 字节缓冲输入流BufferedInputStream
 
 BufferedInputStream是字节缓冲输入流。
 
@@ -4506,27 +4368,21 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ 可以看到文件已经复制成功：
 
- 可以看到文件已经复制成功：
+![](https://i-blog.csdnimg.cn/blog_migrate/348f7c0f54ab211ecd84c6ab88dca058.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b75df823c62e495a86e148ee40961985.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 10.6 字符流
 
-
-
-## 10.6 字符流
-
-### 10.6.1 继承关系
+#### 10.6.1 继承关系
 
 **字符流的继承关系：**
 
+![](https://i-blog.csdnimg.cn/blog_migrate/ec9ba62888fbd621982659f758e5d4e8.png)​
 
+​
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\0d5d279fc5e44675b312678255f15b79.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 10.6.2 字符流的编码和解码
+#### 10.6.2 字符流的编码和解码
 
 **为什么要用字符流？**
 
@@ -4534,28 +4390,26 @@ public class Test {
 
 计算机底层存储数据都是通过二进制的字节文件存储的，所以我们看到的文件信息都是有多少字节、多少KB、多少MB，文本文件需要设置编码是UTF-8、GBK等类型。
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\d9e2e8b69b4549f1bc70654016bdd7c0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\bfb96da633d74f118a3f8ff824d5c245.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/f8dd472f064f72f2a4e7423023617b7f.png)![](https://i-blog.csdnimg.cn/blog_migrate/1887be4dcf7340bddeb25311c133f53d.png)
 
 > GBK编码，一个汉字占用2个字节。
->
+> 
 > utf-8编码，一个汉字占用3个字节。
 
-一个英文字符占一个字节，一个汉字占多个字节，因为字节流都是单字节读取，所以***字节流***在读中文的时候有可能会读到半个中文,造成**乱码**，所以这就引入了字符流。
+一个英文字符占一个字节，一个汉字占多个字节，因为字节流都是单字节读取，所以_**字节流**_在读中文的时候有可能会读到半个中文,造成**乱码**，所以这就引入了字符流。
 
 **字符流对字节文件进行编码和解码：**
 
-- **编码：**字符输出流将字符编码为字节写入字节文件
-- **解码：**字符输入流从字节文件解码出字符。 
+-   **编码：**字符输出流将字符编码为字节写入字节文件
+-   **解码：**字符输入流从字节文件解码出字符。 
 
 这样可以保证我们写入文件时，写入的格式是字节文件，读取文件时，将字节文件转为字符文件。
 
-
-
 > **字符串的编码解码方法：** 字符串的编码和解码是指在不同字符集之间转换字符数据的过程。
->
-> - **编码：**将字符串转换为字节数组
-> - **解码：**将字节数组转换为字符串。
->
+> 
+> -   **编码：**将字符串转换为字节数组
+> -   **解码：**将字节数组转换为字符串。
+> 
 > ```java
 >     public static void main(String[] args) throws IOException {
 >         String str = "你好";
@@ -4570,41 +4424,33 @@ public class Test {
 > 
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\3f4815524cf44dc8bd9e3370d2f5b451.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/4085c127f00347825ac229be338fa560.png)​
 
+#### 10.6.3 字符输入输出流
 
-
-
-
-
-
-### 10.6.3 字符输入输出流
-
-#### 10.6.3.1 字符输出流OutputStreamWriter
+##### 10.6.3.1 字符输出流OutputStreamWriter
 
 **OutputStreamWriter：**将字符编码为字节，再写入字节文件。
 
 OutputStreamWriter 是 Java 中一个桥接器类，用于将字符流转换为字节流。它使用指定的字符编码将字符写入字节流。它可以用于写入文件、网络流等。
 
-> **桥接器类：**指充当中介，用于连接或转换两种不兼容类型的类 
+> **桥接器类：**指充当中介，用于连接或转换两种不兼容类型的类 
 
 **构造方法：**构造参数都有OutputStream，因为要讲字符流编码成字节流OutputStream
 
-- OutputStreamWriter(OutputStream out): 创建一个使用默认字符编码的 OutputStreamWriter。
-- **OutputStreamWriter(OutputStream out, String charsetName):** 创建一个使用指定字符编码的 OutputStreamWriter。
-- OutputStreamWriter(OutputStream out, Charset cs): 创建一个使用指定 Charset 的 OutputStreamWriter。
-- OutputStreamWriter(OutputStream out, CharsetEncoder enc): 创建一个使用指定 CharsetEncoder 的 OutputStreamWriter。
+-   OutputStreamWriter(OutputStream out): 创建一个使用默认字符编码的 OutputStreamWriter。
+-   **OutputStreamWriter(OutputStream out, String charsetName):** 创建一个使用指定字符编码的 OutputStreamWriter。
+-   OutputStreamWriter(OutputStream out, Charset cs): 创建一个使用指定 Charset 的 OutputStreamWriter。
+-   OutputStreamWriter(OutputStream out, CharsetEncoder enc): 创建一个使用指定 CharsetEncoder 的 OutputStreamWriter。
 
 **写入方法**
 
-- void write(int c): 写入单个字符。
-- void write(char[] cbuf, int off, int len): 写入字符数组的一部分。
-- void write(char[] cbuf): 写入字符数组。
-- void write(String str, int off, int len): 写入字符串的一部分。
-- **void write(String str):** 写入整个字符串。
+-   void write(int c): 写入单个字符。
+-   void write(char\[\] cbuf, int off, int len): 写入字符数组的一部分。
+-   void write(char\[\] cbuf): 写入字符数组。
+-   void write(String str, int off, int len): 写入字符串的一部分。
+-   **void write(String str):** 写入整个字符串。
 
 **代码示例：**
 
@@ -4634,30 +4480,28 @@ OutputStreamWriter 是 Java 中一个桥接器类，用于将字符流转换为�
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/02986c716250e8c094148e7b24abad9f.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\3a285a635a0443a9ae7f93d0a4974132.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-#### 10.6.3.2 字符输入流InputStreamReader
+##### 10.6.3.2 字符输入流InputStreamReader
 
 InputStreamReader 是 Java 中一个桥接器类，用于从字节文件解码出字符。因为计算机底层存储的数据都是二进制的字节码文件，所以我们要读取文本文件，就需要将其根据编码解析成字符流，才能读取文件中的内容。
 
 **构造方法**：构造参数都有InputStream，因为InputStreamReader作用是将字节文件转为字符
 
-- InputStreamReader(InputStream in): 使用默认字符集将给定的输入流 in 转换为字符流。
-- **InputStreamReader(InputStream in, Charset cs):** 使用指定的字符集 cs 将给定的输入流 in 转换为字符流。
+-   InputStreamReader(InputStream in): 使用默认字符集将给定的输入流 in 转换为字符流。
+-   **InputStreamReader(InputStream in, Charset cs):** 使用指定的字符集 cs 将给定的输入流 in 转换为字符流。
 
 **读取字符**：
 
-- **int read():** 读取单个字符并返回其 Unicode 编码，如果到达流的末尾，则返回 -1。
-- int read(char[] cbuf, int offset, int length): 将字符读入数组 cbuf，从 offset 位置开始存放，最多读取 length 个字符。
+-   **int read():** 读取单个字符并返回其 Unicode 编码，如果到达流的末尾，则返回 -1。
+-   int read(char\[\] cbuf, int offset, int length): 将字符读入数组 cbuf，从 offset 位置开始存放，最多读取 length 个字符。
 
 **其他方法**：
 
-- void mark(int readAheadLimit): 标记流的当前位置，最多可以在流中读取 readAheadLimit 个字符。
-- void reset(): 将流重置到最后一次标记的位置。
-- boolean markSupported(): 测试此输入流是否支持标记功能。
-- void close(): 关闭流并释放与之关联的所有系统资源。
+-   void mark(int readAheadLimit): 标记流的当前位置，最多可以在流中读取 readAheadLimit 个字符。
+-   void reset(): 将流重置到最后一次标记的位置。
+-   boolean markSupported(): 测试此输入流是否支持标记功能。
+-   void close(): 关闭流并释放与之关联的所有系统资源。
 
 **代码示例：**
 
@@ -4688,15 +4532,9 @@ InputStreamReader 是 Java 中一个桥接器类，用于从字节文件解码�
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/23042d519b58085befb4804b871c127a.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\e0af736e589c4d759924d76e360a5c2a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-### 10.6.4 FileWriter和FileReader：简化字符流
+#### 10.6.4 FileWriter和FileReader：简化字符流
 
 FileWriter是OutputStreamWriter的子类，FileReader是InputStreamReader的子类。这两个类的作用是简化字符输入输出流的构造方法。
 
@@ -4730,46 +4568,38 @@ public class FileReader extends InputStreamReader {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\8220ea37271a401c8ae4c41ebd8963a3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/c6fe5e5648b78ba71b0890563911b118.png)
 
 > 下面两段代码效果是一样的，都是创建字符输入流，明显FileReader更方便：
->
+> 
 > **InputStreamReader创建字符输入流方式：**
->
+> 
 > ```java
 >         // 创建文件输入流
 >         FileInputStream fis = new FileInputStream("D://output.txt");
 >         // 创建使用 UTF-8 编码的 InputStreamReader
 >         InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **FileReader创建字符输入流方式：**
->
+> 
 > ```java
 > FileReader reader = new FileReader("output.txt")
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 除了构造方法外，其他方法和他们的父类一致，这里不再赘述。
 
 **FileReader构造方法**
 
-- **FileReader(String fileName):** 创建一个新的 FileReader，读取指定文件。
-- **FileReader(File file):** 创建一个新的 FileReader，读取指定的 File 对象。
+-   **FileReader(String fileName):** 创建一个新的 FileReader，读取指定文件。
+-   **FileReader(File file):** 创建一个新的 FileReader，读取指定的 File 对象。
 
 **FileWriter构造方法**
 
-- **FileWriter(String fileName):** 创建一个使用默认字符编码的 FileWriter，将数据写入指定文件。如果文件不存在，则创建新文件；如果文件存在，则覆盖原有内容。
-- FileWriter(String fileName, boolean append): 创建一个使用默认字符编码的 FileWriter，将数据写入指定文件。若 append 为 true，则在文件末尾追加内容，而不是覆盖。
-- **FileWriter(File file):** 创建一个 FileWriter，将数据写入指定的 File 对象。
-- FileWriter(File file, boolean append): 创建一个 FileWriter，将数据写入指定的 File 对象，并选择是否在文件末尾追加内容。
+-   **FileWriter(String fileName):** 创建一个使用默认字符编码的 FileWriter，将数据写入指定文件。如果文件不存在，则创建新文件；如果文件存在，则覆盖原有内容。
+-   FileWriter(String fileName, boolean append): 创建一个使用默认字符编码的 FileWriter，将数据写入指定文件。若 append 为 true，则在文件末尾追加内容，而不是覆盖。
+-   **FileWriter(File file):** 创建一个 FileWriter，将数据写入指定的 File 对象。
+-   FileWriter(File file, boolean append): 创建一个 FileWriter，将数据写入指定的 File 对象，并选择是否在文件末尾追加内容。
 
 **代码示例：**
 
@@ -4797,14 +4627,12 @@ public class FileReader extends InputStreamReader {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
- ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\161006ab49ab4db192ca7183321d5d4b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ ![](https://i-blog.csdnimg.cn/blog_migrate/eccd61d4d7e99292486a99708e1f909c.png)
 
 > **JDK7之前的异常处理版本：**
->
-> 实际场景中，IO流需要进行异常处理，确保文件资源能正常读写和关闭，保证程序更加健壮： 
->
+> 
+> 实际场景中，IO流需要进行异常处理，确保文件资源能正常读写和关闭，保证程序更加健壮： 
+> 
 > ```java
 >     public static void main(String[] args) {
 >         FileWriter writer = null;
@@ -4851,83 +4679,69 @@ public class FileReader extends InputStreamReader {
 >         }
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 10.6.5 字符缓冲流（推荐）
+#### 10.6.5 字符缓冲流（推荐）
 
 BufferedWriter和BufferedReader是带缓冲区的字符流，读写效率相对于普通的字符流OutputStreamWriter和InputStreamReader会高很多。
 
 > **为什么字符缓冲流读写效率高？**
->
+> 
 > 原因跟字节缓冲流类似，它维护了默认容量8192容量的char类型数组，在写入时会将字符先写进这个存于内存的数组中，等容量满了之后，会一次性将数据写进磁盘，而不是每次写数据都进行磁盘IO一次，有效降低了读写次数，又因为磁盘的IO效率是远低于内存IO效率的，所以字符缓冲流的写效率高。
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b6d2058003044dca9d04d817e2d06ea4.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/609dd917d27ed6acc186c8389db31f4a.png)
+> 
 > BufferedReader也一个道理，它在第一次读的时候将数据尽可能多的塞满char类型数组，下次读的时候优先从char数组中读，读的效率肯定比直接在磁盘中读的效率高很多。
 
 **BufferedWriter**
 
 **构造方法**
 
-- BufferedWriter(Writer out): 创建一个使用默认大小输出缓冲区的缓冲字符输出流。默认值8192足够大，可用于大多数用途。
-
-  ```java
-      public BufferedWriter(Writer out) {
-          // 没指定缓冲区容量时，默认是最大长度8192
-          this(out, defaultCharBufferSize);
-      }
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- BufferedWriter(Writer out, int sz): 创建一个使用指定大小输出缓冲区的缓冲字符输出流。参数sz可以指定缓冲区大小，或者可以接受默认大小8192。
-
-  
+-   BufferedWriter(Writer out): 创建一个使用默认大小输出缓冲区的缓冲字符输出流。默认值8192足够大，可用于大多数用途。
+    
+    ```java
+        public BufferedWriter(Writer out) {
+            // 没指定缓冲区容量时，默认是最大长度8192
+            this(out, defaultCharBufferSize);
+        }
+    ```
+    
+-   BufferedWriter(Writer out, int sz): 创建一个使用指定大小输出缓冲区的缓冲字符输出流。参数sz可以指定缓冲区大小，或者可以接受默认大小8192。
+    
 
 **常用方法**
 
-- void write(int c): 写入单个字符。
-
-- void write(char[] cbuf, int off, int len): 写入字符数组的某一部分。
-
-- void write(String s, int off, int len): 写入字符串的某一部分。
-
-- **void newLine(): 写入一个行分隔符。**
-
-- ```java
-      public void newLine() throws IOException {
-          // lineSeparator是本类的一个属性，在构造函数执行时获取当前操作系统的行分隔符并赋值
-          write(lineSeparator);
-      }
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- **void flush(): 刷新该流的缓冲区。**每次写完bw.flush();可以将缓冲字符写入文本，虽然close()也能刷新后关闭，但加上flush更保险。
-
-- void close(): 关闭该流，但要先刷新它。
-
-
+-   void write(int c): 写入单个字符。
+-   void write(char\[\] cbuf, int off, int len): 写入字符数组的某一部分。
+-   void write(String s, int off, int len): 写入字符串的某一部分。
+-   **void newLine(): 写入一个行分隔符。**
+-   ```java
+        public void newLine() throws IOException {
+            // lineSeparator是本类的一个属性，在构造函数执行时获取当前操作系统的行分隔符并赋值
+            write(lineSeparator);
+        }
+    ```
+    
+-   **void flush(): 刷新该流的缓冲区。**每次写完bw.flush();可以将缓冲字符写入文本，虽然close()也能刷新后关闭，但加上flush更保险。
+-   void close(): 关闭该流，但要先刷新它。
 
 **BufferedReader**
 
 **构造方法：**可以指定缓冲区大小，或者可以使用默认大小8192。 默认值足够大，可用于大多数用途。
 
-- BufferedReader(Reader in): 创建一个使用默认大小输入缓冲区的缓冲字符输入流。
-- BufferedReader(Reader in, int sz): 创建一个使用指定大小输入缓冲区的缓冲字符输入流。
+-   BufferedReader(Reader in): 创建一个使用默认大小输入缓冲区的缓冲字符输入流。
+-   BufferedReader(Reader in, int sz): 创建一个使用指定大小输入缓冲区的缓冲字符输入流。
 
 **常用方法**
 
-- int read(): 读取单个字符。
-- int read(char[] cbuf, int off, int len): 将字符读入数组的某一部分。
-- **String readLine(): 读取一个文本行。**
-- boolean ready(): 判断输入流是否准备好被读取。
-- void close(): 关闭该流并释放与之关联的所有资源。
+-   int read(): 读取单个字符。
+-   int read(char\[\] cbuf, int off, int len): 将字符读入数组的某一部分。
+-   **String readLine(): 读取一个文本行。**
+-   boolean ready(): 判断输入流是否准备好被读取。
+-   void close(): 关闭该流并释放与之关联的所有资源。
 
-**代码示例：** 
+**代码示例：** 
 
-BufferedWriter写入三行文字，然后BufferedReader读出来： 
+BufferedWriter写入三行文字，然后BufferedReader读出来： 
 
 ```java
     public static void main(String[] args) {
@@ -4959,22 +4773,16 @@ BufferedWriter写入三行文字，然后BufferedReader读出来：
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\278c42e7aae94948aa29590b271cb890.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/e2c2b3d97eb96b6cf033b71806bec5ce.png)
 
 > **BufferedReader实现读取键盘录入：**
->
+> 
 > ```java
 > BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **代码示例：**
->
+> 
 > ```java
 >     public static void main(String[] args) {
 >         // 使用 InputStreamReader 包装 System.in，再使用 BufferedReader 包装 InputStreamReader
@@ -5001,16 +4809,12 @@ BufferedWriter写入三行文字，然后BufferedReader读出来：
 >         }
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 输入123后回车：
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\222af27b549548aa8d1d6440625e5d15.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/cd7606eeb84821728333242a4f804664.png)
 
-
-
-## 10.7 知识加油站：I/O流JDK7异常处理
+### 10.7 知识加油站：I/O流JDK7异常处理
 
 **I/O流的异常处理：**
 
@@ -5026,8 +4830,6 @@ try {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 JDK7改进方案：try-with-resources
 
 > 因为之前方案，每次都要finally中再次判空、try-catch区关闭IO流，太过麻烦，所以JDK7引入了新的异常处理形式，可以**把流对象放到try()的括号里**，这样就不需要再写finally了，系统会自动释放资源
@@ -5041,18 +4843,14 @@ try (定义流对象) {
 // 自动释放资源
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-> **代码示例:**
->
+> **代码示例​:**
+> 
 > 使用字符缓冲流写文件后，读文件：
->
+> 
 > **JDK7之前格式：**
->
+> 
 > 异常处理后，需要在finally里关闭流对象：
->
+> 
 > ```java
 >     public static void main(String[] args) {
 >         // 定义文件路径
@@ -5102,13 +4900,11 @@ try (定义流对象) {
 >         }
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > **JDK7格式：**
->
+> 
 > 异常处理后，不需要再写finally了，系统会自动释放资源，可以看到代码变简洁很多：
->
+> 
 > ```java
 >     public static void main(String[] args) {
 >         // 定义文件路径
@@ -5138,31 +4934,27 @@ try (定义流对象) {
 >         }
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
+### 10.8 特殊操作流 
 
-
-## 10.8 特殊操作流 
-
-### 10.8.1 标准输入输出流：System.in和System.out
+#### 10.8.1 标准输入输出流：System.in和System.out
 
  **什么是标准输入输出流？**
 
-- 标准输出流：System.out。用于指定输出到控制台的数据。
-- 标准输入流：System.in。用于读取用户在控制台输入的数据。
+-   标准输出流：System.out。用于指定输出到控制台的数据。
+-   标准输入流：System.in。用于读取用户在控制台输入的数据。
 
-#### 10.8.1.1 **标准输出流**
+##### 10.8.1.1 **标准输出流**
 
-##### **基本介绍**
+###### **基本介绍**
 
 标准输出流：System.out。用于往控制台输出数据。
 
 **常用方法：**
 
-- **print()**: 打印数据到控制台，不换行。
-- **println()**: 打印数据到控制台，并换行。
-- **printf()**: 使用指定的格式字符串和参数将数据格式化并打印到控制台。 
+-   **print()**: 打印数据到控制台，不换行。
+-   **println()**: 打印数据到控制台，并换行。
+-   **printf()**: 使用指定的格式字符串和参数将数据格式化并打印到控制台。 
 
 **代码示例：**
 
@@ -5180,44 +4972,42 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e97a687a5f4c1b6f9b7b5aff18527ae9.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\8ecd076cfb66404eaab47404c58fae78.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-##### 常用格式化符号 
+###### 常用格式化符号 
 
 使用System.out、String.format可以对字符串格式化。
 
 常用格式化符号
 
-- %d：十进制整数
-- %f：十进制浮点数
-- %e：科学计数法表示的十进制数
-- %g：根据值的大小，自动选择使用普通计数法或科学计数法
-- %s：字符串
-- %c：字符
-- %b：布尔值（true 或 false）
-- %x：整数的十六进制表示
-- %o：整数的八进制表示
-- %t 或 %T：日期和时间（需要与日期时间转换符配合使用）
-- %%：文字百分号（% 本身）
+-   %d：十进制整数
+-   %f：十进制浮点数
+-   %e：科学计数法表示的十进制数
+-   %g：根据值的大小，自动选择使用普通计数法或科学计数法
+-   %s：字符串
+-   %c：字符
+-   %b：布尔值（true 或 false）
+-   %x：整数的十六进制表示
+-   %o：整数的八进制表示
+-   %t 或 %T：日期和时间（需要与日期时间转换符配合使用）
+-   %%：文字百分号（% 本身）
 
 日期和时间转换符
 
-- %tF：年-月-日（yyyy-MM-dd）
-- %tD：月/日/年（MM/dd/yy）
-- %tT：时:分:秒（HH:mm:ss）
-- %tR：时:分（HH:mm）
-- %tY：年（四位数）
-- %ty：年（两位数）
-- %tm：月（两位数）
-- %td：日（两位数）
-- %tH：小时（24 小时制，两位数）
-- %tI：小时（12 小时制，两位数）
-- %tM：分钟（两位数）
-- %tS：秒（两位数）
-- %tp：小写上午或下午标记（am 或 pm）
-- %tZ：时区
+-   %tF：年-月-日（yyyy-MM-dd）
+-   %tD：月/日/年（MM/dd/yy）
+-   %tT：时:分:秒（HH:mm:ss）
+-   %tR：时:分（HH:mm）
+-   %tY：年（四位数）
+-   %ty：年（两位数）
+-   %tm：月（两位数）
+-   %td：日（两位数）
+-   %tH：小时（24 小时制，两位数）
+-   %tI：小时（12 小时制，两位数）
+-   %tM：分钟（两位数）
+-   %tS：秒（两位数）
+-   %tp：小写上午或下午标记（am 或 pm）
+-   %tZ：时区
 
 代码示例：
 
@@ -5268,26 +5058,24 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/0e38902eb567e133822d2e6a82ff6b15.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\1a1f6665db97402cb1f8cdc981aae517.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### 10.8.1.2 标准输入流
 
-#### 10.8.1.2 标准输入流
-
-##### 基本介绍
+###### 基本介绍
 
 标准输入流：System.in。用于读取用户在控制台输入的数据。
 
 **用法：**
 
-- **字符输入流：**作为构造参数传入字符输入流InputStreamReader中，例如new InputStreamReader(System.in)。
-- **Scanner：**因为用字符输入流包装太麻烦，所以Java提供了一个工具类实现键盘录入，即Scanner类，专门用于从各种输入源（如控制台、文件、字符串等）读取输入。
+-   **字符输入流：**作为构造参数传入字符输入流InputStreamReader中，例如new InputStreamReader(System.in)。
+-   **Scanner：**因为用字符输入流包装太麻烦，所以Java提供了一个工具类实现键盘录入，即Scanner类，专门用于从各种输入源（如控制台、文件、字符串等）读取输入。
 
 **常用方法：**
 
-- **read()**: 从输入流中读取一个字节。
-- **read(byte[] b)**: 从输入流中读取一定数量的字节，并将其存储在缓冲区数组 b 中。
-- **read(byte[] b, int off, int len)**: 从输入流中将 len 个字节的数据读入一个字节数组。
+-   **read()**: 从输入流中读取一个字节。
+-   **read(byte\[\] b)**: 从输入流中读取一定数量的字节，并将其存储在缓冲区数组 b 中。
+-   **read(byte\[\] b, int off, int len)**: 从输入流中将 len 个字节的数据读入一个字节数组。
 
 **代码示例：**
 
@@ -5310,32 +5098,30 @@ public class Test {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/f493814e21476095a1b592b663d5a282.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\8c747b0d19b74116beed9b9d9ce46c51.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-##### Scanner类
+###### Scanner类
 
 因为用字符输入流包装太麻烦，所以Java提供了一个工具类实现键盘录入，即Scanner类，专门用于从各种输入源（如控制台、文件、字符串等）读取输入。
 
 **构造方法：**
 
-- **Scanner(InputStream source):** 构造一个新的 Scanner，生成的扫描器从指定的输入流读取数据。用于读取用户在控制台输入的数据。一般用System.in，即标准输入流，用于读取用户在控制台输入的数据。
-- Scanner(File source): 构造一个新的 Scanner，生成的扫描器从指定的文件读取数据。
-- Scanner(String source): 构造一个新的 Scanner，生成的扫描器从指定的字符串读取数据。
+-   **Scanner(InputStream source):** 构造一个新的 Scanner，生成的扫描器从指定的输入流读取数据。用于读取用户在控制台输入的数据。一般用System.in，即标准输入流，用于读取用户在控制台输入的数据。
+-   Scanner(File source): 构造一个新的 Scanner，生成的扫描器从指定的文件读取数据。
+-   Scanner(String source): 构造一个新的 Scanner，生成的扫描器从指定的字符串读取数据。
 
 **常用方法：**
 
-- **nextInt()、nextDouble()、next()：**获取输入的整数、浮点数、字符串（不包括空格）等。
-- **nextLine()：**获取一行输入（包括空格）。
-- **hasNextInt()、hasNextDouble()、hasNext()：** 判断下一个输入是否为整数、浮点数、字符串。
-- **useDelimiter(String pattern)：** 设置分隔符模式，用于指定不同类型数据之间的分隔符，默认为空白字符。
-- **close()：**关闭扫描器。
+-   **nextInt()、nextDouble()、next()：**获取输入的整数、浮点数、字符串（不包括空格）等。
+-   **nextLine()：**获取一行输入（包括空格）。
+-   **hasNextInt()、hasNextDouble()、hasNext()：** 判断下一个输入是否为整数、浮点数、字符串。
+-   **useDelimiter(String pattern)：** 设置分隔符模式，用于指定不同类型数据之间的分隔符，默认为空白字符。
+-   **close()：**关闭扫描器。
 
 > **示例：**
->
+> 
 > 从控制台输入整数、浮点数、字符串，并在控制台打印。
->
+> 
 > ```java
 > import java.util.Scanner;
 > 
@@ -5364,25 +5150,21 @@ public class Test {
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 结果：
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\d869b26f47f84a97a708d2a2f28cf581.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/f6c9390588377597174525be0cd28312.png)
 
+#### 10.8.2 打印流
 
-
-### 10.8.2 打印流
-
-#### 10.8.2.1 字节打印流：PrintStream
+##### 10.8​​​​​​​.2.1 字节打印流：PrintStream
 
 PrintStream用于将不同的数据类型格式化为字节并写入到输出流，支持自动刷新。它只负责输出数据，不负责读取数据。
 
 一般情况下，打印数据用System.out.printf()就可以了，PrintStream适用于需要重定向输出的场景，例如将打印的结果写入一个文件中。
 
->  **重定向输出：**将输出重定向到文件、网络流或其他输出目标。
->
+>   **重定向输出：**将输出重定向到文件、网络流或其他输出目标。
+> 
 > ```java
 >     public static void main(String[] args) {
 >         try (PrintStream ps = new PrintStream(new FileOutputStream("output.txt"))) {
@@ -5394,29 +5176,27 @@ PrintStream用于将不同的数据类型格式化为字节并写入到输出流
 >         }
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **构造方法：**
 
-- **PrintStream(OutputStream out):** 创建一个新的打印流，使用指定的输出流。
-- PrintStream(OutputStream out, boolean autoFlush): 创建一个新的打印流，使用指定的输出流和自动刷新设置。
-- PrintStream(OutputStream out, boolean autoFlush, String encoding): 创建一个新的打印流，使用指定的输出流、自动刷新设置和字符编码。
-- **PrintStream(String fileName):** 创建一个新的打印流，使用指定的文件名。
-- PrintStream(String fileName, String encoding): 创建一个新的打印流，使用指定的文件名和字符编码。
-- PrintStream(File file): 创建一个新的打印流，使用指定的文件。
-- PrintStream(File file, String encoding): 创建一个新的打印流，使用指定的文件和字符编码。
+-   **PrintStream(OutputStream out):** 创建一个新的打印流，使用指定的输出流。
+-   PrintStream(OutputStream out, boolean autoFlush): 创建一个新的打印流，使用指定的输出流和自动刷新设置。
+-   PrintStream(OutputStream out, boolean autoFlush, String encoding): 创建一个新的打印流，使用指定的输出流、自动刷新设置和字符编码。
+-   **PrintStream(String fileName):** 创建一个新的打印流，使用指定的文件名。
+-   PrintStream(String fileName, String encoding): 创建一个新的打印流，使用指定的文件名和字符编码。
+-   PrintStream(File file): 创建一个新的打印流，使用指定的文件。
+-   PrintStream(File file, String encoding): 创建一个新的打印流，使用指定的文件和字符编码。
 
 **常用方法：**
 
-- void print(String s): 打印字符串。
-- PrintStream printf(String format, Object... args): 使用指定的格式字符串和参数，将格式化的字符串输出到该流。
-- void println(int i): 打印整数并换行。
-- close()：关闭。
+-   void print(String s): 打印字符串。
+-   PrintStream printf(String format, Object... args): 使用指定的格式字符串和参数，将格式化的字符串输出到该流。
+-   void println(int i): 打印整数并换行。
+-   close()：关闭。
 
-**代码示例：** 
+**代码示例：** 
 
-打印到控制台： 
+打印到控制台： 
 
 ```java
     public static void main(String[] args) {
@@ -5427,9 +5207,7 @@ PrintStream用于将不同的数据类型格式化为字节并写入到输出流
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\b12c4a9a49614895bbab1df989692f1f.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a44500efdbf37e4172d9ff2b7a0889ec.png)
 
 打印到文件：
 
@@ -5447,30 +5225,28 @@ PrintStream用于将不同的数据类型格式化为字节并写入到输出流
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d92fc0d5f169f1b01ad35d42b5b944fa.png)
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\7e1f06a4d5f144cabad0c98a26a0635e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+##### 10.8​​​​​​​.2.2 字符打印流：PrintWriter
 
-#### 10.8.2.2 字符打印流：PrintWriter
-
-PrintWriter与 PrintStream 类似，都用于打印数据到文件。主要区别是PrintWriter用于打印字符流，而不是字节流，它可以自动处理字符编码。 
+PrintWriter与 PrintStream 类似，都用于打印数据到文件。主要区别是PrintWriter用于打印字符流，而不是字节流，它可以自动处理字符编码。 
 
 构造方法：
 
-- **PrintWriter(OutputStream out):** 创建一个新的 PrintWriter，从现有的 OutputStream 输出字符。
-- PrintWriter(OutputStream out, boolean autoFlush): 创建一个新的 PrintWriter，从现有的 OutputStream 输出字符，并指定是否在调用 println、printf 或 format 方法时自动刷新。
-- **PrintWriter(Writer out):** 创建一个新的 PrintWriter，从现有的 Writer 输出字符。
-- PrintWriter(Writer out, boolean autoFlush): 创建一个新的 PrintWriter，从现有的 Writer 输出字符，并指定是否在调用 println、printf 或 format 方法时自动刷新。
-- **PrintWriter(String fileName):** 创建一个新的 PrintWriter，将输出写入指定的文件。
-- PrintWriter(String fileName, String csn): 创建一个新的 PrintWriter，将输出写入指定的文件，使用给定的字符集。
-- PrintWriter(File file): 创建一个新的 PrintWriter，将输出写入指定的文件。
-- PrintWriter(File file, String csn): 创建一个新的 PrintWriter，将输出写入指定的文件，使用给定的字符集。
+-   **PrintWriter(OutputStream out):** 创建一个新的 PrintWriter，从现有的 OutputStream 输出字符。
+-   PrintWriter(OutputStream out, boolean autoFlush): 创建一个新的 PrintWriter，从现有的 OutputStream 输出字符，并指定是否在调用 println、printf 或 format 方法时自动刷新。
+-   **PrintWriter(Writer out):** 创建一个新的 PrintWriter，从现有的 Writer 输出字符。
+-   PrintWriter(Writer out, boolean autoFlush): 创建一个新的 PrintWriter，从现有的 Writer 输出字符，并指定是否在调用 println、printf 或 format 方法时自动刷新。
+-   **PrintWriter(String fileName):** 创建一个新的 PrintWriter，将输出写入指定的文件。
+-   PrintWriter(String fileName, String csn): 创建一个新的 PrintWriter，将输出写入指定的文件，使用给定的字符集。
+-   PrintWriter(File file): 创建一个新的 PrintWriter，将输出写入指定的文件。
+-   PrintWriter(File file, String csn): 创建一个新的 PrintWriter，将输出写入指定的文件，使用给定的字符集。
 
 **常用方法：**
 
-- 跟PrintStream基本一致，这里不再赘述。 
+-   跟PrintStream基本一致，这里不再赘述。 
 
-**代码示例：** 
+**代码示例：** 
 
 ```java
     /**
@@ -5489,49 +5265,43 @@ PrintWriter与 PrintStream 类似，都用于打印数据到文件。主要区�
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 10.8​​​​​​​.3 序列号流和反序列化流
 
-
-
-### 10.8.3 序列号流和反序列化流
-
-#### 10.8.3.1 **Serializable 接口和serialVersionUID变量**
+##### 10.8​​​​​​​.3.1 **Serializable 接口和serialVersionUID变量**
 
 **序列化和反序列化：**
 
-- **序列化：**将对象转换为字节流。转为字节流后可以把它写入文件、数据库，或者传输到网络中。
-- **反序列化：**序列化的逆过程，也就是将字节流转换回对象。
+-   **序列化：**将对象转换为字节流。转为字节流后可以把它写入文件、数据库，或者传输到网络中。
+-   **反序列化：**序列化的逆过程，也就是将字节流转换回对象。
 
-**不参与序列化的字段：**被transient修饰的成员变量不参与序列化。 
+**不参与序列化的字段：**被transient修饰的成员变量不参与序列化。  
 
-被序列化的类必须实现Serializable接口，并且声明一个成员变量**serialVersionUID**。 
+被序列化的类必须实现Serializable接口，并且声明一个成员变量**serialVersionUID**。 
 
 **Serializable 接口：**
 
-用于标记一个类的对象可以被序列化。这个接口没有任何方法，它仅仅是一个标记，表明实现这个接口的类可以被 Java 的序列化机制处理。 
+用于标记一个类的对象可以被序列化。这个接口没有任何方法，它仅仅是一个标记，表明实现这个接口的类可以被 Java 的序列化机制处理。 
 
 如果一个类的对象没有实现这个接口，并且他的对象被序列号，则会报错不能序列号异常java.io.NotSerializableException：
 
-![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\5915f02cae7d4f5eae35fc1547188a23.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
+![](https://i-blog.csdnimg.cn/blog_migrate/7fcccd1d78077d88f9f9700babf18b2c.png)  
+ 
 
 **serialVersionUID变量：**
 
-- **作用：**serialVersionUID是类的版本号，类型是长整型数值，该字段的主要作用是检查反序列化时类的版本，与序列化时类的版本是否一致。
-- **私有：**为了保证不同Java编译器实现之间的一致的serialVersionUID值，一个可序列化的类必须声明一个显式的serialVersionUID值，尽量使用private修饰符。
-- **序列化类必须包含serialVersionUID：**为了保证不同Java编译器实现之间的一致的serialVersionUID值，一个可序列化的类必须声明一个显式的serialVersionUID值，尽量使用private修饰符。
-- **建议手动指定：**如果实现了Serializable接口，并且没有指定serialVersionUID，编译器会隐式地自动生成一个serialVersionUID，但是建议手动指定，因为默认的serialVersionUID计算对类详细信息非常敏感，从而出现**InvalidClassException**。
+-   **作用：**serialVersionUID是类的版本号，类型是长整型数值，该字段的主要作用是检查反序列化时类的版本，与序列化时类的版本是否一致。
+-   **私有：**为了保证不同Java编译器实现之间的一致的serialVersionUID值，一个可序列化的类必须声明一个显式的serialVersionUID值，尽量使用private修饰符。
+-   **序列化类必须包含serialVersionUID：**为了保证不同Java编译器实现之间的一致的serialVersionUID值，一个可序列化的类必须声明一个显式的serialVersionUID值，尽量使用private修饰符。
+-   **建议手动指定：**如果实现了Serializable接口，并且没有指定serialVersionUID，编译器会隐式地自动生成一个serialVersionUID，但是建议手动指定，因为默认的serialVersionUID计算对类详细信息非常敏感，从而出现**InvalidClassException**。
 
 **InvalidClassException异常：**
 
 序列化时版本号不匹配，会抛出无效类异常。例如反序列化时类的版本号，与序列化时类的版本号不一致在序列化之后，类的结构发生了变化，例如添加、删除或修改了字段，导致版本号不匹配。
 
-
-
 > **代码示例：**
->
+> 
 > 创建一个可序列号的Dog类：
->
+> 
 > ```java
 > /**
 >  * @Author: vince
@@ -5558,22 +5328,20 @@ PrintWriter与 PrintStream 类似，都用于打印数据到文件。主要区�
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-#### 10.8.3.2 对象序列化流：ObjectOutputStream
+##### 10.8​​​​​​​.3​​​​​​​.2 对象序列化流：ObjectOutputStream
 
 序列化流可以将对象转换为字节流，并保存到文件或者传输到网络。
 
 **构造方法：**
 
-- **ObjectOutputStream(OutputStream out):** 创建一个写入指定 OutputStream 的 ObjectOutputStream。构造参数是FileOutputStream等OutputStream的子类。
+-   **ObjectOutputStream(OutputStream out):** 创建一个写入指定 OutputStream 的 ObjectOutputStream。构造参数是FileOutputStream等OutputStream的子类。
 
 **常用方法：**
 
-- **void writeObject(Object obj):** 将指定的对象写入 ObjectOutputStream。
-- void close(): 关闭输出流并释放与此流相关联的所有系统资源。
-- void flush(): 刷新输出流，并强制任何缓冲的输出字节被写出。
+-   **void writeObject(Object obj):** 将指定的对象写入 ObjectOutputStream。
+-   void close(): 关闭输出流并释放与此流相关联的所有系统资源。
+-   void flush(): 刷新输出流，并强制任何缓冲的输出字节被写出。
 
 **代码示例：**被序列化的类使用上一节创建的Dog类：
 
@@ -5592,26 +5360,22 @@ public class Test {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-#### 10.8.3.3 对象反序列化流：ObjectInputStream
+##### 10.8​​​​​​​.3​​​​​​​.3 对象反序列化流：ObjectInputStream
 
 ObjectInputStream是序列化的逆过程，也就是将字节流转换回对象。
 
 **构造方法**
 
-- ObjectOutputStream(OutputStream out): 创建一个写入指定 OutputStream 的 ObjectOutputStream。
+-   ObjectOutputStream(OutputStream out): 创建一个写入指定 OutputStream 的 ObjectOutputStream。
 
 **常用方法**
 
-- void writeObject(Object obj): 将指定的对象写入 ObjectOutputStream。
-- void close(): 关闭输出流并释放与此流相关联的所有系统资源。
-- void flush(): 刷新输出流，并强制任何缓冲的输出字节被写出。
+-   void writeObject(Object obj): 将指定的对象写入 ObjectOutputStream。
+-   void close(): 关闭输出流并释放与此流相关联的所有系统资源。
+-   void flush(): 刷新输出流，并强制任何缓冲的输出字节被写出。
 
 > **代码示例：**反序列化上一节创建的dog.txt：
->
+> 
 > ```java
 > public class Test {
 >     public static void main(String[] args)  {
@@ -5633,7 +5397,7 @@ ObjectInputStream是序列化的逆过程，也就是将字节流转换回对象
 >     }
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> ![img](Java修仙之路，十万字吐血整理全网最完整Java学习笔记（进阶篇）.assets\c860da6875694c90b269fd41b539972b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/a5e5c241bd60f9a2c84a49161de20e66.png)
+> 
+> ​
