@@ -1,38 +1,84 @@
->  **导航：**
->
-> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501)
->
+> **导航：**
+> 
+> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑汇总篇")
+> 
 >  **Java笔记汇总：**
->
-> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289)
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289 "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客")
 
+**目录**
 
+[1 业务流程，订单失败后自动回滚解锁库存](#%E5%8D%81%E4%B8%80%E3%80%81%E5%BA%93%E5%AD%98%E8%87%AA%E5%8A%A8%E8%A7%A3%E9%94%81)
 
-[TOC]
+[可靠消息+最终一致性方案](#8.2.1%E3%80%81%E5%8F%AF%E9%9D%A0%E6%B6%88%E6%81%AF%2B%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7%E6%96%B9%E6%A1%88)
 
+[2【仓库服务】RabbitMQ环境准备](#11.1%E3%80%81gulimall-ware%20%E6%9C%8D%E5%8A%A1%E6%B7%BB%E5%8A%A0RabbitMQ)
 
+[2.1 导入依赖](#%E5%AF%BC%E5%85%A5%E4%BE%9D%E8%B5%96)
+
+[2.2 yml配置RabbitMQ信息](#yml%E9%85%8D%E7%BD%AERabbitMQ%E4%BF%A1%E6%81%AF)
+
+[2.3 主启动类添加注解@EnableRabbit](#%E4%B8%BB%E5%90%AF%E5%8A%A8%E7%B1%BB%E6%B7%BB%E5%8A%A0%E6%B3%A8%E8%A7%A3%40EnableRabbit)
+
+[2.4 配置类，JSON消息转换、创建交换机、队列和绑定](#11.2%E3%80%81%E5%88%9B%E5%BB%BA%E4%B8%9A%E5%8A%A1%E4%BA%A4%E6%8D%A2%E6%9C%BA%20%26%20%E9%98%9F%E5%88%97%20%E4%BB%A5%E5%8F%8A%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BB%91%E5%AE%9A)
+
+[2.5 导入seata依赖](#%E5%AF%BC%E5%85%A5seata%E4%BE%9D%E8%B5%96)
+
+[3 监听库存解锁](#11.3%E3%80%81%E7%9B%91%E5%90%AC%E5%BA%93%E5%AD%98%E8%A7%A3%E9%94%81)
+
+[3.0 分析](#3.0%E3%80%81%E5%88%86%E6%9E%90)
+
+[3.1 “仓库工作单” 数据库表、实体类、mapper添加字段“锁定状态”](#11.3.1%E3%80%81%E7%8E%AF%E5%A2%83%E4%BF%AE%E6%94%B9)
+
+[3.2 发消息MQ库存锁定成功](#11.3.2%E3%80%81%E5%91%8A%E8%AF%89MQ%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A%E6%88%90%E5%8A%9F)
+
+[3.2.1 封装库存锁定单传输类](#%E5%B0%81%E8%A3%85%E5%BA%93%E5%AD%98%E9%94%81%E5%AE%9A%E5%8D%95%E4%BC%A0%E8%BE%93%E7%B1%BB)
+
+[3.2.2 service，锁库存成功发延迟消息，内容是库存单](#service%EF%BC%8C%E9%94%81%E5%BA%93%E5%AD%98%E6%88%90%E5%8A%9F%E5%8F%91%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF%EF%BC%8C%E5%86%85%E5%AE%B9%E6%98%AF%E5%BA%93%E5%AD%98%E5%8D%95)
+
+[3.3 监听消息，判断是否解锁库存](#11.3.3%E3%80%81%E7%9B%91%E5%90%AC%E5%BA%93%E5%AD%98%E8%87%AA%E5%8A%A8%E8%A7%A3%E9%94%81)
+
+[3.3.1 业务流程](#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%C2%A0) 
+
+[3.3.2 监听类监听消息](#%E7%9B%91%E5%90%AC%E7%B1%BB%E7%9B%91%E5%90%AC%E6%B6%88%E6%81%AF)
+
+[3.3.3 service，判断是否解锁库存](#service%EF%BC%8C%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E8%A7%A3%E9%94%81%E5%BA%93%E5%AD%98)
+
+[3.3.4 仓库模块远程调用订单模块](#%E4%BB%93%E5%BA%93%E6%A8%A1%E5%9D%97%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E8%AE%A2%E5%8D%95%E6%A8%A1%E5%9D%97)
+
+[3.3.5【订单模块】controller，通过订单号获取订单的详细信息](#%E3%80%90%E8%AE%A2%E5%8D%95%E6%A8%A1%E5%9D%97%E3%80%91controller%EF%BC%8C%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E5%8F%B7%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF)
+
+[3.3.6【订单模块】service，通过订单号获取订单的详细信息](#%E3%80%90%E8%AE%A2%E5%8D%95%E6%A8%A1%E5%9D%97%E3%80%91service%EF%BC%8C%E9%80%9A%E8%BF%87%E8%AE%A2%E5%8D%95%E5%8F%B7%E8%8E%B7%E5%8F%96%E8%AE%A2%E5%8D%95%E7%9A%84%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF)
+
+[3.3.7 接收信息的VO类](#%E6%8E%A5%E6%94%B6%E4%BF%A1%E6%81%AF%E7%9A%84VO%E7%B1%BB)
+
+[3.3.8 解锁库存详情方法](#%E8%A7%A3%E9%94%81%E5%BA%93%E5%AD%98%E8%AF%A6%E6%83%85%E6%96%B9%E6%B3%95)
+
+[3.3.9【订单模块】 修改拦截器](#%E3%80%90%E8%AE%A2%E5%8D%95%E6%A8%A1%E5%9D%97%E3%80%91%20%E4%BF%AE%E6%94%B9%E6%8B%A6%E6%88%AA%E5%99%A8)
+
+[4 监听消息完整代码](#11.4%E3%80%81%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86)
+
+--
 
 > 延迟队列：
->
-> [SpringCloud基础4——RabbitMQ和SpringAMQP_springcloud rabbitmq_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126801025?spm=1001.2014.3001.5501)
+> 
+> [SpringCloud基础4——RabbitMQ和SpringAMQP\_springcloud rabbitmq\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126801025?spm=1001.2014.3001.5501 "SpringCloud基础4——RabbitMQ和SpringAMQP_springcloud rabbitmq_vincewm的博客-CSDN博客")
 
+## 1 业务流程，订单失败后自动回滚解锁库存
 
-
-# 1 业务流程，订单失败后自动回滚解锁库存
-
-> ### 可靠消息+最终一致性方案
->
+> #### 可靠消息+最终一致性方案
+> 
 > 业务处理服务在业务事务提交之前，向实时消息服务请求发送消息，实时消息服务只记录消息数据，而不是真正的发送。
->
+> 
 > 业务处理服务在业务事务提交之后，向实时消息服务确认发送。只有在得到确认发送指令后，实时消息服务才会真正发送。
 
 在商品下单业务的最后要锁定库存，我们设置在锁定库存后发RabbitMQ延迟队列消息，通知锁定库存成功，两分钟后消费消息，根据库存信息查询检查订单是否存在，若不存在代表下订单失败，此时要回滚，也就是解锁库存。
 
-![在这里插入图片描述](谷粒商城笔记+踩坑（22）——库存自动解锁。RabbitMQ延迟队列.assets/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBASEdXNjg5,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![在这里插入图片描述](https://i-blog.csdnimg.cn/blog_migrate/9f1e0d61491cd57c80d71eec53213c2d.png#pic_center)
 
-# 2【仓库服务】RabbitMQ环境准备
+## 2【仓库服务】RabbitMQ环境准备
 
-## 2.1 导入依赖
+### 2.1 导入依赖
 
 ```XML
 <dependency>
@@ -41,9 +87,7 @@
 </dependency>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 2.2 yml配置RabbitMQ信息
+### 2.2 yml配置RabbitMQ信息
 
 ```bash
 spring:
@@ -57,9 +101,7 @@ spring:
         acknowledge-mode: manual
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 2.3 主启动类添加注解@EnableRabbit
+### 2.3 主启动类添加注解@EnableRabbit
 
 ```java
 @EnableRabbit
@@ -75,9 +117,7 @@ public class GulimallWareApplication {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 2.4 配置类，JSON消息转换、创建交换机、队列和绑定
+### 2.4 配置类，JSON消息转换、创建交换机、队列和绑定
 
 **过程：** 
 
@@ -179,46 +219,40 @@ public class MyRabbitMQConfig {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 2.5 导入seata依赖
+### 2.5 导入seata依赖
 
 common模块引入seata依赖，因为所有模块引用了公共模块的依赖，所以这里要排除不使用分布式事务模块的seata依赖
 
 认证、用户、优惠券、第三方等模块：
 
-![img](谷粒商城笔记+踩坑（22）——库存自动解锁。RabbitMQ延迟队列.assets/9a0f5421a6154e85b51e78e0d15de978.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a4735ac058df84f9c5bd2254e6d8ed76.png)
 
+## 3 监听库存解锁
 
+--
 
-# 3 监听库存解锁
-
-------
-
-## 3.0 分析
+### 3.0 分析
 
 **库存解锁的场景**
 
 订单取消和订单回滚。
 
-1. 下订单成功，**订单**过期没有支付被系统自动**取消**、被用户手动取消。都要解锁库存
-2. 下订单成功，库存锁定成功，接下来的业务调用失败，导致订单回滚;之前锁定的库存就要自动解锁
+1.  下订单成功，**订单**过期没有支付被系统自动**取消**、被用户手动取消。都要解锁库存
+2.  下订单成功，库存锁定成功，接下来的业务调用失败，导致订单回滚;之前锁定的库存就要自动解锁
 
 业务流程
 
-![img](谷粒商城笔记+踩坑（22）——库存自动解锁。RabbitMQ延迟队列.assets/f61bb63e6e9b4169abfa709a4b70621a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/483cdd1670fc4054694236832b017a3a.png)
 
+### 3.1 “仓库工作单” 数据库表、实体类、mapper添加字段“锁定状态”
 
+> wms\_ware\_order\_task仓库工作单表，表示等待被锁库存的订单们。
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/981c5c4a398ab82bed31a9cf03213585.png)
 
-## 3.1 “仓库工作单” 数据库表、实体类、mapper添加字段“锁定状态”
+wms\_ware\_order\_task\_detail仓库工作单详情表，表示订单哪个sku锁了哪些库存，这里添加两个字段：
 
-> wms_ware_order_task仓库工作单表，表示等待被锁库存的订单们。
->
-> ![img](谷粒商城笔记+踩坑（22）——库存自动解锁。RabbitMQ延迟队列.assets/dfb2423690a240c58913d8ee2aae4d7c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-wms_ware_order_task_detail仓库工作单详情表，表示订单哪个sku锁了哪些库存，这里添加两个字段：
-
- ![img](谷粒商城笔记+踩坑（22）——库存自动解锁。RabbitMQ延迟队列.assets/f2d7ad2159614faf815c5175bb63e46d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ ![](https://i-blog.csdnimg.cn/blog_migrate/8cf62e3b81c69afd8b439e86e9bd8703.png)
 
 这里“扣减” 状态是真实扣减了库存，也就是说订单交易成功了。
 
@@ -265,8 +299,6 @@ public class WareOrderTaskDetailEntity implements Serializable {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **修改 Mapper文件**
 
 修改`resources/mapper/ware/WareOrderTaskDetailDao.xml`
@@ -292,13 +324,11 @@ public class WareOrderTaskDetailEntity implements Serializable {
 </mapper>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 3.2 发消息MQ库存锁定成功
 
-## 3.2 发消息MQ库存锁定成功
+#### 3.2.1 封装库存锁定单传输类
 
-### 3.2.1 封装库存锁定单传输类
-
-库存锁定单 
+库存锁定单 
 
 ```java
 package com.atguigu.common.to.mq;
@@ -314,11 +344,10 @@ public class StockLockedTo {
      */
     private StockDetailTo detailTo;
 }
+
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-库存锁定详情单 
+库存锁定详情单  
 
 ```java
 package com.atguigu.common.to.mq;
@@ -357,22 +386,19 @@ public class StockDetailTo {
      */
     private Integer lockStatus;
 }
+
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.2.2 service，锁库存成功发延迟消息，内容是库存单
+#### 3.2.2 service，锁库存成功发延迟消息，内容是库存单
 
 > **业务流程**
->
-> 1. 保存库存工作单
-> 2. 保存库存工作单详情
-> 3. 给MQ发送锁定库存以及详情消息
-
-
+> 
+> 1.  保存库存工作单
+> 2.  保存库存工作单详情
+> 3.  给MQ发送锁定库存以及详情消息
 
 > **参数：**
->
+> 
 > ```java
 > //锁定库存的vo
 > @Data
@@ -387,10 +413,8 @@ public class StockDetailTo {
 > 
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-gulimall-ware 服务 `com.atguigu.gulimall.ware.service.imp` 路径下的 WareSkuServiceImpl 
+gulimall-ware 服务 `com.atguigu.gulimall.ware.service.imp` 路径下的 WareSkuServiceImpl 
 
 ```java
     @Transactional(rollbackFor = Exception.class)
@@ -479,8 +503,6 @@ gulimall-ware 服务 `com.atguigu.gulimall.ware.service.imp` 路径下的 WareSk
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```java
 @Data
 class SkuWareHashStock{
@@ -490,32 +512,24 @@ class SkuWareHashStock{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 3.3 监听消息，判断是否解锁库存
 
+--
 
-
-## 3.3 监听消息，判断是否解锁库存
-
-------
-
-### 3.3.1 业务流程 
+#### 3.3.1 业务流程 
 
 **业务流程：**接收到库存锁订单传输类，根据消息里的订单号查询商品订单，判断是否解锁库存
 
 是否接收到消息：
 
-- 接收到了消息
+-   **接收到了消息**，证明库存锁定成功了，根据消息内锁定单对象查用户下的订单：
+    -   1、没有这个订单。必须解锁
+    -   2、有这个订单：
+        -   订单状态：已取消：解锁库存
+        -   订单状态：没取消：不能解锁
+-   **没有接收到消息**，库存锁定失败了，库存回滚了。这种情况无需解锁
 
-  ，证明库存锁定成功了，根据消息内锁定单对象查用户下的订单： 	
-
-  - 1、没有这个订单。必须解锁
-  - 2、有这个订单： 	
-    - 订单状态：已取消：解锁库存
-    - 订单状态：没取消：不能解锁
-
-- **没有接收到消息**，库存锁定失败了，库存回滚了。这种情况无需解锁
-
-### 3.3.2 监听类监听消息
+#### 3.3.2 监听类监听消息
 
 gulimall-ware 服务中 `com.atguigu.gulimall.ware.listener` 路径下 StockReleaseListener
 
@@ -544,9 +558,7 @@ public class StockReleaseListener {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.3 service，判断是否解锁库存
+#### 3.3.3 service，判断是否解锁库存
 
 ```java
 /**
@@ -619,13 +631,11 @@ private void unLockStock(Long skuId, Long wareId, Integer num, Long taskDetailId
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.4 仓库模块远程调用订单模块
+#### 3.3.4 仓库模块远程调用订单模块
 
 1、编写远程调用 gulimall-order 服务feign接口
 
-gulimall-ware服务中 ` com.atguigu.gulimall.ware.feign` 路径下的 OrderFeignService类，代码如下：
+gulimall-ware服务中 `com.atguigu.gulimall.ware.feign` 路径下的 OrderFeignService类，代码如下：
 
 ```java
 package com.atguigu.gulimall.ware.feign;
@@ -639,9 +649,7 @@ public interface OrderFeignService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.5【订单模块】controller，通过订单号获取订单的详细信息
+#### 3.3.5【订单模块】controller，通过订单号获取订单的详细信息
 
 gulimall-order服务中 `com.atguigu.gulimall.order.controller` 路径下的 OrderController类，代码如下：
 
@@ -664,9 +672,7 @@ public class OrderController {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.6【订单模块】service，通过订单号获取订单的详细信息
+#### 3.3.6【订单模块】service，通过订单号获取订单的详细信息
 
 gulimall-order服务中 `com.atguigu.gulimall.order.service.impl` 路径下的 OrderServiceImpl类，代码如下：
 
@@ -678,11 +684,7 @@ public OrderEntity getOrderByOrderSn(String orderSn) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.7 接收信息的VO类
-
-
+#### 3.3.7 接收信息的VO类
 
 ```java
 package com.atguigu.gulimall.ware.vo;
@@ -858,13 +860,11 @@ public class OrderVo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.8 解锁库存详情方法
+#### 3.3.8 解锁库存详情方法
 
 gulimall-ware服务中的 `/com/atguigu/gulimall/ware/service/impl/WareSkuServiceImpl.java` 路径下 WareSkuServiceImpl.java类的方法
 
-> 注意：上面解锁库存方法是“unlocakStock” ，这里是“unLockStock”
+> 注意：上面解锁库存方法是“unlocakStock” ，这里是“unLockStock”
 
 ```java
 /**
@@ -879,13 +879,9 @@ private void unLockStock(Long skuId, Long wareId, Integer num, Long taskDetailId
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```java
 void unlockStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 gulimall-ware服务中的 `resources/mapper/ware/WareSkuDao.xml` 文件
 
@@ -895,9 +891,7 @@ gulimall-ware服务中的 `resources/mapper/ware/WareSkuDao.xml` 文件
 </update>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 3.3.9【订单模块】 修改拦截器
+#### 3.3.9【订单模块】 修改拦截器
 
 > 由于gulimall-order添加了拦截器，只要使用该服务必须登录才行。因为这边需要远程调用订单，但不需要登录，所以给这个路径放行
 
@@ -945,20 +939,16 @@ public class LoginUserInterceptor implements HandlerInterceptor {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+## 4 监听消息完整代码
 
-
-
-# 4 监听消息完整代码
-
-------
+--
 
 1)、创建一个类监听 `stock.release.stock.queue` 队列
 
 gulimall-ware服务的 `com.atguigu.gulimall.ware.listener` 路径 StockReleaseListener 类，接收到消息之后调用 Service层 WareSkuServiceImpl.java 实现类的 unlockStock 方法实现解锁库存：
 
-1. 没有异常捕捉，则成功解锁消息。手动ACK
-2. 捕捉到异常，则 消息拒绝以后重新放到队列里面，让别人继续消费解锁
+1.  没有异常捕捉，则成功解锁消息。手动ACK
+2.  捕捉到异常，则 消息拒绝以后重新放到队列里面，让别人继续消费解锁
 
 ```java
 package com.atguigu.gulimall.ware.listener;
@@ -984,8 +974,6 @@ public class StockReleaseListener {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 2)、service层业务方法
 
@@ -1061,5 +1049,3 @@ private void unLockStock(Long skuId, Long wareId, Integer num, Long taskDetailId
     orderTaskDetailService.updateById(entity);
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)

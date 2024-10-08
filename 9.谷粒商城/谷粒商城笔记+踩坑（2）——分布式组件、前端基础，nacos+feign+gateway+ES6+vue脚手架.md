@@ -1,48 +1,166 @@
->  **导航：**
->
-> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501)
->
+> **导航：**
+> 
+> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑汇总篇")
+> 
 >  **Java笔记汇总：**
->
-> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289)
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289 "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客")
 
-[TOC]
+**目录**
 
+[4、分布式组件](#%E5%9B%9B%E3%80%81%E5%88%86%E5%B8%83%E5%BC%8F%E7%BB%84%E4%BB%B6)
 
+[4.0. 简介](#4.0.%20%E7%AE%80%E4%BB%8B)
 
-# 4、分布式组件
+[4.0.1、SpringCloud 对比SpringCloud Alibaba](#4.0.1%E3%80%81SpringCloud%20%E5%AF%B9%E6%AF%94SpringCloud%20Alibaba)
+
+[4.0.2、项目技术搭配方案选择](#4.0.2%E3%80%81%E9%A1%B9%E7%9B%AE%E6%8A%80%E6%9C%AF%E6%90%AD%E9%85%8D%E6%96%B9%E6%A1%88)
+
+[4.0.3、common模块引入SpringCloud Alibaba依赖管理](#4.0.3%E3%80%81common%E6%A8%A1%E5%9D%97%E5%BC%95%E5%85%A5SpringCloud%20Alibaba%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86)
+
+[4.1 nacos下载、启动、配置](#1.%20nacos%E7%94%A8%E4%BD%9C%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83)
+
+[4.1.1、nacos下载安装](#4.1.1%E3%80%81nacos%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85)
+
+[4.1.2、配置nacos注册中心](#4.1%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B.2%E3%80%81%E9%85%8D%E7%BD%AEnacos)
+
+[4.1.3、启动gulimall-xxx, 查看服务注册中心](#4.1%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B%E2%80%8B.3%E3%80%81%E5%90%AF%E5%8A%A8gulimall-xxx%2C%20%E6%9F%A5%E7%9C%8B%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83)
+
+[4.2. openfegin远程调用，案例演示](#2.%20openfegin%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8)
+
+[4.2.0、需求，member调用coupon](#4.2.0%E3%80%81%E9%9C%80%E6%B1%82%EF%BC%8Cmember%E8%B0%83%E7%94%A8coupon)
+
+[4.2.1、common模块引入openfegin依赖](#4.2.1%E3%80%81common%E6%A8%A1%E5%9D%97%E5%BC%95%E5%85%A5openfegin%E4%BE%9D%E8%B5%96)
+
+[4.2.2、 coupon的controller编写测试方法](#4.2.2%E3%80%81%20coupon%E7%9A%84controller%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95)
+
+[4.2.3、member的引导类注解@EnableFeignClients](#4.2.3%E3%80%81member%E7%9A%84%E5%BC%95%E5%AF%BC%E7%B1%BB%E6%B3%A8%E8%A7%A3%40EnableDiscoveryClient)
+
+[4.2.4、member模块编写coupon的客户端](#4.2.4%E3%80%81member%E6%A8%A1%E5%9D%97%E7%BC%96%E5%86%99coupon%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF)
+
+[4.2.5、member模块注入coupon的客户端](#4.2.5%E3%80%81member%E6%A8%A1%E5%9D%97%E6%B3%A8%E5%85%A5coupon%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF%C2%A0) 
+
+[4.3. nacos用作配置中心](#3.%20nacos%E7%94%A8%E4%BD%9C%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83)
+
+[4.3.1、依赖 nacos-config,bootstrap](#4.3.1%E3%80%81common%E4%B8%AD%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%20nacos-config)
+
+[4.3.2、coupons模块创建bootstrap.yml](#4.3.2%E3%80%81coupons%E6%A8%A1%E5%9D%97%E5%88%9B%E5%BB%BAbootstrap.yml)
+
+[4.3.3、nacos服务端添加配置文件](#4.3.3%E3%80%81nacos%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)
+
+[4.3.4、coupon的controller中编写测试代码](#4.3.4%E3%80%81coupon%E7%9A%84controller%E4%B8%AD%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81)
+
+[4.3.5、启动测试](#4.3.5%E3%80%81%E5%90%AF%E5%8A%A8%E6%B5%8B%E8%AF%95)
+
+[4.3.6、配置热更新，controller注解@RefreshScope动态刷新](#4.3.6%E3%80%81%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0%EF%BC%8Ccontroller%E6%B3%A8%E8%A7%A3%40RefreshScope%E5%8A%A8%E6%80%81%E5%88%B7%E6%96%B0)
+
+[4.3.7、命名空间](#4.3.7%E3%80%81%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4)
+
+[4.3.8、根据服务创建命名空间，各命名空间根据环境分组](#4.3.8%E3%80%81%E7%BB%88%E6%9E%81%E7%89%88%EF%BC%8C%E6%A0%B9%E6%8D%AE%E6%9C%8D%E5%8A%A1%E5%88%9B%E5%BB%BA%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%EF%BC%8C%E5%90%84%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E6%A0%B9%E6%8D%AE%E7%8E%AF%E5%A2%83%E5%88%86%E7%BB%84)
+
+[4.3.9、按类型抽取配置，加载多配置集](#4.3.9%E3%80%81%E6%8C%89%E7%B1%BB%E5%9E%8B%E6%8A%BD%E5%8F%96%E9%85%8D%E7%BD%AE%EF%BC%8C%E5%8A%A0%E8%BD%BD%E5%A4%9A%E9%85%8D%E7%BD%AE%E9%9B%86%C2%A0) 
+
+[4.4. 网关gateway](#4.%20%E7%BD%91%E5%85%B3gateway-88)
+
+[4.4.0、简介](#4.4.0%E3%80%81%E7%AE%80%E4%BB%8B%C2%A0) 
+
+[4.4.1、gulimall父工程下新建gulimall-gateway模块作为网关](#4.4.1%E3%80%81gulimall%E7%88%B6%E5%B7%A5%E7%A8%8B%E4%B8%8B%E6%96%B0%E5%BB%BAgulimall-gateway%E4%BD%9C%E4%B8%BA%E7%BD%91%E5%85%B3)
+
+[4.4.2、演示，网关路由到百度](#4.4.2%E3%80%81%E6%BC%94%E7%A4%BA%EF%BC%8C%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1%E5%88%B0%E7%99%BE%E5%BA%A6)
+
+[5、前端基础（回顾，与项目无关）](#%E4%BA%94%E3%80%81%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80)
+
+[5.1. ES6基础](#1.%20ES6%E5%9F%BA%E7%A1%80)
+
+[5.1.1、let & const](#1%E3%80%81let%20%26%20const)
+
+[5.1.2、解构表达式](#2%E3%80%81%E8%A7%A3%E6%9E%84%E8%A1%A8%E8%BE%BE%E5%BC%8F)
+
+[5.1.3、函数优化](#3%E3%80%81%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96)
+
+[5.1.4、对象优化](#4%E3%80%81%E5%AF%B9%E8%B1%A1%E4%BC%98%E5%8C%96)
+
+[5.1.5、map和reduce](#5%E3%80%81map%E5%92%8Creduce)
+
+[5.1.6、promise](#6%E3%80%81promise)
+
+[5.1.7、模块化](#7%E3%80%81%E6%A8%A1%E5%9D%97%E5%8C%96)
+
+[5.2. VUE基础](#2.%20VUE%E5%9F%BA%E7%A1%80)
+
+[5.2.1、VUE安装](#1%E3%80%81VUE%E5%AE%89%E8%A3%85)
+
+[5.2.2、v-model, v-on](#2%E3%80%81v-model%2C%20v-on)
+
+[5.2.3、v-text、v-html、v-ref](#3%E3%80%81v-text%E3%80%81v-html%E3%80%81v-ref)
+
+[5.2.4、单向绑定v-bind:](#4%E3%80%81%E5%8D%95%E5%90%91%E7%BB%91%E5%AE%9Av-bind%3A)
+
+[5.2.5、双向绑定v-model](#5%E3%80%81%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9Av-model)
+
+[5.2.6、v-on事件](#6%E3%80%81v-on%E4%BA%8B%E4%BB%B6)
+
+[5.2.7、v-for遍历](#7%E3%80%81v-for%E9%81%8D%E5%8E%86)
+
+[5.2.8、v-if和v-show](#8%E3%80%81v-if%E5%92%8Cv-show)
+
+[5.2.9、v-else和v-else-if](#9%E3%80%81v-else%E5%92%8Cv-else-if)
+
+[5.2.10、计算属性和监听器](#10%E3%80%81%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8)
+
+[5.2.11、过滤器filter](#11%E3%80%81%E8%BF%87%E6%BB%A4%E5%99%A8filter)
+
+[5.2.12、组件化](#12%E3%80%81%E7%BB%84%E4%BB%B6%E5%8C%96)
+
+[5.2.13、生命周期和钩子函数](#13%E3%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%92%8C%E9%92%A9%E5%AD%90%E5%87%BD%E6%95%B0)
+
+[5.3. vue脚手架进行模块化开发](#3.%20vue-dome)
+
+[5.3.1、全局安装webpack](#1%E3%80%81%E5%85%A8%E5%B1%80%E5%AE%89%E8%A3%85webpack)
+
+[5.3.2、全局安装vue脚手架](#2%E3%80%81%E5%85%A8%E5%B1%80%E5%AE%89%E8%A3%85vue%E8%84%9A%E6%89%8B%E6%9E%B6)
+
+[5.3.3、初始化vue项目](#3%E3%80%81%E5%88%9D%E5%A7%8B%E5%8C%96vue%E9%A1%B9%E7%9B%AE)
+
+[5.3.4、vue项目目录结构](#4%E3%80%81vue%E9%A1%B9%E7%9B%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84)
+
+[5.3.5、分析主页展示逻辑](#5.3.5%E3%80%81%E4%BF%AE%E6%94%B9vue%E9%A1%B9%E7%9B%AE)
+
+[5.3.6、新建Hello组件，负责/hello路径](#5.3.6%E3%80%81%E6%96%B0%E5%BB%BAHello%E7%BB%84%E4%BB%B6%EF%BC%8C%E8%B4%9F%E8%B4%A3%2Fhello%E8%B7%AF%E5%BE%84)
+
+[5.3.7、快速生成组件模板](#5.3.6%E3%80%81%E5%BF%AB%E9%80%9F%E7%94%9F%E6%88%90%E7%BB%84%E4%BB%B6%E6%A8%A1%E6%9D%BF)
+
+[5.4. ElementUI](#5.4.%20ElementUI)
+
+--
+
+## 4、分布式组件
 
 > 本节主要用于回顾，主要就**4.4.1网关模块时真实操作一下**就行，其他都是测试。
 
-## 4.0. 简介
+### 4.0. 简介
 
-### 4.0.1、**SpringCloud 对比SpringCloud Alibaba**
+#### 4.0.1、**SpringCloud 对比SpringCloud Alibaba**
 
 **springcloud对比SpringCloud Alibaba：** 
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/e1f6524c050d493299c7e99102136e80.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/3049aa7135cd57fbae86b65f6c7fdfbb.png)
 
 **企业需求：**
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/41297e7330aa4cffaba32bc2b88368bc.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/02d52dd2bcdb4cf9515523efbd319a51.png)
 
+#### 4.0.2、项目技术搭配方案选择
 
+![](https://i-blog.csdnimg.cn/blog_migrate/5e464ee74a0bb25ab3798e1a9900bea8.png)
 
+![](https://i-blog.csdnimg.cn/blog_migrate/6a1fe7994d464988eb55eb55038c2e25.png)
 
+#### 4.0.3、common模块引入**SpringCloud Alibaba**依赖管理
 
-### 4.0.2、项目技术搭配方案选择
+[spring-cloud-alibaba/README-zh.md at 2021.x · alibaba/spring-cloud-alibaba · GitHub](https://github.com/alibaba/spring-cloud-alibaba/blob/2021.x/README-zh.md "spring-cloud-alibaba/README-zh.md at 2021.x · alibaba/spring-cloud-alibaba · GitHub")
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/2022ebbb2b6540f8833ca9c4dda83aa2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/244532aea4704473ab56ebf327626050.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 4.0.3、common模块引入**SpringCloud Alibaba**依赖管理
-
-[spring-cloud-alibaba/README-zh.md at 2021.x · alibaba/spring-cloud-alibaba · GitHub](https://github.com/alibaba/spring-cloud-alibaba/blob/2021.x/README-zh.md)
-
-guimall-common模块的pom： 
+guimall-common模块的pom： 
 
 ```XML
     <dependencyManagement>
@@ -58,89 +176,73 @@ guimall-common模块的pom：
     </dependencyManagement>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 4.1 nacos下载、启动、配置
 
-## 4.1 nacos下载、启动、配置
+#### 4.1.**1、nacos下载安装**
 
-### 4.1.**1、nacos下载安装**
+-   下载地址：https://github.com/alibaba/nacos/releases
 
-- 下载地址：https://github.com/alibaba/nacos/releases
-
-![image-20210925231418023](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/a9eb73043758e9a98fa8b5c2074e7551.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925231418023](https://i-blog.csdnimg.cn/blog_migrate/b1c719d06b49174904adc310bbf52520.png)​
 
 **启动：** 
 
-- 解压后启动nacos：
+-   解压后启动nacos：
 
- 在bin目录下cmd：
+ 在bin目录下cmd：
 
 ```XML
 startup.cmd -m standalone
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+-   命令运行成功后直接访问http://localhost:8848/nacos，默认账号密码都是nacos
 
-- 命令运行成功后直接访问http://localhost:8848/nacos，默认账号密码都是nacos
+[http://localhost:8848/nacos/index.html](http://localhost:8848/nacos/index.html "http://localhost:8848/nacos/index.html")
 
-http://localhost:8848/nacos/index.html
+![image-20210925231458882](https://i-blog.csdnimg.cn/blog_migrate/96fe2b8589b64385b81fc980979f571f.png)​
 
-![image-20210925231458882](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/850425674597f5cc30f316de1aea46f8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 4.1.**2、配置nacos注册中心**
 
-### 4.1.**2、配置nacos注册中心**
+-    **common引入依赖**
+    
+    ```XML
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            </dependency>
+    ```
+    
 
--  **common引入依赖**
+-   在**所有子模块gulimall-xxx里yml**里写**`spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848`**（指定nacos的地址）。再指定**spring.applicatin.name**告诉注册到nacos中以什么命名
+    
+    ```bash
+    spring:
+      application:
+    #注意修改服务名
+        name: gulimall-coupon
+      cloud:
+        nacos:
+          discovery:
+            server-addr: 127.0.0.1:8848
+    ```
+    
+-   在**所有子模块gulimall-xxx引导类**上使用 **`@EnableDiscoveryClient` 注解开启Feign**服务注册与发现功能
+    
+-   ```java
+    @EnableDiscoveryClient
+    @SpringBootApplication
+    public class GulimallCouponApplication {
+        public static void main(String[] args) {
+            SpringApplication.run(GulimallCouponApplication.class, args);
+        }
+    }
+    ```
+    
 
-  ```XML
-          <dependency>
-              <groupId>com.alibaba.cloud</groupId>
-              <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-          </dependency>
-  ```
+#### 4.1.**3、启动gulimall-xxx, 查看服务注册中心**
 
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/3b089ab8fbac9c74fa1ac467cf5ae1ce.png)​
 
-
-
-
-
-- 在**所有子模块gulimall-xxx里yml**里写**`spring.cloud.nacos.discovery.server-addr=127.0.0.1:8848`**（指定nacos的地址）。再指定**spring.applicatin.name**告诉注册到nacos中以什么命名
-
-  ```bash
-  spring:
-    application:
-  #注意修改服务名
-      name: gulimall-coupon
-    cloud:
-      nacos:
-        discovery:
-          server-addr: 127.0.0.1:8848
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-- 在**所有子模块gulimall-xxx引导类**上使用 **`@EnableDiscoveryClient` 注解开启Feign**服务注册与发现功能
-
-- ```java
-  @EnableDiscoveryClient
-  @SpringBootApplication
-  public class GulimallCouponApplication {
-      public static void main(String[] args) {
-          SpringApplication.run(GulimallCouponApplication.class, args);
-      }
-  }
-  ```
-
-  ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.1.**3、启动gulimall-xxx, 查看服务注册中心**
-
-
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/ddf5d5083f4c4fa3963023160f08bcb7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-## 4.2. openfegin远程调用，案例演示
+### 4.2. openfegin远程调用，案例演示
 
 声明式远程调用
 
@@ -148,11 +250,11 @@ feign是一个声明式的HTTP客户端，他的目的就是让远程调用更�
 
 会员服务想要远程调用优惠券服务，只需要给会员服务里引入openfeign依赖，他就有了远程调用其他服务的能力。
 
-### 4.2.0**、需求，member调用coupon**
+#### 4.2.0**、需求，member调用coupon**
 
 会员模块通过feign远程调用优惠券模块controller的方法。
 
-### 4.2.**1、common模块引入**openfegin**依赖**
+#### 4.2.**1、common模块引入**openfegin**依赖**
 
 ```XML
 <dependency>
@@ -161,11 +263,9 @@ feign是一个声明式的HTTP客户端，他的目的就是让远程调用更�
 </dependency>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 4.2.**2、 coupon的controller编写测试方法**
 
-### 4.2.**2、 coupon的controller编写测试方法**
-
- 在gulimall-coupon中的**CouponController**中添加**测试方法**
+ 在gulimall-coupon中的**CouponController**中添加**测试方法**
 
 ```java
     @RequestMapping("/member/list")
@@ -177,10 +277,8 @@ feign是一个声明式的HTTP客户端，他的目的就是让远程调用更�
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > R 结果类：
->
+> 
 > ```java
 > public class R extends HashMap<String, Object> {
 > 	private static final long serialVersionUID = 1L;
@@ -227,10 +325,8 @@ feign是一个声明式的HTTP客户端，他的目的就是让远程调用更�
 > 	}
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 4.2.3、member的引导类注解`**@EnableFeignClients**`
+#### 4.2.3、member的引导类注解`**@EnableFeignClients**`
 
 在**member的主启动类**上加注解@EnableFeignClients**启用`feign`客户端**
 
@@ -245,11 +341,9 @@ public class GulimallMemberApplication {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+>  @EnableDiscoveryClient是服务的注册发现。
 
->  @EnableDiscoveryClient是服务的注册发现。
-
-### 4.2.4、member模块编写coupon的客户端
+#### 4.2.4、member模块编写coupon的客户端
 
 在`com.xmh.gulimall.member.**feign**`中**新建接口`CouponFeignService（或CouponClient）`**
 
@@ -265,9 +359,7 @@ public interface CouponFeignService{
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.2.5、member模块注入coupon的客户端 
+#### 4.2.5、member模块注入coupon的客户端 
 
 在member的**MemberController**写一个**测试**
 
@@ -285,19 +377,17 @@ public interface CouponFeignService{
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+启动gulimall-me mber，gulimall-coupon项目。**访问http://localhost:8000/member/member/coupons**测试
 
-启动gulimall-me mber，gulimall-coupon项目。**访问http://localhost:8000/member/member/coupons**测试
-
-![image-20210925232220401](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/1d0846759ac8e32d75ac4a4650fa02de.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925232220401](https://i-blog.csdnimg.cn/blog_migrate/f4aa445281c9c8dbf1ab7788d50728b0.png)​
 
 测试成功！
 
-## 4.3. nacos用作配置中心
+### 4.3. nacos用作配置中心
 
-**Nacos**一方面可以**将配置集中管理**，另一方面可以在**配置变更时**，及时**通知微服务**，实现**配置的热更新。** 
+**Nacos**一方面可以**将配置集中管理**，另一方面可以在**配置变更时**，及时**通知微服务**，实现**配置的热更新。** 
 
-### 4.3.**1、依赖 nacos-config,bootstrap**
+#### 4.3.**1、依赖 nacos-config,bootstrap**
 
 **common中添加依赖**
 
@@ -314,14 +404,12 @@ public interface CouponFeignService{
         </dependency>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.3.**2、coupons模块创建bootstrap.yml**
+#### 4.3.**2、coupons模块创建bootstrap.yml**
 
 **在coupons模块中创建/src/main/resources/bootstrap.yml，优先级别application.properties高**
 
 > **问题：nacos配置要先于yml，但如果尚未读取yml，又如何得知nacos地址并获取nacos配置呢？**
->
+> 
 > **答案：**因此spring引入了一种新的配置文件：**bootstrap.yaml**文件，优先级高于application.yml，会在application.yml之前被读取。
 
 ```bash
@@ -336,25 +424,21 @@ spring:
         file-extension: yaml # 指定配置文件为yaml格式
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.3.**3、nacos服务端**添加配置文件
+#### 4.3.**3、nacos服务端**添加配置文件
 
 **浏览器去nacos里的配置列表，点击＋号，data ID：`gulimall-coupon.yaml`，配置**
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/633bf1b66da7dd27ffb5d0e452245e54.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/dd1fa046c3d855e0118c90debb44913a.png)​ 
 
+![image-20210925232732790](https://i-blog.csdnimg.cn/blog_migrate/ed8d9469386c49fbcbce199e5cb87905.png)​
 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/d95f8837beaf10f5ab1f4e21313f6a12.png)​ 
+> 
+> 这里分组名称默认DEFAULT\_GROUP，我们看服务列表也可以看到所有服务默认都在这个分组：
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/292425d7a7552f0336441593528a10af.png)​
 
-![image-20210925232732790](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/82eba787d3644cd070eeeeb1d32995f3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-> ![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/babffc766d1156de102fd226db15b78b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
->
-> 这里分组名称默认DEFAULT_GROUP，我们看服务列表也可以看到所有服务默认都在这个分组：
->
-> ![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/2e65719e63074956a2f68b4b63bb5c4e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.3.**4、coupon的controller中编写测试代码**
+#### 4.3.**4、coupon的controller中编写测试代码**
 
 ```java
     @Value("${coupon.user.name}")
@@ -369,63 +453,53 @@ spring:
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.3.**5、启动测试**
+#### 4.3.**5、启动测试**
 
 **访问http://localhost:7000/coupon/coupon/nacos测试**
 
-![image-20210925233031028](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/632d9b1752880ad051d1223949454ada.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925233031028](https://i-blog.csdnimg.cn/blog_migrate/db158cf03f2d516982bf2dc80da7d8df.png)​
 
-### 4.3.**6、配置热更新，controller注解`@RefreshScope`动态刷新**
+#### 4.3.**6、配置热更新，controller注解`@RefreshScope`动态刷新**
 
-![image-20210925233121327](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/3956d03fcb2d2873e2d3a132668f7fae.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925233121327](https://i-blog.csdnimg.cn/blog_migrate/93352fb3e912782335bc2c6dd5f6e405.png)​
 
+#### 4.3.7、命名空间
 
-
-### 4.3.7、命名空间
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/0029036d4c5548669aaf3dfeec63dd62.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/946f545ed617748bb48ae0d5bd60842f.png)​ 
 
 命名空间用于将开发测试生产三种**环境**、**或者**各**微服务**之间**配置隔离**。默认命名空间是public：
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/5ac1f825e2cc48dab2d2ab49e9b541c4.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/26505760f6595218480a3c617417a5aa.png)​
 
 **不同命名空间设置不同配置：** 
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/57ad36cf140d4cc39ed4c961669e103a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/9a3273384757105e1f1af22fb6d36de0.png)​ 
 
 **指定命名空间：** 
 
- ![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/67c1d2853a57414bb862ca4467f1fea9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ ![](https://i-blog.csdnimg.cn/blog_migrate/415ec3db090e74248917f8c01bfcf6e9.png)​
 
-### 4.3.8、根据服务创建命名空间，各命名空间根据环境分组
+#### 4.3.8、根据服务创建命名空间，各命名空间根据环境分组
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/ba502d1797004ec3937260c206812b4a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/46d8e2b512608616a6e0e228cda849f6.png)​
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/c6e7ab2c58e343a3be6868cbbd91722d.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/0ebf82d6252871872717c0380334db9e.png)​
 
+![](https://i-blog.csdnimg.cn/blog_migrate/976b80da68f292cb83accd4315684392.png)​ 
 
+#### 4.3.9、按类型抽取配置，加载多配置集 
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/09a882b2c44549db89d83a6eb574db07.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/d2db5b401eea56fce29cf1323ea93394.png)​ 
 
-### 4.3.9、按类型抽取配置，加载多配置集 
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/2caabaa4e97d432995bee2a6bdccca51.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
-
-> 开发时为了方便可以将配置文件写在项目中，等发布后再抽取到nacos中。 
+> 开发时为了方便可以将配置文件写在项目中，等发布后再抽取到nacos中。 
 
 **将datasource相关配置抽取成一个配置**，在coupon命名空间下，分组名为dev（根据环境分组） ：
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/a1b81469ec734e03af483e6c1c49475c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e25274fb7839250faaaa9a59adf3e06e.png)​
 
 **使用：**
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/197b9f57f4994975bc26ebfb109cb4a9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/5237085b70e77e5a53cf05a918f52ece.png)​ 
 
 **或者bootstrap.yml** 
 
@@ -445,21 +519,15 @@ spring:
             refresh: true
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 4.4. 网关gateway
 
-
-
-## 4.4. 网关gateway
-
-### 4.4.0、简介 
+#### 4.4.0、简介 
 
 网关的**核心功能特性**：
 
-- **请求路由**
-- **权限控制**
-- **限流**
-
-
+-   **请求路由**
+-   **权限控制**
+-   **限流**
 
 动态上下线：发送请求需要知道商品服务的地址，如果商品服务器有123服务器，1号掉线后，还得改，所以需要网关动态地管理，他能从注册中心中实时地感知某个服务上线还是下线。【先通过网关，网关路由到服务提供者】
 
@@ -475,24 +543,24 @@ https://spring.io/projects/spring-cloud-gateway
 
 **三大核心概念：**
 
-- **Route路由:** The basic building block of the gateway. It is defined by an ID, a destination URI, a collection of predicates断言, and a collection of filters. A route is matched if the aggregate predicate is true.**发一个请求给网关，网关要将请求路由到指定的服务。路由有id，目的地uri，断言的集合，匹配了断言就能到达指定位置，**
-- **Predicate断言:** This is a Java 8 Function Predicate. The input type is a Spring Framework ServerWebExchange. This lets you match on anything from the HTTP request, such as headers or parameters.**就是java里的断言函数，匹配请求里的任何信息，包括请求头等。根据请求头路由哪个服务**
-- **Filter过滤:** These are instances of Spring Framework GatewayFilter that have been constructed with a specific factory. Here, you can modify requests and responses before or after sending the downstream request.**过滤器请求和响应都可以被修改。
-   客户端发请求给服务端。中间有网关。先交给映射器，如果能处理就交给handler处理，然后交给一系列filer，然后给指定的服务，再返回回来给客户端。**
+-   **Route路由:** The basic building block of the gateway. It is defined by an ID, a destination URI, a collection of predicates断言, and a collection of filters. A route is matched if the aggregate predicate is true.**发一个请求给网关，网关要将请求路由到指定的服务。路由有id，目的地uri，断言的集合，匹配了断言就能到达指定位置，**
+-   **Predicate断言:** This is a Java 8 Function Predicate. The input type is a Spring Framework ServerWebExchange. This lets you match on anything from the HTTP request, such as headers or parameters.**就是java里的断言函数，匹配请求里的任何信息，包括请求头等。根据请求头路由哪个服务**
+-   **Filter过滤:** These are instances of Spring Framework GatewayFilter that have been constructed with a specific factory. Here, you can modify requests and responses before or after sending the downstream request.**过滤器请求和响应都可以被修改。  
+    客户端发请求给服务端。中间有网关。先交给映射器，如果能处理就交给handler处理，然后交给一系列filer，然后给指定的服务，再返回回来给客户端。**
 
 客户端发请求给服务端。中间有网关。先交给映射器，如果能处理就交给handler处理，然后交给一系列filer，然后给指定的服务，再返回回来给客户端。
 
-![image-20210925233712996](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/988e7a522e8e3e5275d4f99d06ab6485.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925233712996](https://i-blog.csdnimg.cn/blog_migrate/6a90dc066d40e89f765dcefca5703f2f.png)​
 
-### 4.4.**1、gulimall父工程下新建gulimall-gateway模块作为网关**
+#### 4.4.**1、gulimall父工程下新建gulimall-gateway模块作为网关**
 
 新建springboot项目，勾选gateway：
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/dc8e83217e7249ccb75ed49739a2f116.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d31ea91abe32751a1cefd9f4d74a5f6c.png)​
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/6f934bc40da04464b2ea63003c46a5e1.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/0beaea83653b77505ab0f1f7fdbff60e.png)​ 
 
-pom导入common模块 
+pom导入common模块 
 
 ```XML
     <dependencies>
@@ -508,15 +576,13 @@ pom导入common模块
     </dependencies>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 在nacos上新建gateway命名空间
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/dedd8699898e4367841ac090d2bde6f7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/ea6149f118328747df1af9bfc538ef86.png)​ 
 
-在gateway命名空间下新建配置`gulimall-gateway.yml`： 
+在gateway命名空间下新建配置`gulimall-gateway.yml`： 
 
-![image-20210925234232602](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/6635a7d57f43bef6edff74258f6fa39b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925234232602](https://i-blog.csdnimg.cn/blog_migrate/753006b806685704f9bbb96b85259ffd.png)​
 
 配置application.yml
 
@@ -531,8 +597,6 @@ spring:
   application:
     name: gulimall-gateway
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 配置bootstrap.yml
 
@@ -549,17 +613,13 @@ spring:
         #namespace: d717d0ee-7a07-4125-9881-3ef57d696ad3
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **引导类注解@EnableDiscoveryClient，并排除数据源配置：**
 
-> **引入mybatisplus依赖后不配置数据源报错：**
->
+> **引入mybatisplus依赖​​​​​​​后不配置数据源报错：**
 > 
->
-> ![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/e3df5335e938449f99896d3494bd8ca7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
->  因为引入了common模块的依赖，common里有mybatisplus依赖。**引入了mybatisplus依赖就必须配置数据源项目才能运行，而网关模块没必要配置数据源，所以这里要排除。**
+> ![](https://i-blog.csdnimg.cn/blog_migrate/238ddd8081ec6500a9a7c6382297fd24.png)
+> 
+>  因为引入了common模块的依赖，common里有mybatisplus依赖。**引入了mybatisplus依赖就必须配置数据源项目才能运行，而网关模块没必要配置数据源，所以这里要排除。**
 
 ```java
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}) //不用数据源，过滤掉数据源配置
@@ -571,9 +631,7 @@ public class GulimallGatewayApplication {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 4.4.**2、演示，网关路由到百度**
+#### 4.4.**2、演示，网关路由到百度**
 
 > **需求：访问http://localhost:88?url=baidu 切换到百度， http://localhost:88?url=qq 切换到qq**
 
@@ -603,53 +661,47 @@ spring:
     name: gulimall-gateway
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > **断言工厂包括：** 
->
-> | **名称**   | **说明**                       | **示例**                                                     |
-> | ---------- | ------------------------------ | ------------------------------------------------------------ |
-> | After      | 是某个时间点后的请求           | - After=2037-01-20T17:42:47.789-07:00[America/Denver]        |
-> | Before     | 是某个时间点之前的请求         | - Before=2031-04-13T15:14:47.433+08:00[Asia/Shanghai]        |
-> | Between    | 是某两个时间点之前的请求       | - Between=2037-01-20T17:42:47.789-07:00[America/Denver], 2037-01-21T17:42:47.789-07:00[America/Denver] |
-> | Cookie     | 请求必须包含某些cookie         | - Cookie=chocolate, ch.p                                     |
-> | Header     | 请求必须包含某些header         | - Header=X-Request-Id, \d+                                   |
-> | Host       | 请求必须是访问某个host（域名） | - Host=**.somehost.org,**.anotherhost.org                    |
-> | Method     | 请求方式必须是指定方式         | - Method=GET,POST                                            |
-> | **Path**   | **请求路径**必须符合指定规则   | **- Path=**/red/{segment},/blue/**                           |
-> | Query      | 请求参数必须包含指定参数       | - Query=name, Jack或者- Query=name                           |
-> | RemoteAddr | 请求者的ip必须是指定范围       | - RemoteAddr=192.168.1.1/24                                  |
-> | Weight     | 权重处理                       |                                                              |
->
-> 具体网关内容参考：
->
-> [SpringCloud基础2——nacos配置、Feign、Gateway_nacos feign配置_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126772669?spm=1001.2014.3001.5501)
+> 
+> | **名称** | **说明** | **示例** |
+> | --- | --- | --- |
+> | After | 是某个时间点后的请求 | \- After=2037-01-20T17:42:47.789-07:00\[America/Denver\] |
+> | Before | 是某个时间点之前的请求 | \- Before=2031-04-13T15:14:47.433+08:00\[Asia/Shanghai\] |
+> | Between | 是某两个时间点之前的请求 | \- Between=2037-01-20T17:42:47.789-07:00\[America/Denver\], 2037-01-21T17:42:47.789-07:00\[America/Denver\] |
+> | Cookie | 请求必须包含某些cookie | \- Cookie=chocolate, ch.p |
+> | Header | 请求必须包含某些header | \- Header=X-Request-Id, \\d+ |
+> | Host | 请求必须是访问某个host（域名） | \- Host=**.somehost.org,**.anotherhost.org |
+> | Method | 请求方式必须是指定方式 | \- Method=GET,POST |
+> | **Path** | **请求路径**必须符合指定规则 | **\- Path=**/red/{segment},/blue/\*\* |
+> | Query | 请求参数必须包含指定参数 | \- Query=name, Jack或者- Query=name |
+> | RemoteAddr | 请求者的ip必须是指定范围 | \- RemoteAddr=192.168.1.1/24 |
+> | Weight | 权重处理 |  |
+> 
+> ​​​​​​​具体网关内容参考： [SpringCloud基础2——nacos配置、Feign、Gateway\_nacos feign配置\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126772669?spm=1001.2014.3001.5501 "SpringCloud基础2——nacos配置、Feign、Gateway_nacos feign配置_vincewm的博客-CSDN博客")
 
 启动网关，访问http://localhost:88?url=baidu测试，成功！
 
-![image-20210925234834078](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/e1118f511301812f7f7ae7057f7ce84a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210925234834078](https://i-blog.csdnimg.cn/blog_migrate/8f7de6104f88a0f1002d77adf94ee4cd.png)​
 
-# 5、前端基础（回顾，与项目无关）
+## 5、前端基础（回顾，与项目无关）
 
 > 前端基础**了解即可，初级工程师应该提升深度而非广度**，技术停留在**能基本看懂代码**的基础上即可，**建议选择性过一遍即可**，哪个知识点没学过就过哪里。
->
-> [【黑马Java笔记】JavaWeb基础4——HTML,JavaScript&CSS_vincewm的博客-CSDN博客_java添加输入框](https://blog.csdn.net/qq_40991313/article/details/125909662)
->
-> [【黑马Java笔记】JavaWeb基础10——VUE&Element&整合Javaweb的商品管理系统_vincewm的博客-CSDN博客_javaweb商品管理系统](https://blog.csdn.net/qq_40991313/article/details/126186764?spm=1001.2014.3001.5502)
+> 
+> [【黑马Java笔记】JavaWeb基础4——HTML,JavaScript&CSS\_vincewm的博客-CSDN博客\_java添加输入框](https://blog.csdn.net/qq_40991313/article/details/125909662 "【黑马Java笔记】JavaWeb基础4——HTML,JavaScript&CSS_vincewm的博客-CSDN博客_java添加输入框")
+> 
+> [【黑马Java笔记】JavaWeb基础10——VUE&Element&整合Javaweb的商品管理系统\_vincewm的博客-CSDN博客\_javaweb商品管理系统](https://blog.csdn.net/qq_40991313/article/details/126186764?spm=1001.2014.3001.5502 "【黑马Java笔记】JavaWeb基础10——VUE&Element&整合Javaweb的商品管理系统_vincewm的博客-CSDN博客_javaweb商品管理系统")
 
-## 5.1. ES6基础
+### 5.1. ES6基础
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/b0bd3e9f6ea94a86967d838b7ae9562e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/68ced9e8a259e39441696a55216ace7c.png)​ 
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/e6676765d6734c358be70d64c50f2282.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/f3d3bf42ec0e7c1ae1e6292d845eefa7.png)​ 
 
-
-
-### 5.1.1、let & const
+#### 5.1.1、let & const
 
 vscode快捷键：`！+ 回车`生成html模板
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/0354bd242db54e318cbafab14d045fee.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
+![](https://i-blog.csdnimg.cn/blog_migrate/88d0de8819aeabfff2b3bdc996b1f230.png)​ 
 
 ```html
 <!DOCTYPE html>
@@ -666,14 +718,10 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-​     
-
-- **let声明后不能作用于{}外**，var可以
-- **let只能声明一次**（let a=1;let a=2;报错），var可以声明多次
-- **var会变量提升**（使用在定义之前，console.log(x);var x = 10;  // undefined），let必须先定义再使用
-- const一旦初始化后，不能改变
+-   **let声明后不能作用于{}外**，var可以
+-   **let只能声明一次**（let a=1;let a=2;报错），var可以声明多次
+-   **var会变量提升**（使用在定义之前，console.log(x);var x = 10;  // undefined），let必须先定义再使用
+-   const一旦初始化后，不能改变
 
 ```html
 <!DOCTYPE html>
@@ -725,26 +773,20 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+打开Chrome控制台可以查看报错信息。 
 
-打开Chrome控制台可以查看报错信息。 
+#### 5.1.2、解构表达式
 
+-   **数组解构（批量赋值）**`let arr = [1,2,3];` `let [a,b,c] = arr`
+-   **对象解构**`const{name:abc, age, language} = person;console.log(abc);` 其中`name:abc`代表把name改名为abc
+-   **字符串扩展**`str.startsWith();str.endsWith();str.includes();str.includes()`
+-   **字符串模板**，\`\`符号，支持一个字符串定义为多行
 
+![](https://i-blog.csdnimg.cn/blog_migrate/bad0faa8eeedaaede16a4ecf92f30d96.png)​
 
-### 5.1.2、解构表达式
+![](https://i-blog.csdnimg.cn/blog_migrate/df062f36bb20a02b1df44a406efd125f.png)​ 
 
-- **数组解构（批量赋值）**`let arr = [1,2,3];` `let [a,b,c] = arr`
-- **对象解构**`const{name:abc, age, language} = person;console.log(abc);` 其中`name:abc`代表把name改名为abc
-- **字符串扩展**`str.startsWith();str.endsWith();str.includes();str.includes()`
-- **字符串模板**，``符号，支持一个字符串定义为多行
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/76c2dc3c4db64e319f555301b51f4677.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/79e5a15a84164484b55584f07cb5cbb1.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 
-
-
-
-- **占位符功能** ${}，字符串插入变量
+-   **占位符功能** ${}，字符串插入变量
 
 ```html
 <!DOCTYPE html>
@@ -805,14 +847,12 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.1.3、函数优化
 
-### 5.1.3、函数优化
-
-- 支持函数**形参默认值**`function add(a, **b = 1**){}`
-- 支持**不定参数数量**`function fun(...values){}，此时能传多个参数，values.length获取数量。`
-- 支持**箭头函数**`var print = obj => console.log(obj);有点**像Lambda表达式**`
-- 支持**箭头函数+解构对象**`var hello2 = ({name}) => console.log("hello," +name); hello2(person);这里参数{name}是解构出person对象的name属性`
+-   支持函数**形参默认值**`function add(a, **b = 1**){}`
+-   支持**不定参数数量**`function fun(...values){}，此时能传多个参数，values.length获取数量。`
+-   支持**箭头函数**`var print = obj => console.log(obj);有点**像Lambda表达式**`
+-   支持**箭头函数+解构对象**`var hello2 = ({name}) => console.log("hello," +name); hello2(person);这里参数{name}是解构出person对象的name属性`
 
 ```html
 <!DOCTYPE html>
@@ -893,14 +933,12 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.1.4、对象优化
 
-### 5.1.4、对象优化
-
-- 可以**获取map的键值对**`Object.keys(personMap)`、`Object.values(personMap)`、`Object.entries(personMap)`
-- `Object.assgn(target,source1,source2)` **合并对象**source1，source2到target
-- 支持**对象名声明简写**：如果属性名和属性值的变量名相同可以省略
-- `let someone = {...person}`取出person对象所有的属性拷贝到当前对象
+-   可以**获取map的键值对**`Object.keys(personMap)`、`Object.values(personMap)`、`Object.entries(personMap)`
+-   `Object.assgn(target,source1,source2)` **合并对象**source1，source2到target
+-   支持**对象名声明简写**：如果属性名和属性值的变量名相同可以省略
+-   `let someone = {...person}`取出person对象所有的属性拷贝到当前对象
 
 ```html
 <!DOCTYPE html>
@@ -980,12 +1018,10 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.1.5、map和reduce
 
-### 5.1.5、map和reduce
-
-- `arr.map()`接收一个函数，将arr中的所有元素用接收到的函数处理后放入新的数组
-- `arr.reduce()`为数组中的每一个元素依次执行回调函数，不包括数组中被删除或从未被赋值的元素，
+-   `arr.map()`接收一个函数，将arr中的所有元素用接收到的函数处理后放入新的数组
+-   `arr.reduce()`为数组中的每一个元素依次执行回调函数，不包括数组中被删除或从未被赋值的元素，
 
 ```html
 <!DOCTYPE html>
@@ -1081,14 +1117,12 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.1.6、promise
 
-### 5.1.6、promise
-
-- 优化异步操作。封装ajax
-- 把Ajax封装到Promise中，赋值给let p
-- 在Ajax中成功使用resolve(data)，失败使用reject(err)
-- p.then().catch()
+-   优化异步操作。封装ajax
+-   把Ajax封装到Promise中，赋值给let p
+-   在Ajax中成功使用resolve(data)，失败使用reject(err)
+-   p.then().catch()
 
 ```html
 <!DOCTYPE html>
@@ -1214,12 +1248,10 @@ vscode快捷键：`！+ 回车`生成html模板
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.1.7、模块化
 
-### 5.1.7、模块化
-
-- `export`用于规定模块的对外接口,`export`不仅可以导出对象，一切JS变量都可以导出。比如：基本类型变量、函数、数组、对象
-- `import`用于导入其他模块提供的功能
+-   `export`用于规定模块的对外接口,`export`不仅可以导出对象，一切JS变量都可以导出。比如：基本类型变量、函数、数组、对象
+-   `import`用于导入其他模块提供的功能
 
 ```javascript
 // user.js
@@ -1254,20 +1286,18 @@ console.log(name);
 add(1,3);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 5.2. VUE基础
+### 5.2. VUE基础
 
 MVVM思想
 
-M：model 包括数据和一些基本操作
- V：view 视图，页面渲染结果
- VM：View-model，模型与视图间的双向操作（无需开发人员干涉）
- 视图和数据通过VM绑定起来，model里有变化会自动地通过Directives填写到视view中，视图表单中添加了内容也会自动地通过DOM Listeners保存到模型中。
+M：model 包括数据和一些基本操作  
+V：view 视图，页面渲染结果  
+VM：View-model，模型与视图间的双向操作（无需开发人员干涉）  
+视图和数据通过VM绑定起来，model里有变化会自动地通过Directives填写到视view中，视图表单中添加了内容也会自动地通过DOM Listeners保存到模型中。
 
 官方文档：https://cn.vuejs.org/v2/guide/
 
-### 5.2.1、VUE安装
+#### 5.2.1、VUE安装
 
 给当前项目安装vue
 
@@ -1278,21 +1308,15 @@ npm init -y
 npm install vue@2.6.10
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > **npm init -y：**在文件夹下生成默认的**package.json**文件，代表此文件夹是npm管理的项目。
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/d8c8e547bba84694bedf9e99c545424a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/d472635aab0d9995afd300c3cb132e84.png)​
 
 **引入vue：**
 
 ```
 <script src="./node_modules/vue/dist/vue.js"></script>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **示例：**
 
@@ -1322,17 +1346,13 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/4811928b32bef91c2a044744bb9112d2.png)
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/4171220ee53b4920a2ff6e1bd819dc9a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.2、v-model, v-on
 
-
-
-### 5.2.2、v-model, v-on
-
-- new VUE
-- v-model 双向绑定
-- v-on 绑定事件
+-   new VUE
+-   v-model 双向绑定
+-   v-on 绑定事件
 
 ```html
 <!DOCTYPE html>
@@ -1394,9 +1414,7 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.3、v-text、v-html、v-ref
+#### 5.2.3、v-text、v-html、v-ref
 
 ```html
 <!DOCTYPE html>
@@ -1443,17 +1461,16 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.4、单向绑定v-bind:
 
-### 5.2.4、单向绑定v-bind:
-
-- 花括号只能写在标签体内（`<div 标签内> 标签体 </div>`），不能用在标签内。
-
-  插值表达式只能用在标签体里，如果我们这么用`<a href="{{}}">`是不起作用的，所以要用v-bind
-
-- 跳转页面`<a v-bind:href="link">跳转</a>`
-
-- 用`v-bind:`，简写为`:`。表示把model绑定到view。可以设置src、title、class等
+-   花括号只能写在标签体内（`<div 标签内> 标签体 </div>`），不能用在标签内。
+    
+    插值表达式只能用在标签体里，如果我们这么用`<a href="{{}}">`是不起作用的，所以要用v-bind
+    
+-   跳转页面`<a v-bind:href="link">跳转</a>`
+    
+-   用`v-bind:`，简写为`:`。表示把model绑定到view。可以设置src、title、class等
+    
 
 ```html
 <!DOCTYPE html>
@@ -1495,9 +1512,7 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.5、双向绑定v-model
+#### 5.2.5、双向绑定v-model
 
 ```html
 <!DOCTYPE html>
@@ -1535,22 +1550,20 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.6、v-on事件
 
-### 5.2.6、v-on事件
-
-- 事件监听可以使用 v-on 指令
-- `v-on:事件类型="方法"` ，可以简写成`@事件类型="方法"`
-- Vue.js 为 v-on 提供了事件修饰符来处理 DOM 事件细节，如：event.preventDefault() 或 event.stopPropagation()。
-- Vue.js 通过由点 . 表示的指令后缀来调用修饰符。 
-  - .stop - 阻止冒泡
-  - .prevent - 阻止默认事件
-  - .capture - 阻止捕获
-  - .self - 只监听触发该元素的事件
-  - .once - 只触发一次
-  - .left - 左键事件
-  - .right - 右键事件
-  - .middle - 中间滚轮事
+-   事件监听可以使用 v-on 指令
+-   `v-on:事件类型="方法"` ，可以简写成`@事件类型="方法"`
+-   Vue.js 为 v-on 提供了事件修饰符来处理 DOM 事件细节，如：event.preventDefault() 或 event.stopPropagation()。
+-   Vue.js 通过由点 . 表示的指令后缀来调用修饰符。
+    -   .stop - 阻止冒泡
+    -   .prevent - 阻止默认事件
+    -   .capture - 阻止捕获
+    -   .self - 只监听触发该元素的事件
+    -   .once - 只触发一次
+    -   .left - 左键事件
+    -   .right - 右键事件
+    -   .middle - 中间滚轮事
 
 ```html
 <!DOCTYPE html>
@@ -1614,12 +1627,10 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.7、v-for遍历
 
-### 5.2.7、v-for遍历
-
-- 可以遍历 数组[] 字典{} 。对于字典`<li v-for="(value, key, index) in object">`
-- 遍历的时候都加上:key来区分不同数据，提高vue渲染效率
+-   可以遍历 数组\[\] 字典{} 。对于字典`<li v-for="(value, key, index) in object">`
+-   遍历的时候都加上:key来区分不同数据，提高vue渲染效率
 
 ```html
 <!DOCTYPE html>
@@ -1680,14 +1691,12 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.8、v-if和v-show
 
-### 5.2.8、v-if和v-show
-
-- 在vue实例的data指定一个bool变量，然后v-show赋值即可。show里的字符串也可以比较
-- if是根据表达式的真假，切换元素的显示和隐藏（操作dom元素）
-- 区别：show的标签F12一直都在，if的标签会移除，
-- if操作dom树对性能消耗大
+-   在vue实例的data指定一个bool变量，然后v-show赋值即可。show里的字符串也可以比较
+-   if是根据表达式的真假，切换元素的显示和隐藏（操作dom元素）
+-   区别：show的标签F12一直都在，if的标签会移除，
+-   if操作dom树对性能消耗大
 
 ```html
 <!DOCTYPE html>
@@ -1729,9 +1738,7 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.9、v-else和v-else-if
+#### 5.2.9、v-else和v-else-if
 
 ```html
 <!DOCTYPE html>
@@ -1778,9 +1785,7 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.10、计算属性和监听器
+#### 5.2.10、计算属性和监听器
 
 **计算属性computed：属性**不是具体值，而**是通过一个函数计算出来的**，**随时变化**
 
@@ -1809,11 +1814,7 @@ npm install vue@2.6.10
 </body>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/4240109f969a47e2a688d189c0e0ab68.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/81266c872c27ff62a214ac891492c599.png)
 
 **监听watch:**可以让我们**监控一个值的变化，从而做出相应的反应**。
 
@@ -1878,9 +1879,7 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.11、过滤器filter
+#### 5.2.11、过滤器filter
 
 过滤器filter：定义filter组件后，管道符“|”后面跟具体过滤器**`{{user.gender | gFilter}}`**
 
@@ -1942,22 +1941,18 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/ad6258e86399ab9db0381b520e77789b.png)
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/f0685ae1caf54e3d802badc7cf587cac.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.2.12、组件化
 
-
-
-### 5.2.12、组件化
-
-- 在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。
-- 但是如果每个页面都自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同分拆分成立的组件，然后在不同页面就可以共享这些组件，避免重复开发。
-- 在vue里，所有的vue实例都是组件
-- 组件其实也是一个vue实例，因此它在定义时也会接收：data、methods、生命周期函数等
-- 不同的是组件不会与页面的元素绑定（所以不写el），否则就无法复用了，因此没有el属性。
-- 但是组件渲染需要html模板，所以增加了template属性，值就是HTML模板
-- data必须是一个函数，不再是一个对象。
-- 全局组件定义完毕，任何vue实例都可以直接在HTML中通过组件名称来使用组件了
+-   在大型应用开发的时候，页面可以划分成很多部分。往往不同的页面，也会有相同的部分。例如可能会有相同的头部导航。
+-   但是如果每个页面都自开发，这无疑增加了我们开发的成本。所以我们会把页面的不同分拆分成立的组件，然后在不同页面就可以共享这些组件，避免重复开发。
+-   在vue里，所有的vue实例都是组件
+-   组件其实也是一个vue实例，因此它在定义时也会接收：data、methods、生命周期函数等
+-   不同的是组件不会与页面的元素绑定（所以不写el），否则就无法复用了，因此没有el属性。
+-   但是组件渲染需要html模板，所以增加了template属性，值就是HTML模板
+-   data必须是一个函数，不再是一个对象。
+-   全局组件定义完毕，任何vue实例都可以直接在HTML中通过组件名称来使用组件了
 
 ```html
 <!DOCTYPE html>
@@ -2023,15 +2018,11 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 5.2.13、生命周期和钩子函数
+#### 5.2.13、生命周期和钩子函数
 
 每个vue实例在被创建时都要经过一系列的初始化过程：创建实例，装载模板、渲染模板等等。vue为生命周期中的每个状态都设置了钩子函数（监听函）。每当vue实列处于不同的生命周期时，对应的函数就会被触发调用。
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/e70a27c4f870464fadd652cc5ce8f92a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/eb3c6dd900b85b47607f0d757af54326.png)​
 
 ```html
 <!DOCTYPE html>
@@ -2106,13 +2097,9 @@ npm install vue@2.6.10
 </html>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 5.3. vue脚手架进行模块化开发
 
-
-
-## 5.3. vue脚手架进行模块化开发
-
-### 5.3.1、全局安装webpack
+#### 5.3.1、全局安装webpack
 
 在任意目录下cmd，注意命令尾部“-g” 是全局安装的意思。
 
@@ -2120,25 +2107,19 @@ npm install vue@2.6.10
 npm install webpack -g
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 默认安装到目录：
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/f1c7ceb5adaa4f5e87e9f4c565617c93.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/51ffabbe0b5637b0a21e37bfd1d05dd0.png)
 
-
-
-### 5.3.2、全局安装vue脚手架
+#### 5.3.2、全局安装vue脚手架
 
 ```bash
 npm install -g @vue/cli@4.0.3
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> **注意：**脚手架版本和node版本要匹配，我node版本10.16.3，匹配脚手架4.0.3 
 
-> **注意：**脚手架版本和node版本要匹配，我node版本10.16.3，匹配脚手架4.0.3 
-
-### 5.3.3、初始化vue项目
+#### 5.3.3、初始化vue项目
 
 在工程文件夹下cmd，输入以下命令初始化vue项目。建议工程名与文件夹名一致
 
@@ -2147,50 +2128,35 @@ vue init webpack 想要起的工程名
 #vue init webpack vue-demo
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927110259380](https://i-blog.csdnimg.cn/blog_migrate/712ffa1d36a054c851fea3a0dae4d726.png)​
 
-
-
-![image-20210927110259380](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/6c4b047a712197ee67ea448759abaeaf.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-> standalone单例是选择运行+编译：![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/cb5b452892a1490ba00094fde2454c61.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> standalone单例是选择运行+编译：![](https://i-blog.csdnimg.cn/blog_migrate/230738f37a3bfa9f049bdd643614be4f.png)
 > 
->
-> ESLint是检查代码规范的，这里不选否。 
->
+> ESLint是检查代码规范的，这里不选否。 
+> 
 > test是否使用单元测试，这里也是否
 
 > 如果一直卡在downloading template，配置淘宝镜像
->
+> 
 > ```
 > npm config set chromedriver_cdnurl https://npm.taobao.org/mirrors/chromedriver
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 **初始化成功，运行项目**
 
 ```bash
 cd vue-demo
-```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+```
 
 ```bash
 npm run dev
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 >  **为什么运行命令是npm run dev?**
->
+> 
 > 在项目目录下，我们可以看到一个名为package.json的文件，该文件是对项目、模块包的描述，在package.json文件中，有一个scripts的字段:
->
+> 
 > ```javascript
 >   "scripts": {
 >     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -2198,11 +2164,9 @@ npm run dev
 >     "build": "node build/build.js"
 >   },
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 修改后运行命令就是npm run serve：
->
+> 
 > ```javascript
 > // 运行npm run serve的scripts字段
 >   "scripts": {
@@ -2211,55 +2175,130 @@ npm run dev
 >     "lint": "vue-cli-service lint"
 >   },
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **启动成功**
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/407a68a78fd94ee39ed808d3eb5ef690.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d0775746ef4540e85b878c436ad0af2e.png)
 
-**访问默认端口**http://localhost:8080/#/**。**
+**访问默认端口**[http://localhost:8080/#/](http://localhost:8080/#/ "http://localhost:8080/#/")**。**
 
+![image-20210927110328858](https://i-blog.csdnimg.cn/blog_migrate/79ea857002cfa71819c17322db577e75.png)​
 
-
-![image-20210927110328858](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/7d40e948a2071e0ee2978687474627b8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-关闭cmd窗口，在vscode打开项目，重新启动： 
+关闭cmd窗口，在vscode打开项目，重新启动： 
 
 ```bash
 npm run dev
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 5.3.4、vue项目目录结构
 
-### 5.3.4、vue项目目录结构
+![](https://i-blog.csdnimg.cn/blog_migrate/022c4d96bf23a2dc647c6ebc198f1f7b.png)
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/d9ecda9add2f4ff784950873b3fa7be7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+| 
+目录/文件
 
+ | 
 
+说明
 
-| 目录/文件    | 说明                                                         |
-| ------------ | ------------------------------------------------------------ |
-| build        | 项目构建(webpack)相关代码                                    |
-| config       | 配置目录，包括端口号等。我们初学可以使用默认的。             |
-| node_modules | npm 加载的项目依赖模块                                       |
-| **src**      | 这里是我们**要开发的目录**，基本上要做的事情都在这个目录里。里面包含了几个目录及文件：`assets`: 放置一些图片，如logo等。`components`: 目录里面放了一个组件文件，可以不用。`App.vue`: 项目入口文件，我们也可以直接将组件写这里，而不使用 components 目录。`main.js`: 项目的核心文件。 |
-| **static**   | **静态资源目录，如图片、字体等。**                           |
-| test         | 初始测试目录，可删除                                         |
-| .xxxx文件    | 这些是一些配置文件，包括语法配置，git配置等                  |
-| index.html   | 首页入口文件。                                               |
-| package.json | 项目配置文件。                                               |
-| README.md    | 项目的说明文档，markdown 格式                                |
+ |
+| --- | --- |
+| 
 
+build
 
+ | 
 
-### 5.3.5、**分析主页展示逻辑**
+项目构建(webpack)相关代码
 
+ |
+| 
 
+config
+
+ | 
+
+配置目录，包括端口号等。我们初学可以使用默认的。
+
+ |
+| 
+
+node\_modules
+
+ | 
+
+npm 加载的项目依赖模块
+
+ |
+| 
+
+**src**
+
+ | 
+
+这里是我们**要开发的目录**，基本上要做的事情都在这个目录里。里面包含了几个目录及文件：`assets`: 放置一些图片，如logo等。`components`: 目录里面放了一个组件文件，可以不用。`App.vue`: 项目入口文件，我们也可以直接将组件写这里，而不使用 components 目录。`main.js`: 项目的核心文件。
+
+ |
+| 
+
+**static**
+
+ | 
+
+**静态资源目录，如图片、字体等。**
+
+ |
+| 
+
+test
+
+ | 
+
+初始测试目录，可删除
+
+ |
+| 
+
+.xxxx文件
+
+ | 
+
+这些是一些配置文件，包括语法配置，git配置等
+
+ |
+| 
+
+index.html
+
+ | 
+
+首页入口文件。
+
+ |
+| 
+
+package.json
+
+ | 
+
+项目配置文件。
+
+ |
+| 
+
+README.md
+
+ | 
+
+项目的说明文档，markdown 格式
+
+ |
+
+#### 5.3.5、**分析主页展示逻辑**
 
 > /config/**index.js配置端口：**
->
-> ![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/ffb5bf1272934068ad887d4d62c21226.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/d2c68bb4afc111829f0b390776ee00d8.png)
 
 **/index.html主页**
 
@@ -2271,8 +2310,6 @@ npm run dev
     <!-- built files will be auto injected -->
   </body>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 src/**main.js****主程序，里面有vue实例挂载id为“app”元素：**
 
@@ -2293,12 +2330,12 @@ new Vue({
 })
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **主组件/src/App.vue，显示页面并引入路由规则**
 
-- 首先显示一张图片，图片路径为`"./assets/logo.png`
-- 其中的`<router-view/>`是根据url要决定访问的vue,在main.js中提及了使用的是`./router`规则
+-   首先显示一张图片，图片路径为`"./assets/logo.png`
+    
+-   其中的`<router-view/>`是根据url要决定访问的vue,在main.js中提及了使用的是`./router`规则
+    
 
 ```html
 <!--模板标签，编写页面展示内容-->
@@ -2324,8 +2361,6 @@ export default {
 </style>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **配置路由规则**/src/router/**index.js**
 
 routes表示路由规则
@@ -2350,8 +2385,6 @@ export default new Router({
   ]
 })
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 /src/components/**HelloWorld.vue组件**
 
@@ -2477,11 +2510,7 @@ a {
 </style>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### **5.3.6、新建Hello组件，负责/hello路径**
+#### **5.3.6、新建Hello组件，负责/hello路径**
 
 /src/components**创建hello.vue组件，编写组件三标签：**
 
@@ -2507,8 +2536,6 @@ export default {
 
 </style>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **编写路由文件**，修改/src/router/index.js
 
@@ -2537,13 +2564,9 @@ export default new Router({
 })
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+**此时访问**[http://localhost:8080/#/hello](http://localhost:8080/#/hello "http://localhost:8080/#/hello")
 
-**此时访问**http://localhost:8080/#/hello
-
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/10549b4b55774f729aa549d3a99e3f39.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/0164084f137693be04ae293bb8c060ac.png)
 
 **添加App.vue点击跳转**，修改/src/App.vue的template标签：
 
@@ -2558,17 +2581,11 @@ export default new Router({
 </template>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 运行测试效果
 
-![img](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/adc6c83703344334a8e5a794aa81f0cd.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/7ad9285646aa70d63ab59951f33b971d.png)
 
-
-
-
-
-### 5.3.7、快速生成组件模板
+#### 5.3.7、快速生成组件模板
 
 1、文件->首选项->用户代码 新建全局代码片段
 
@@ -2632,11 +2649,9 @@ export default new Router({
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 3、在创建组件时直接输入`vue`点击回车就可生成模板
 
-## 5.4. ElementUI
+### 5.4. ElementUI
 
 官方文档：https://element.eleme.cn/#/zh-CN/component/installation
 
@@ -2645,8 +2660,6 @@ export default new Router({
 ```
 npm install element-ui
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 2、在main.js下引入
 
@@ -2657,8 +2670,6 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 然后就可以使用elementui之中的组件。
 
 3、快速搭建后台管理系统的页面
@@ -2667,15 +2678,15 @@ elementui手册中找到`Container 布局容器`，找到代码直接复制到`A
 
 启动测试：
 
-![image-20210927111110073](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/01988a3014ecb5204d55cc57fc263c68.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927111110073](https://i-blog.csdnimg.cn/blog_migrate/25c70bc1305215dbc1a8baf24a942546.png)​
 
 4、实现当点击用户列表，显示用户。点击hello组件，显示hello。
 
-![image-20210927111213237](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/db97a0d3fc238131ff964a046b53ea59.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927111213237](https://i-blog.csdnimg.cn/blog_migrate/541732ff4127d4c84aa75744d4a9c278.png)​
 
 把`<el-main>`中的数据列表换成路由视图`<router-view></router-view>`
 
-![image-20210927111502253](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/91e54a45319aa82330a98aec1c3d2512.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927111502253](https://i-blog.csdnimg.cn/blog_migrate/747b154610a28028d799dd8c9f87bea8.png)​
 
 新建MyTable组件，用来显示用户数据
 
@@ -2709,8 +2720,6 @@ export default {
 </style>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 添加路由规则
 
 ```javascript
@@ -2724,10 +2733,8 @@ import MyTable from '@/components/MyTable'
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 修改App.vue
 
-![image-20210927111630855](谷粒商城笔记+踩坑（2）——分布式组件、前端基础，nacos+feign+gateway+ES6+vue脚手架.assets/4bedd50bd3981d8db01946452d1d03e8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927111630855](https://i-blog.csdnimg.cn/blog_migrate/ad45a8bbf30a4bae6b22084272aa630c.png)​
 
 启动测试

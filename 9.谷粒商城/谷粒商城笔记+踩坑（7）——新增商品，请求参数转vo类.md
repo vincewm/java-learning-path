@@ -1,48 +1,94 @@
->  **导航：**
->
-> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501)
->
+> **导航：**
+> 
+> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑汇总篇")
+> 
 >  **Java笔记汇总：**
->
-> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289)
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289 "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客")
 
-[TOC]
+**目录**
 
+[12、商品服务-新增商品](#12%E3%80%81%E6%96%B0%E5%A2%9E%E5%95%86%E5%93%81)
 
+[12.0、效果展示](#12.1%E3%80%81%E8%B0%83%E8%AF%95%E4%BC%9A%E5%91%98%E7%AD%89%E7%BA%A7%E7%9B%B8%E5%85%B3%E6%8E%A5%E5%8F%A3)
 
-# 12、商品服务-新增商品
+[12.1、配置、启动会员模块](#12.1%E3%80%81%E9%85%8D%E7%BD%AE%E3%80%81%E5%90%AF%E5%8A%A8%E4%BC%9A%E5%91%98%E6%A8%A1%E5%9D%97)
 
-## 12.0、效果展示
+[12.1.1、用户模块添加到nacos注册中心](#12.1.1%E3%80%81%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97%E6%B7%BB%E5%8A%A0%E5%88%B0nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83)
 
-todo。这节写后补上 
+[12.1.2、配置网关路由](#12.1.2%E3%80%81%E9%85%8D%E7%BD%AE%E7%BD%91%E5%85%B3%E8%B7%AF%E7%94%B1)
 
-## 12.1、配置、启动会员模块
+[12.1.3、添加“会员等级”数据](#12.1.3%E3%80%81%E6%B7%BB%E5%8A%A0%E2%80%9C%E4%BC%9A%E5%91%98%E7%AD%89%E7%BA%A7%E2%80%9D%E6%95%B0%E6%8D%AE)
+
+[12.2、获取当前分类关联的品牌（不用分页）](#12.2%E3%80%81%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E5%85%B3%E8%81%94%E7%9A%84%E5%93%81%E7%89%8C)
+
+[12.2.1、分析](#12.2.1%E3%80%81%E5%88%86%E6%9E%90)
+
+[12.2.2、新建BrandVo](#12.2.2%E3%80%81%E6%96%B0%E5%BB%BABrandVo)
+
+[12.2.3、代码实现](#12.2.3%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%C2%A0) 
+
+[12.2.4、测试](#12.2.4%E3%80%81%E6%B5%8B%E8%AF%95)
+
+[12.3、获取当前分类下的分组及其关联的属性](#12.3%E3%80%81%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E4%B8%8B%E6%89%80%E6%9C%89%E5%88%86%E7%BB%84%E4%BB%A5%E5%8F%8A%E5%B1%9E%E6%80%A7)
+
+[12.3.1、分析](#12.3.1%E3%80%81%E5%88%86%E6%9E%90%C2%A0) 
+
+[12.3.2、代码实现](#12.3.2%E3%80%81%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0)
+
+[12.3.3、测试](#12.3.3%E3%80%81%E6%B5%8B%E8%AF%95)
+
+[12.4、新增商品](#12.4%E3%80%81%E6%96%B0%E5%A2%9E%E5%95%86%E5%93%81)
+
+[12.4.1、分析](#12.4.1%E3%80%81%E5%88%86%E6%9E%90)
+
+[12.4.2、填写表单](#12.4.2%E3%80%81%E5%A1%AB%E5%86%99%E8%A1%A8%E5%8D%95)
+
+[12.4.3、vo类封装表单json数据](#12.4.3%E3%80%81vo%E7%B1%BB%E5%B0%81%E8%A3%85%E8%A1%A8%E5%8D%95json%E6%95%B0%E6%8D%AE)
+
+[12.4.4、新增业务流程分析](#12.4.4%E3%80%81%E6%96%B0%E5%A2%9E%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90)
+
+[12.4.5、保存商品模块的商品信息](#12.4.5%E3%80%81%E4%BF%9D%E5%AD%98%E5%95%86%E5%93%81%E6%A8%A1%E5%9D%97%E7%9A%84%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF)
+
+[12.4.6、保存优惠券模块的商品信息，feign远程调用](#12.4.6%E3%80%81%E4%BF%9D%E5%AD%98%E4%BC%98%E6%83%A0%E5%88%B8%E6%A8%A1%E5%9D%97%E7%9A%84%E5%95%86%E5%93%81%E4%BF%A1%E6%81%AF%EF%BC%8Cfeign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8)
+
+[12.5、添加复合配置、限制内存](#12.5%E3%80%81%E5%86%85%E5%AD%98%E8%B0%83%E4%BC%98)
+
+[12.6、报错loadbalancer解决](#12.6%E3%80%81%E5%95%86%E5%93%81%E4%BF%9D%E5%AD%98debug)
+
+[12.7、商品保存debug、解决其他报错](#12.7%E3%80%81%E5%95%86%E5%93%81%E4%BF%9D%E5%AD%98debug%E3%80%81%E8%A7%A3%E5%86%B3%E5%85%B6%E4%BB%96%E6%8A%A5%E9%94%99)
+
+--
+
+## 12、商品服务-新增商品
+
+### 12.0、效果展示
+
+todo。这节写后补上 
+
+### 12.1、配置、启动会员模块
 
 进入“发布商品”页面会发获取会员等级的请求，所以第一步要先配置、启动会员模块。
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/09d1609993a345569b9905a3d7ad5ec0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/cb564542cd53d5940f8c868599226c7b.png)
 
+#### 12.1.**1、用户模块添加到nacos注册中心**
 
+修改gulimall-member配置文件，将用户模块添加到服务注册中心，然后启动gulimall-member服务 
 
-### 12.1.**1、用户模块添加到nacos注册中心**
+![](https://i-blog.csdnimg.cn/blog_migrate/f1f18937ae0c30c1b069ff58cca470d9.png)
 
-修改gulimall-member配置文件，将用户模块添加到服务注册中心，然后启动gulimall-member服务 
+启动成功： 
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/005c8a9432b144dd9fa39a8c50e3ac17.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/dde2ec7731bc1a44dab4f70d23291173.png)
 
-启动成功： 
-
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/405916c5d6284485b3a265d051020cf0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/df3f6fdfbdb04a2abffd2c1da409ef72.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/c66d7f86912cc8bb1c8e62fca37876aa.png)
 
 > “获取所有会员等级”功能，在逆向工程时已经自动生成了。url:`/member/memberlevel/list`
 
-### 12.1.2、配置网关路由
+#### 12.1.2、配置网关路由
 
-网关模块修改yml，用户路由（/api/member/**）要放到人人管理后台路由（/api/**）前面，因为路由路径更具体。
+网关模块修改yml，用户路由（/api/member/\*\*）要放到人人管理后台路由（/api/\*\*）前面，因为路由路径更具体。
 
 ```bash
 #用户模块路由
@@ -55,12 +101,8 @@ todo。这节写后补上
             - RewritePath=/api/(?<segment>.*),/$\{segment}
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-> 当前网关模块的yml： 
->
+> 当前网关模块的yml： 
+> 
 > ```bash
 > server:
 >   port: 88
@@ -113,57 +155,45 @@ todo。这节写后补上
 >   level:
 >     com.vince.gulimall: debug
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-重启网关模块，发现“会员列表”和“会员等级”请求已经不报错404： 
+重启网关模块，发现“会员列表”和“会员等级”请求已经不报错404： 
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/c62aaf8a9cca480cac2a16e400853d77.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/170be3db2262eddcda117ac7b5016550.png)
 
+#### 12.1.3、添加“会员等级”数据
 
-
-
-
-### 12.1.3、添加“会员等级”数据
-
-点击 用户系统-会员等级 
+点击 用户系统-会员等级 
 
 添加一些数据
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/a8c3db7f677c471d9c0ea3be60249013.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/3d535a60a49560dea46b5da8efc5cb9c.png)
 
 然后进入“发布商品”页面，就不用请求会员等级报错：
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/4ad46827e113466db4711b523f730c26.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/6a1e7a95b9960ed4d04f1f4a6d2b78b2.png)
 
+### 12.2、获取当前分类关联的品牌（不用分页）
 
-
-## 12.2、获取当前分类关联的品牌（不用分页）
-
-
-
-### 12.2.1、分析
+#### 12.2.1、分析
 
 **需求：**发布商品时，选择分类后，会发请求获取当前分类关联的品牌，所以需要编写这个业务，下面是完成后的效果：
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/4f5bd453e8db40cdb9ece8a724761e94.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d109eb5107876720125a687d774d0cc6.png)
 
 **请求14：**`/product/categorybrandrelation/brands/list`
 
-- 新增商品时，点击商品的分类，要获取与该分类关联的所有品牌id和name
+-   新增商品时，点击商品的分类，要获取与该分类关联的所有品牌id和name
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/5180246009114d32b7fa72184ac379b3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/717f844b41ba01f0ed5d9d9515c3d4cb.png)
 
-
-
-### 12.2.**2、新建BrandVo**
+#### 12.2.**2、新建BrandVo**
 
 > **因为只需要品牌id和name，也可以不新建vo**，使用CategoryBrandRelationEntity响应数据：
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/06ca525335924d8a866c4d3f4830748c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/debdb8bc6db324708a0b7daae57bec9e.png)
+> 
 > CategoryBrandRelationController中一步到位：
->
+> 
 > ```java
 >     /**
 >      * 获取当前分类关联的所有品牌id和name
@@ -178,8 +208,6 @@ todo。这节写后补上
 >         return R.ok().put("data",categoryBrandRelationEntities);
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 ```java
 @Data
@@ -189,9 +217,7 @@ public class BrandVo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 12.2.3、代码实现 
+#### 12.2.3、代码实现 
 
 CategoryBrandRelationController
 
@@ -218,8 +244,6 @@ CategoryBrandRelationController
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 CategoryBrandRelationServiceImpl
 
 ```java
@@ -238,20 +262,18 @@ public List<BrandEntity> getBrandsByCatId(Long catId) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > 如果报错：
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/2e7020220ebe45c9851aa82109075b12.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
-> 就把brandService.getById改成brandDao.selectById 
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/13bfc30be35e3080a0dfd215bc4cd845.png)
+> 
+> 就把brandService.getById改成brandDao.selectById 
 
 >  **也可以不新建vo**，使用CategoryBrandRelationEntity响应数据：
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/06ca525335924d8a866c4d3f4830748c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/debdb8bc6db324708a0b7daae57bec9e.png)
+> 
 > CategoryBrandRelationController中一步到位：
->
+> 
 > ```java
 >     /**
 >      * 获取当前分类关联的所有品牌id和name
@@ -266,50 +288,40 @@ public List<BrandEntity> getBrandsByCatId(Long catId) {
 >         return R.ok().put("data",categoryBrandRelationEntities);
 >     }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 12.2.4、测试
+#### 12.2.4、测试
 
 再次发布商品，选择分类后就能查到该分类下的品牌了：
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/4f5bd453e8db40cdb9ece8a724761e94.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/d109eb5107876720125a687d774d0cc6.png)
 
+### 12.3、获取当前分类下的分组及其关联的属性
 
-
-## 12.3、获取当前分类下的分组及其关联的属性
-
-### 12.3.1、分析 
+#### 12.3.1、分析 
 
 **需求：**录入规格参数时要获取当前分类下所有分组和关联属性，进行选择分组、规格参数
 
- ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/83a7763e258d4f9c9589d879713674e3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ ![](https://i-blog.csdnimg.cn/blog_migrate/ebbe59b2e3e64c80ce1b545440f0e4be.png)
 
 > **无法上传图片问题**
->
-> 如果在填写基本信息时候无法上传图片，开启第三方模块。
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/0e0536059c4c40278d01ccdc517a47b4.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
 > 
->
+> 如果在填写基本信息时候无法上传图片，开启第三方模块。
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/fb62c5527abf75875dc5af5a582c6caa.png)
+> 
 > 检测bucket域名，参考下文7.3.10修改前端，替换成自己的**Bucket域名**：
->
-> [谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储](https://blog.csdn.net/qq_40991313/article/details/127058164?spm=1001.2014.3001.5501)
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/78459316649644abb27804f65cb955b7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> [谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储](https://blog.csdn.net/qq_40991313/article/details/127058164?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储")
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/23dc41a5750fd232cadefa6cdfc80859.png)
 
 **请求17：**`/product/attrgroup/{catelogId}/withattr`
 
 **响应数据：**
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/e18fe5fa00d4455f8baf945a2beee4bc.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/9ea3a207c6beb9d2a169e518b3581a18.png)
 
-
-
-
-
-### 12.3.2、代码实现
+#### 12.3.2、代码实现
 
 新建AttrGroupWithAttrsVo
 
@@ -320,8 +332,6 @@ public class AttrGroupWithAttrsVo extends AttrGroupEntity {
     private List<AttrEntity> attrs;
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 AttrGroupController
 
@@ -335,8 +345,6 @@ public R getAttrGroupWithAttrs(@PathVariable("catelogId") Long catelogId){
 
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 AttrGroupServiceImpl
 
@@ -365,75 +373,61 @@ AttrGroupServiceImpl
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 12.3.3、测试
 
-### 12.3.3、测试
+重启商品模块，可以看到当前分类下的分组和规格参数已显示： 
 
-重启商品模块，可以看到当前分类下的分组和规格参数已显示： 
-
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/3fbc36f54e0742f88e351e22b6514836.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/46f0367de3500a62890f790788766f89.png)
 
 > **无法上传图片问题**
->
-> 如果在填写基本信息时候无法上传图片，开启第三方模块。
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/0e0536059c4c40278d01ccdc517a47b4.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
 > 
->
+> 如果在填写基本信息时候无法上传图片，开启第三方模块。
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/fb62c5527abf75875dc5af5a582c6caa.png)
+> 
 > 检测bucket域名，参考下文7.3.10修改前端，替换成自己的**Bucket域名**：
->
-> [谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储](https://blog.csdn.net/qq_40991313/article/details/127058164?spm=1001.2014.3001.5501)
->
-> ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/78459316649644abb27804f65cb955b7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> [谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储](https://blog.csdn.net/qq_40991313/article/details/127058164?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑（4）——商品服务-品牌管理、云存储")
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/23dc41a5750fd232cadefa6cdfc80859.png)
 
+### 12.4、新增商品
 
-
-## 12.4、新增商品
-
-### 12.4.1、分析
+#### 12.4.1、分析
 
 url：`/product/spuinfo/save`
 
-### 12.4.2、填写表单
+#### 12.4.2、填写表单
 
-参考商品：[【AppleiPhone 14 Pro】Apple iPhone 14 Pro (A2892) 256GB 暗紫色 支持移动联通电信5G 双卡双待手机【行情 报价 价格 评测】-京东](https://item.jd.com/100038004389.html)
+参考商品：[【AppleiPhone 14 Pro】Apple iPhone 14 Pro (A2892) 256GB 暗紫色 支持移动联通电信5G 双卡双待手机【行情 报价 价格 评测】-京东](https://item.jd.com/100038004389.html "【AppleiPhone 14 Pro】Apple iPhone 14 Pro  (A2892) 256GB 暗紫色 支持移动联通电信5G 双卡双待手机【行情 报价 价格 评测】-京东")
 
-图片地址：D:\download\尚硅谷谷粒商城电商项目等1个文件\尚硅谷谷粒商城电商项目\资料源码\docs\pics
+图片地址：D:\\download\\尚硅谷谷粒商城电商项目等1个文件\\尚硅谷谷粒商城电商项目\\资料源码\\docs\\pics
 
- 基本信息
+ 基本信息
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/fadb476b84df4885b2cdba7e7893dced.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/99727af67776bcb661852df3504c83c0.png)
 
-规格参数 
+规格参数 
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/f3d8efe002ef403484c8b614ff72605c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==) 销售属性
+![](https://i-blog.csdnimg.cn/blog_migrate/b344645a0ff5621a2a4db7b0a7398e13.png) 销售属性
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/c53f46e0494d44a6878da2a5761fb1b7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a7b876286190989e1bd893d5753edba4.png)
 
 > 销售属性展示的是“可选值”。这里自定义“+” 号，可以新加销售属性的可选值，仅针对于这个商品，不会改动销售属性的数据库。
 
-sku信息 
+sku信息 
 
 > 根据笛卡尔积计算销售属性，得出相应数量的sku信息。一个sku决定了一个价格。
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/256a5e142a1e4351b0f250cdfc27d1c7.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/5a0bb067912491785993e0f5bb5dc0ce.png)
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/ccaec4ac49e740648f186ecabaac6ae9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/0cb928e2f046b5d21070cccd8eb26a9d.png)
 
-
-
-
-
-### 12.4.3、vo类封装表单json数据
+#### 12.4.3、vo类封装表单json数据
 
 点击下一步“保存商品信息” ，然后点击取消，复制控制台的json数据。
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/d408da97fcc64f5483d608d3ed0a543a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/66da9556227291b25bcbdf8a5b4aae02.png)
 
 **json格式化工具：**
 
@@ -441,57 +435,45 @@ sku信息
 https://www.bejson.com/
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **json生成java类：**
 
 ```java
 https://www.bejson.com/json2javapojo/new/
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 **1.生成vo类并下载，复制到自己项目的vo包下**
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/155d57095466446c8c7bbf9a0d129cb5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/ebb21facf320d788bbdad34e498ec960.png)
 
 **2.把所有id字段改成Long类型，把所有金额相关字段的类型由String或Double改成BigDecimal类型，把get和set方法改成@Data**
 
-1. SpuSaveVo的brandId和catelogId改成Long，weight改成BigDecimal。
-2. Bounds都改成BigDecimal
-3. BaseAttrs的attrId改成Long；price,discount,fullPrice,reducePrice改成BigDecimal ;
-4. Attr的attrId改成Long
-5. MemberPrice的id改成Long，price改成BigDecimal； 
+1.  SpuSaveVo的brandId和catelogId改成Long，weight改成BigDecimal。
+2.  Bounds都改成BigDecimal
+3.  BaseAttrs的attrId改成Long；price,discount,fullPrice,reducePrice改成BigDecimal ;
+4.  Attr的attrId改成Long
+5.  MemberPrice的id改成Long，price改成BigDecimal； 
 
 > **BigDecimal**
->
-> Java在java.math包中提供的API类BigDecimal，用来对超过16位有效位的数进行精确的运算。双精度浮点型变量double可以处理16位有效数。在实际应用中，需要对更大或者更小的数进行运算和处理。float和double只能用来做科学计算或者是工程计算，在商业计算中要用java.math.BigDecimal。BigDecimal所创建的是对象，我们不能使用传统的+、-、*、/等算术运算符直接对其对象进行数学运算，而必须调用其相对应的方法。方法中的参数也必须是BigDecimal的对象。构造器是类的特殊方法，专门用来创建对象，特别是带有参数的对象。
->
 > 
->  
+> Java在java.math包中提供的API类BigDecimal，用来对超过16位有效位的数进行精确的运算。双精度浮点型变量double可以处理16位有效数。在实际应用中，需要对更大或者更小的数进行运算和处理。float和double只能用来做科学计算或者是工程计算，在商业计算中要用java.math.BigDecimal。BigDecimal所创建的是对象，我们不能使用传统的+、-、\*、/等算术运算符直接对其对象进行数学运算，而必须调用其相对应的方法。方法中的参数也必须是BigDecimal的对象。构造器是类的特殊方法，专门用来创建对象，特别是带有参数的对象。
+> 
+>   
+>  
 
+#### 12.4.4、新增业务流程分析
 
+1.  保存spu基本信息`pms_spu_info`
+2.  保存spu的描述图片`pms_spu_info_desc`
+3.  保存spu的图片集`pms_spu_images`
+4.  保存spu的规格参数`pms_product_attr_value`
+5.  保存spu的积分信息`gulimall_sms`\->`sms_spu_bounds`
+6.  保存spu对应的所有sku信息
+    1.  sku的基本信息`pms_sku_info`
+    2.  sku的图片信息`pms_sku_images`
+    3.  sku的销售属性信息`pms_sku_sale_attr_value`
+    4.  sku的优惠、满减等信息`gulimall_sms`\->`sms_sku_ladder`/`sms_sku_full_reduction`/`sms_member_price`
 
-### 12.4.4、新增业务流程分析
-
-
-
-1. 保存spu基本信息`pms_spu_info`
-2. 保存spu的描述图片`pms_spu_info_desc`
-3. 保存spu的图片集`pms_spu_images`
-4. 保存spu的规格参数`pms_product_attr_value`
-5. 保存spu的积分信息`gulimall_sms`->`sms_spu_bounds`
-6. 保存spu对应的所有sku信息 
-   1. sku的基本信息`pms_sku_info`
-   2. sku的图片信息`pms_sku_images`
-   3. sku的销售属性信息`pms_sku_sale_attr_value`
-   4. sku的优惠、满减等信息`gulimall_sms`->`sms_sku_ladder`/`sms_sku_full_reduction`/`sms_member_price`
-
-### 12.4.5、**保存商品模块的商品信息**
+#### 12.4.5、**保存商品模块的商品信息**
 
 SpuInfoController
 
@@ -507,13 +489,11 @@ SpuInfoController
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 SpuInfoServiceImpl
 
 > **注意：**
->
-> - 保存sku的优惠、满减信息时，需要用到gulimall-coupon模块的服务，所以这里要用**open-feign远程调用**。
+> 
+> -   保存sku的优惠、满减信息时，需要用到gulimall-coupon模块的服务，所以这里要用**open-feign远程调用**。
 
 ```java
 @Autowired
@@ -642,14 +622,12 @@ CouponFeignService couponFeignService;
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 12.4.6、**保存优惠券模块的商品信息，feign远程调用**
+#### 12.4.6、**保存优惠券模块的商品信息，feign远程调用**
 
 **1.common模块创建to，用于不同服务间传数据**
 
-> **TO:Transfer Object 数据传输对象**
->  在应用程序不同关系之间传输的对象。
+> **TO:Transfer Object 数据传输对象**  
+> 在应用程序不同关系之间传输的对象。
 
 在`common模块`中新建common.to.SpuBoundTo用来做远程调用积分数据传输
 
@@ -662,10 +640,6 @@ public class SpuBoundTo {
     private BigDecimal growBounds;
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 在`common模块`中新建common.to.`SkuReductionTo`用来做远程调用满减数据传输
 
@@ -683,8 +657,6 @@ public class SkuReductionTo {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 在`common`中新建`MemberPrice`
 
 ```java
@@ -697,12 +669,6 @@ public class MemberPrice {
     
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
 
 **2.引导类注解扫描远程调用的包**
 
@@ -724,14 +690,10 @@ public class GulimallProductApplication {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-**3.product远程调用coupon服务保存积分和满减信息** 
+**3.product远程调用coupon服务保存积分和满减信息** 
 
 > SpuInfoServiceImpl中保存coupon模块的信息：
->
+> 
 > ```java
 >         //5、保存spu的积分信息；gulimall_sms->sms_spu_bounds
 >         Bounds bounds = vo.getBounds();
@@ -743,11 +705,7 @@ public class GulimallProductApplication {
 >             log.error("远程保存spu积分信息失败");
 >         }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
 > 
->
 > ```java
 >                 // //6.4）、sku的优惠、满减等信息；gulimall_sms->sms_sku_ladder\sms_sku_full_reduction\sms_member_price
 >                 SkuReductionTo skuReductionTo = new SkuReductionTo();
@@ -760,10 +718,8 @@ public class GulimallProductApplication {
 >                     }
 >                 }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-在`product`模块的product.feign包新建CouponFeignService接口，用来远程调用Coupon服务。 
+在`product`模块的product.feign包新建CouponFeignService接口，用来远程调用Coupon服务。 
 
 一共调用了两个服务`"coupon/spubounds/save"`和`"coupon/skufullreduction/saveInfo"，`即保存积分和满减：
 
@@ -792,8 +748,6 @@ public interface CouponFeignService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 在coupon模块的`SkuFullReductionController`中新建方法
 
 ```java
@@ -803,8 +757,6 @@ public interface CouponFeignService {
         return R.ok();
     }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 在`SkuFullReductionServiceImpl`中实现
 
@@ -855,8 +807,6 @@ public interface CouponFeignService {
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 common模块的R结果类加上获取状态码方法，方便判断远程调用是否成功
 
 ```java
@@ -865,33 +815,17 @@ public Integer getCode(){
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-## 12.5、添加复合配置、限制内存
+### 12.5、添加复合配置、限制内存
 
 1、新建复合Compound
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/8561ee4fd129476eb67787e3c626dd8a.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/335006628c3446947c492518ee86b4b6.png)
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/e4d25cd3437645d38cb207dbbe859aca.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/f94865439e8cc5d709459cf3517f347e.png)
 
 2、把服务添加到新建的compound里
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/f7a72a9cdaa24bd3be7da9263fa1f846.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/43ccd97075f9ec7740404dff135313fd.png)
 
 3、设置每个项目最大占用内存为100M
 
@@ -899,41 +833,29 @@ public Integer getCode(){
 -Xmx100m
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+ ![](https://i-blog.csdnimg.cn/blog_migrate/a98f664e2c76ee2fe5e3b0ce664af894.png)
 
- ![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/ca0380fa225c47a4afe7565cd796b3f2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
-
-![image-20210927214421128](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/8fbc9c85f861acd163a94b177ad52bf3.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927214421128](https://i-blog.csdnimg.cn/blog_migrate/ce9f81b63661dc465394087ea0fd8b1d.png)
 
 4.设置compound命名后，点确定：
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/e6563a127bd24a4ea18dbe9ad99f2f1e.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/52b2cc54832ca603c4d53c02d8905e8c.png)
 
 5、启动或重启复合配置
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/005e3458f5254fb38d68d6f5e4b18928.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/9272aae44344b4f4127fc95b550bb536.png)
 
-启动后此复合包含的六个模块就都会启动成功，如果有报错请看下一节报错解决。 
+启动后此复合包含的六个模块就都会启动成功，如果有报错请看下一节报错解决。 
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/37271fcc9a294187b44b9ab7baba5c50.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/19a1f78a8659b12f2597be06a86271a1.png)
 
-
-
-## 12.6、报错loadbalancer解决
+### 12.6、报错loadbalancer解决
 
 **如果product模块启动报错**
 
 ```java
 No Feign Client for loadBalancing defined. Did you forget to include spring-cloud-starter-loadbalancer?
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 **原因：**SpringCloud Feign在Hoxton.M2 RELEASED版本之后抛弃了Ribbon，使用了spring-cloud-loadbalancer，所以我们这里还需要引入spring-cloud-loadbalancer的依赖，否则就会报错。
 
@@ -948,8 +870,6 @@ common模块的pom引入依赖：
             <version>3.1.4</version>
         </dependency>
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 nacos里排除ribbon：
 
@@ -966,24 +886,18 @@ nacos里排除ribbon：
         </dependency>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-## 12.7、商品保存debug、解决其他报错
+### 12.7、商品保存debug、解决其他报错
 
 > 如果自己网页没出意外，就重新点击保存商品，否则就重新发请求。
->
+> 
 > POST
->
+> 
 > ```java
 > http://localhost:88/api/product/spuinfo/save
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
->
+> 
 > 请求参数样式：
->
+> 
 > ```java
 > {
 > 	"spuName": "Apple XR",
@@ -1142,8 +1056,6 @@ nacos里排除ribbon：
 > 	}]
 > }
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
 **1、保存基本信息断点调试通过**
 
@@ -1153,25 +1065,19 @@ nacos里排除ribbon：
 SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/7064d7dad1726c26d078cceae07f0469.png)
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/149e13d17e9c4ff9bbb0ae72a9279820.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-第一步保存基本信息成功。 
+第一步保存基本信息成功。 
 
 **2、`SpuInfoDesc`报错**
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/9c8df27909514389a3d910443b3b3276.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/a674c1fb61289303cf35b0a6f64b3969.png)
 
 报错原因：表的id设计不是自增的，保存**`SpuInfoDesc`**时mybatisplus默认主键策略自增，这里要改变主键策略为input：
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/725fae08e4d44d0c9d5a1ea746e578b9.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/9e9123bb008cef867fc5345cc1f9e8af.png)
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/48d105ee23db48f8942ff1320d360248.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/074e8dc36fd6942ea726b1c0997b63b4.png)
 
 报错解决：mybatis默认主键为自增的，而`SpuInfoDescEntity`中的主键为自己输入的，所以修改主键注释
 
@@ -1180,23 +1086,15 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	private Long spuId;
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-![image-20210927215631335](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/88f060daca1aec6e82f852fa0a2b73e2.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![image-20210927215631335](https://i-blog.csdnimg.cn/blog_migrate/01421185026d94198aaf2c9aa9ed7578.png)
 
 **3、结果类R响应码类型报错**
 
 抛出异常，修改`R`中的getCode方法
 
-> 按我博客上面一节里设置R的getCode方法不会此步报错。 
+> 按我博客上面一节里设置R的getCode方法不会此步报错。 
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/25e14047d6c74b05a0af7d5857afd9da.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/e0d7367015ef6883e6436e640ee4e99b.png)
 
 ```java
 	public Integer getCode(){
@@ -1204,17 +1102,11 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	}
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **4、保存空图片问题**
 
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/0bc7a7789e984f5dbfd1af4be2e3124c.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/fb803d5c2053165128863c4e4cb495f9.png)
 
-
-
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/3b59ad3987e7488ab8d6f59bdbbb5dd8.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
+![](https://i-blog.csdnimg.cn/blog_migrate/09d3e9f4e8fdebe069f13a3731a9d8fb.png)
 
 出现问题，保存sku图片时，有些图片是没有路径的，没有路径的图片，无需保存。
 
@@ -1234,8 +1126,6 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
                 skuImagesService.saveBatch(skuImagesEntities);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 ```java
                 //6.2、sku的图片信息`pms_sku_images`。skus列表里的每个item的图片列表赋值给pms_sku_images实体类列表
                 Long skuId = skuInfoEntity.getSkuId();
@@ -1253,17 +1143,9 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
                 skuImagesService.saveBatch(skuImagesEntities);
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
 5、保存折扣信息的时候，满0元打0折这种都是无意义的，要过滤掉
 
-
-
-
-
-![image-20210927222814462](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/2e3b67c68c4b38ecab387ed28d908655.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20210927222814462](https://i-blog.csdnimg.cn/blog_migrate/4529580e0c1b7c9c1311afb222704f65.png)
 
 解决方法：在保存之前做判断，过滤掉小于等于0的无意义信息（不贴代码了），要注意的是判断BigDecimal进行判断时，要用compareTo函数。
 
@@ -1278,8 +1160,6 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
                 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+6、保存满减时product模块远程调用报错500，coupon模块报错空指针异常 
 
-6、保存满减时product模块远程调用报错500，coupon模块报错空指针异常 
-
-![img](谷粒商城笔记+踩坑（7）——新增商品，请求参数转vo类.assets/0d27096a3cfd4de0a3a732dd72883f86.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/7a53f2217ad5d0f321ca8b99c8571f25.png)

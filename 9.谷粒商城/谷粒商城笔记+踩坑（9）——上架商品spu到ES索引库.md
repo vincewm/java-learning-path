@@ -1,24 +1,62 @@
->  **导航：**
->
-> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501)
->
+> **导航：**
+> 
+> [谷粒商城笔记+踩坑汇总篇](https://blog.csdn.net/qq_40991313/article/details/127099139?spm=1001.2014.3001.5501 "谷粒商城笔记+踩坑汇总篇")
+> 
 >  **Java笔记汇总：**
->
-> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289)
+> 
+> [【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126646289 "【Java笔记+踩坑汇总】Java基础+JavaWeb+SSM+SpringBoot+SpringCloud+瑞吉外卖/谷粒商城/学成在线+设计模式+面试题汇总+性能调优/架构设计+源码解析-CSDN博客")
 
-[TOC]
+**目录**
 
+[1、ES回顾](#%E4%B8%80%E3%80%81ES%E5%9B%9E%E9%A1%BE)
 
+[2、ES整合商品上架](#2%E3%80%81ES%E6%95%B4%E5%90%88%E5%95%86%E5%93%81%E4%B8%8A%E6%9E%B6%C2%A0) 
 
-# 1、ES回顾
+[2.1、分析](#%E5%88%86%E6%9E%90)
 
-> [elasticsearch基础1——索引、文档_elasticsearch索引 文档_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126807267?spm=1001.2014.3001.5501)
->
-> [elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能_elasticsearch查询文档_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126819678?spm=1001.2014.3001.5501)[elasticsearch基础3——聚合、补全、集群_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126861326?spm=1001.2014.3001.5501)[elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能_elasticsearch查询文档_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126819678?spm=1001.2014.3001.5501)
+[2.2、创建sku的es索引库](#sku%E5%9C%A8es%E4%B8%AD%E5%AD%98%E5%82%A8)
 
-# **2、ES整合商品上架** 
+[2.2.1、两种索引库设计方案分析](#%E4%B8%A4%E7%A7%8D%E7%B4%A2%E5%BC%95%E5%BA%93%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88%E5%88%86%E6%9E%90)
 
-## 2.1、分析
+[2.2.2、最终选用的索引库方案，nested类型](#%E6%9C%80%E7%BB%88%E9%80%89%E7%94%A8%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B)
+
+[2.3、SkuEsModel模型类](#%E6%9E%84%E9%80%A0%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE)
+
+[2.4、【库存模块】库存量查询](#%E5%BA%93%E5%AD%98%E9%87%8F%E6%9F%A5%E8%AF%A2)
+
+[2.5、【查询模块】保存ES文档](#%E5%95%86%E5%93%81%E4%B8%8A%E6%9E%B6)
+
+[2.5.1、常量类](#%E5%B8%B8%E9%87%8F%E7%B1%BB)
+
+[2.5.2、controller](#controller)
+
+[2.5.3、service](#service)
+
+[2.6、【商品模块】上架单个spu](#%E3%80%90%E5%95%86%E5%93%81%E6%A8%A1%E5%9D%97%E3%80%91%E4%B8%8A%E6%9E%B6%E5%8D%95%E4%B8%AAspu)
+
+[2.6.1、controller](#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81)
+
+[2.6.2、远程调用库存模块](#%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E5%BA%93%E5%AD%98%E6%A8%A1%E5%9D%97)
+
+[2.6.3、【公共模块】商品常量类，添加上传成功或失败的状态码](#%E3%80%90%E5%85%AC%E5%85%B1%E6%A8%A1%E5%9D%97%E3%80%91%E5%95%86%E5%93%81%E5%B8%B8%E9%87%8F%E7%B1%BB%EF%BC%8C%E6%B7%BB%E5%8A%A0%E4%B8%8A%E4%BC%A0%E6%88%90%E5%8A%9F%E6%88%96%E5%A4%B1%E8%B4%A5%E7%9A%84%E7%8A%B6%E6%80%81%E7%A0%81)
+
+[2.6.4、service](#2.6.4%E3%80%81service)
+
+[2.6.5、测试](#%E8%AF%A6%E8%A7%A3)
+
+[2.6.6、修改结果类R](#2.6.6%E3%80%81%EF%BC%88%E5%BE%85%E6%9B%B4%E6%96%B0%EF%BC%89%E6%8A%BD%E5%8F%96%E5%93%8D%E5%BA%94%E7%BB%93%E6%9E%9C)
+
+--
+
+## 1、ES回顾
+
+> [elasticsearch基础1——索引、文档\_elasticsearch索引 文档\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126807267?spm=1001.2014.3001.5501 "elasticsearch基础1——索引、文档_elasticsearch索引 文档_vincewm的博客-CSDN博客")
+> 
+> [elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能\_elasticsearch查询文档\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126819678?spm=1001.2014.3001.5501 "elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能_elasticsearch查询文档_vincewm的博客-CSDN博客")[elasticsearch基础3——聚合、补全、集群\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126861326?spm=1001.2014.3001.5501 "elasticsearch基础3——聚合、补全、集群_vincewm的博客-CSDN博客")[elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能\_elasticsearch查询文档\_vincewm的博客-CSDN博客](https://blog.csdn.net/qq_40991313/article/details/126819678?spm=1001.2014.3001.5501 "elasticsearch基础2——DSL查询文档,黑马旅游项目查询功能_elasticsearch查询文档_vincewm的博客-CSDN博客")
+
+## **2、ES整合商品上架** 
+
+### 2.1、分析
 
 **es在整个项目中的应用：**
 
@@ -26,45 +64,44 @@
 
 2.对日志的全文检索功能
 
-![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/689c3d498fdc417299c095fbdc699397.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/55a629c06f123f220da01ae8260b6e05.png)
 
-![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/18b024d1fb844f98bd58877c5872bda0.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/eabb0e1b9b434a5fce06de05148048a5.png)
 
 > **为什么不用mysql？**
->
-> es比mysql检索功能强大，并且对于庞大的检索数据，es性能更好。
->
-> 因为mysql是存在磁盘中的，磁盘IO效率是很差的，尽管MySQL底层用的是B+树，在精确检索并且命中索引时IO次数可以稳定在4次以内，但如果没命中索引，则需要全表扫描，每次分段加载数据页到内存中进行读写，效率是非常差的。
->
-> ES是基于倒排索引，根据文档id获取文档并根据相关度进行排序，在海量数据查询时效率高。
->
-> **倒排索引流程：**
->
-> 1. **分词：**将每一个文档的数据利用算法**分词**，得到一个个词条；
-> 2. **映射关系表：**创建分词和文档id的映射关系表；
-> 3. **词条-->id-->文档：**搜索词条时，根据映射关系表找到它对应的所有文档id，然后根据文档id正向索引查到文档。
->
 > 
->
+> es比mysql检索功能强大，并且对于庞大的检索数据，es性能更好。
+> 
+> 因为mysql是存在磁盘中的，磁盘IO效率是很差的，尽管MySQL底层用的是B+树，在精确检索并且命中索引时IO次数可以稳定在4次以内，但如果没命中索引，则需要全表扫描，每次分段加载数据页到内存中进行读写，效率是非常差的。
+> 
+> ES是基于倒排索引，根据文档id获取文档并根据相关度进行排序，在海量数据查询时效率高。
+> 
+> **倒排索引流程：**
+> 
+> 1.  **分词：**将每一个文档的数据利用算法**分词**，得到一个个词条；
+>     
+> 2.  **映射关系表：**创建分词和文档id的映射关系表；
+>     
+> 3.  **词条-->id-->文档：**搜索词条时，根据映射关系表找到它对应的所有文档id，然后根据文档id正向索引查到文档。
+>     
+> 
 > 另外，在数据量大的场景下，可以使用ES集群，将索引库从逻辑上拆分为N个分片，并且每个节点可以存储副本分片，提高可用性。
->
-> ![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/836263a28baf413280a790031bfe9e57.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/59dcca18d2100eee01241932d51c7327.png)
 
 **需求：**
 
-- 在后台选择上架的商品才能在网站展示
-- 上架的商品也可以被ES检索
+-   在后台选择上架的商品才能在网站展示
+-   上架的商品也可以被ES检索
 
-![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/f3e2fa891d454b6cb7dd9962c9e56b22.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![](https://i-blog.csdnimg.cn/blog_migrate/e9f99b0ce0d1248cfb30d213e5c9639d.png)
 
+### 2.2、创建sku的es索引库
 
+#### 2.2.1、两种索引库设计方案分析
 
-## 2.2、创建sku的es索引库
-
-### 2.2.1、两种索引库设计方案分析
-
-- 检索的时候输入名字，这样就是需要用sku的名称去全文检索
-- 检索的时候选择商品规格，规格是spu的公共属性，每个spu是一样的
+-   检索的时候输入名字，这样就是需要用sku的名称去全文检索
+-   检索的时候选择商品规格，规格是spu的公共属性，每个spu是一样的
 
 **索引库设计方案1（推荐，空间换时间）：规格参数放在sku里**
 
@@ -85,11 +122,7 @@
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **索引库设计方案2（不推荐，传输的数据量大）：规格参数和sku分离**
-
-
 
 ```bash
 sku索引
@@ -108,30 +141,28 @@ attr索引
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 结论：**如果将规格参数单独建立索引，会出现检索时出现大量数据传输的问题，会引起网络故障。**
 
 所以我们选方案一，**用空间换时间**
 
-### 2.2.2、最终选用的索引库方案，**nested类型**
+#### 2.2.2、最终选用的索引库方案，**nested类型**
 
-{ “type”: “keyword” }, 保持数据精度问题，可以检索，但不分词
- “analyzer”: “ik_smart” 中文分词器
- “index”: false, 不可被检索，不生成index
- “doc_values”: false 默认为true，不可被聚合，es就不会维护一些聚合的信息
+{ “type”: “keyword” }, 保持数据精度问题，可以检索，但不分词  
+“analyzer”: “ik\_smart” 中文分词器  
+“index”: false, 不可被检索，不生成index  
+“doc\_values”: false 默认为true，不可被聚合，es就不会维护一些聚合的信息
 
 **这个数据模型要先在es中建立**
 
 > **注意：**
->
+> 
 > 为了防止对象数组扁平化，商品属性字段类型设为**nested类型。**
->
+> 
 > **es数组的扁平化处理：**es存储**对象数组**时，它会将数组扁平化，也就是说**将对象数组的每个属性抽取出来**，作为一个数组。因此会出现查询紊乱的问题。
->
+> 
 > **示例：**下面user字段是对象数组类型，因为数组扁平化处理，下面结果跟期望查询结果不符：
->
-> ![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/49e84c3513d34ede8a7aaf6e4a257e30.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+> 
+> ![](https://i-blog.csdnimg.cn/blog_migrate/cb9ef612953bdabadf6d3023ba5ec6c9.png)
 
 ```bash
 PUT product
@@ -173,22 +204,17 @@ PUT product
         }
     }
 }
+
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20220918154851294](https://i-blog.csdnimg.cn/blog_migrate/3130e74ee9aeaafee777015bf0265246.png)
 
-> 
-
-![image-20220918154851294](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/9490112ad04fc121918a93b510f9e32b.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-## 2.3、SkuEsModel模型类
+### 2.3、SkuEsModel模型类
 
 商品上架需要在es中保存spu信息并更新spu状态信息，所以我们就建立专门的vo来接收
 
 > SkuEsModel
->
+> 
 > 写在common模块
 
 ```java
@@ -216,11 +242,10 @@ public class SkuEsModel { //common中
         private String attrValue;
     }
 }
+
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-## 2.4、【库存模块】库存量查询
+### 2.4、【库存模块】库存量查询
 
 **查询sku列表是否有库存：**
 
@@ -240,10 +265,6 @@ public class WareSkuController {
     }
 }
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
 
 实现也比较好理解，就是先用自定义的mapper查有没有库存
 
@@ -266,8 +287,6 @@ public List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds) {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 **自定义mapper**
 
 这里的库存并不是简单查一下库存表，需要自定义一个简单的sql。用库存减去锁定的库存即可得出！
@@ -278,11 +297,9 @@ public List<SkuHasStockVo> getSkuHasStock(List<Long> skuIds) {
 </select>
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 2.5、【查询模块】保存ES文档
 
-## 2.5、【查询模块】保存ES文档
-
-### 2.5.1、常量类
+#### 2.5.1、常量类
 
 ```java
 public class EsConstant {
@@ -294,9 +311,7 @@ public class EsConstant {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 2.5.2、controller
+#### 2.5.2、controller
 
 ElasticSaveController
 
@@ -340,11 +355,9 @@ public class ElasticSaveController {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+#### 2.5.3、service
 
-### 2.5.3、service
-
-使用BulkRequest ，批量**保存**sku_es模型类列表到**索引库**
+使用BulkRequest ，批量**保存**sku\_es模型类列表到**索引库**
 
 ```java
 @Slf4j
@@ -387,15 +400,11 @@ public class ProductSaveServiceImpl implements ProductSaveService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+### 2.6、【商品模块】上架单个spu
 
-## 2.6、【商品模块】上架单个spu
+![](https://i-blog.csdnimg.cn/blog_migrate/e9f99b0ce0d1248cfb30d213e5c9639d.png)
 
-![img](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/f3e2fa891d454b6cb7dd9962c9e56b22.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 2.6.1、controller
+#### 2.6.1、controller
 
 SpuInfoController上架
 
@@ -410,11 +419,7 @@ public R spuUp(@PathVariable("spuId") Long spuId){
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-
-
-### 2.6.2、远程调用库存模块
+#### 2.6.2、远程调用库存模块
 
 在商品模块的feign包下：
 
@@ -428,19 +433,15 @@ public interface WareFeignService {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 商品模块启动类：
 
 ```java
 @EnableFeignClients(basePackages = "com.xunqi.gulimall.product.feign")
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+然后service里就能直接@Autowired注入了。 
 
-然后service里就能直接@Autowired注入了。 
-
-### 2.6.3、【公共模块】商品常量类，添加上传成功或失败的状态码
+#### 2.6.3、【公共模块】商品常量类，添加上传成功或失败的状态码
 
 ```java
 public class ProductConstant {
@@ -498,18 +499,16 @@ public class ProductConstant {
 }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
-### 2.6.4、service
+#### 2.6.4、service
 
 **业务流程：**
 
-1. 查询当前spu下的sku列表；
-2. 将这个sku列表封装成sku_es模型类列表； 
-   1. 给每个sku加上属性规格列表；
-   2. 查询每个sku是否有库存，要远程调用库存模块；
-   3. 给每个sku加上热度、所属品牌、所属分类名、所有可被检索的规格等属性；
-3. 将收集的sku_es模型类列表发给es保存，要远程调用查询模块。
+1.  查询当前spu下的sku列表；
+2.  将这个sku列表封装成sku\_es模型类列表；
+    1.  给每个sku加上属性规格列表；
+    2.  查询每个sku是否有库存，要远程调用库存模块；
+    3.  给每个sku加上热度、所属品牌、所属分类名、所有可被检索的规格等属性；
+3.  将收集的sku\_es模型类列表发给es保存，要远程调用查询模块。
 
 SpuInfoServiceImpl
 
@@ -608,19 +607,15 @@ SpuInfoServiceImpl
     }
 ```
 
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
-
 > SpuInfoDao更新spu状态
->
+> 
 > ```XML
 >     <update id="updaSpuStatus">
 >         UPDATE pms_spu_info SET publish_status = #{code} ,update_time = NOW() WHERE id = #{spuId}
 >     </update>
 > ```
->
-> ![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
 
-### 2.6.5、测试
+#### 2.6.5、测试
 
 商品上架用到了三个微服务，分别是product、ware、search
 
@@ -628,23 +623,23 @@ SpuInfoServiceImpl
 
 获得spu对应的sku集合
 
-![image-20220918160846814](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/01e2417a0cc9d8e0850862a21cdc70b5.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20220918160846814](https://i-blog.csdnimg.cn/blog_migrate/f03771a300c3f8df7fd2263ef7014204.png)
 
 获得spu的基础属性实体集合
 
 > 基础属性如下：
 
-![image-20220918161228025](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/2808fd8a130fa69d6be2cd8654468936.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20220918161228025](https://i-blog.csdnimg.cn/blog_migrate/333ccb4d2dbc9c47c0547ae12d51b6ad.png)
 
 给SkuEsModel.Attrs对象赋值
 
-![image-20220918190006951](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/9eeada0e8ef60aa30a0ee5af10fcc128.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20220918190006951](https://i-blog.csdnimg.cn/blog_migrate/8f2fde89c7611cd7dc3df253cd9e4202.png)
 
 测试
 
-![image-20220918192444697](谷粒商城笔记+踩坑（9）——上架商品spu到ES索引库.assets/59d15d688b6b1b382a65bef979b94335.png)![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
+![image-20220918192444697](https://i-blog.csdnimg.cn/blog_migrate/f4c0dc25b171b8e61c54dbec4f0e9827.png)
 
-### 2.6.6、修改结果类R
+#### 2.6.6、修改结果类R
 
 ```java
 	public <T> T getData(String key, TypeReference<T> typeReference) {
@@ -669,5 +664,3 @@ SpuInfoServiceImpl
 		return this;
 	}
 ```
-
-![点击并拖拽以移动](data:image/gif;base64,R0lGODlhAQABAPABAP///wAAACH5BAEKAAAALAAAAAABAAEAAAICRAEAOw==)
